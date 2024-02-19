@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QTimer>
 #include "PomoPeakSettings.h"
+#include "flowhandler.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -26,11 +27,12 @@ private:
     QTimer* timer;
     int globalCounter;
     Settings settings;
+    FlowHandler flowHandler;
     int durationLeft;
     bool isRunning;
     void UpdateCounter();
     void Skip();
-    void UpdateTimer(QString value);
-    void ResetTimer();
+    void UpdateTimerLabel(QString value);
+    void UpdateTimerDuration(FlowSequence sequence);
 };
 #endif // POMOPEAK_H

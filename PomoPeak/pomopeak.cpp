@@ -6,15 +6,14 @@ PomoPeak::PomoPeak(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::PomoPeak)
     , timer(new QTimer)
-    , settings(25,5,10)
-
+    , settings(.05f,.1f,.15f)
+    , flowHandler(2,1)
 {
-
     ui->setupUi(this);
     isRunning = false;
     durationLeft = settings.SessionDuration;
     globalCounter = 0;
-    UpdateTimer(QString("%1:%2").arg(durationLeft / 60,2,10,QChar('0')).arg((durationLeft % 60),2,10,QChar('0')));
+    UpdateTimerLabel(QString("%1:%2").arg(durationLeft / 60,2,10,QChar('0')).arg((durationLeft % 60),2,10,QChar('0')));
     timer->setInterval(1000);
     connect(timer,  &QTimer::timeout, this, &PomoPeak::OnTimerTimeout);
     connect(ui->ChangeFlowBtn, &QPushButton::clicked, this, &PomoPeak::OnChangeState);
@@ -44,13 +43,18 @@ void PomoPeak::OnTimerTimeout()
 {
 
     durationLeft -= 1;
-    UpdateTimer(QString("%1:%2").arg(durationLeft / 60,2,10,QChar('0')).arg((durationLeft % 60),2,10,QChar('0')));
+
 
     if(durationLeft <= 0)
     {
         OnChangeState();
         UpdateCounter();
+
+        flowHandler.Next();
+        UpdateTimerDuration(flowHandler.GetCurrentSequence());
     }
+
+    UpdateTimerLabel(QString("%1:%2").arg(durationLeft / 60,2,10,QChar('0')).arg((durationLeft % 60),2,10,QChar('0')));
 }
 void PomoPeak::UpdateCounter()
 {
@@ -61,12 +65,26 @@ void PomoPeak::Skip()
 {
 
 }
-void PomoPeak::UpdateTimer(QString value)
+void PomoPeak::UpdateTimerLabel(QString value)
 {
-    qDebug() << value;
     ui->TimeLabel->setText(value);
 }
-void PomoPeak::ResetTimer()
+void PomoPeak::UpdateTimerDuration(FlowSequence sequence)
 {
-
+    qDebug() << sequence;
+    switch(sequence)
+    {
+        case FlowSequence::Session:
+            durationLeft = settings.SessionDuration;
+            break;
+        case FlowSequence::ShortBreak:
+            durationLeft = settings.ShortBreakDuration;
+            break;
+        case FlowSequence::LongBreak:
+            durationLeft = settings.LongBreakDuration;
+            break;
+        default:
+            qDebug() << "something wrong with updatingTimerDuration";
+            break;
+    }
 }

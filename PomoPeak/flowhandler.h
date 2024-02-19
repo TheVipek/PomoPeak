@@ -6,7 +6,7 @@ enum FlowSequence { Session = 1, ShortBreak = 2, LongBreak = 6 };
 class FlowHandler
 {
 public:
-    FlowHandler(int shortBreakEvery = 1, int longBreakEvery = 3);
+    FlowHandler(int shortBreakEvery = 2, int longBreakEvery = 6);
     void Next();
     FlowSequence GetCurrentSequence();
 
