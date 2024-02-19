@@ -13,6 +13,7 @@ PomoPeak::PomoPeak(QWidget *parent)
     ui->setupUi(this);
     isRunning = false;
     durationLeft = settings.SessionDuration;
+    globalCounter = 0;
     UpdateTimer(QString("%1:%2").arg(durationLeft / 60,2,10,QChar('0')).arg((durationLeft % 60),2,10,QChar('0')));
     timer->setInterval(1000);
     connect(timer,  &QTimer::timeout, this, &PomoPeak::OnTimerTimeout);
@@ -43,17 +44,18 @@ void PomoPeak::OnTimerTimeout()
 {
 
     durationLeft -= 1;
-    qDebug() << durationLeft;
     UpdateTimer(QString("%1:%2").arg(durationLeft / 60,2,10,QChar('0')).arg((durationLeft % 60),2,10,QChar('0')));
-}
 
-void PomoPeak::SwitchFlow()
-{
-    isRunning = true;
+    if(durationLeft <= 0)
+    {
+        OnChangeState();
+        UpdateCounter();
+    }
 }
 void PomoPeak::UpdateCounter()
 {
-
+    globalCounter++;
+    ui->CounterLabel->setText(QString("%1").arg(globalCounter));
 }
 void PomoPeak::Skip()
 {

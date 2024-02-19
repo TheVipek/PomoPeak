@@ -2,13 +2,14 @@
 #define POMOPEAKSETTINGS_H
 
 
+
 struct Settings
 {
-    int SessionDuration;
-    int ShortBreakDuration;
-    int LongBreakDuration;
+    float SessionDuration;
+    float ShortBreakDuration;
+    float LongBreakDuration;
 
-    Settings(int sessionDuration, int shortBreakDuration, int longBreakDuration)
+    Settings(float sessionDuration, float shortBreakDuration, float longBreakDuration)
     {
         SessionDuration = sessionDuration * 60;
         ShortBreakDuration = shortBreakDuration * 60;

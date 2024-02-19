@@ -24,11 +24,10 @@ public slots:
 private:
     Ui::PomoPeak* ui;
     QTimer* timer;
-
+    int globalCounter;
     Settings settings;
     int durationLeft;
     bool isRunning;
-    void SwitchFlow();
     void UpdateCounter();
     void Skip();
     void UpdateTimer(QString value);
