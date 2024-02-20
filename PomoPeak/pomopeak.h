@@ -34,5 +34,6 @@ private:
     void Skip();
     void UpdateTimerLabel(QString value);
     void UpdateTimerDuration(FlowSequence sequence);
+    void AdjustButtonsVisibilityDependingOnCurrentState();
 };
 #endif // POMOPEAK_H
