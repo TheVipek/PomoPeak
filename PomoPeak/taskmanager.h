@@ -7,7 +7,6 @@ class TaskManager
 {
 public:
     TaskManager();
-    ~TaskManager();
     void AddTask(std::unique_ptr<Task> task);
     void RemoveTask(int index);
     void MoveTask(int from, int to);

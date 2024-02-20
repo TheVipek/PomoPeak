@@ -6,7 +6,7 @@ TaskManager::TaskManager()
 }
 void TaskManager::AddTask(std::unique_ptr<Task> task)
 {
-    tasks.push_back(task);
+    tasks.push_back(std::move(task));
 }
 
 void TaskManager::RemoveTask(int index)

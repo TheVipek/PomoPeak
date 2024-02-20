@@ -3,8 +3,9 @@
 
 #include <QMainWindow>
 #include <QTimer>
-#include "pomosettings.cpp"
+#include "pomosettings.h"
 #include "flowhandler.h"
+#include "taskmanager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -22,11 +23,13 @@ public:
 public slots:
     void OnChangeState();
     void OnTimerTimeout();
+    void OnAddTask();
 private:
     Ui::PomoPeak* ui;
-    QTimer* timer;
+    QTimer timer;
     PomoSettings settings;
     FlowHandler flowHandler;
+    TaskManager taskManager;
     int globalCounter;
     int durationLeft;
     bool isRunning;
