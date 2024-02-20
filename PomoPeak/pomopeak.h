@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QTimer>
-#include "PomoPeakSettings.h"
+#include "pomosettings.cpp"
 #include "flowhandler.h"
 
 QT_BEGIN_NAMESPACE
@@ -25,11 +25,14 @@ public slots:
 private:
     Ui::PomoPeak* ui;
     QTimer* timer;
-    int globalCounter;
-    Settings settings;
+    PomoSettings settings;
     FlowHandler flowHandler;
+    int globalCounter;
     int durationLeft;
     bool isRunning;
+
+
+
     void UpdateCounter();
     void Skip();
     void UpdateTimerLabel(QString value);

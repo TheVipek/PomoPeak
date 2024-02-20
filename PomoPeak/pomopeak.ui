@@ -40,7 +40,7 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <layout class="QVBoxLayout" name="allElementsLayout" stretch="0,9,1,1,1">
+     <layout class="QVBoxLayout" name="allElementsLayout" stretch="0,9,0,1,1,1">
       <property name="spacing">
        <number>15</number>
       </property>
@@ -109,6 +109,25 @@
          <bool>false</bool>
         </property>
        </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="TasksLayout">
+        <property name="spacing">
+         <number>15</number>
+        </property>
+        <property name="leftMargin">
+         <number>15</number>
+        </property>
+        <property name="topMargin">
+         <number>15</number>
+        </property>
+        <property name="rightMargin">
+         <number>15</number>
+        </property>
+        <property name="bottomMargin">
+         <number>15</number>
+        </property>
+       </layout>
       </item>
       <item>
        <spacer name="SpaceBetween">

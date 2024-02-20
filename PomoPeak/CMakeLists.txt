@@ -23,9 +23,12 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(PomoPeak
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        PomoPeakSettings.h
+        pomosettings.cpp
         FlowHandler.h
         FlowHandler.h flowhandler.cpp
+        task.h task.cpp
+        pomosettings.h
+        taskmanager.h taskmanager.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET PomoPeak APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

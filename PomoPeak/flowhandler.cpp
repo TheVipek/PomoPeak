@@ -1,10 +1,10 @@
 #include "flowhandler.h"
 
 FlowHandler::FlowHandler(int shortBreakEvery, int longBreakEvery)
+                                                                : toShortBreak(shortBreakEvery)
+                                                                , toLongBreak(longBreakEvery)
 {
-    toShortBreak = shortBreakEvery;
     currentToShortBreak = toShortBreak;
-    toLongBreak = longBreakEvery;
     currentToLongBreak = toLongBreak;
 }
 
