@@ -1,12 +1,12 @@
 #ifndef TASK_H
 #define TASK_H
-#include "string"
+#include <QString>
 struct Task
 {
 public:
-    Task(std::string title, std::string description, int pomodorosToDo);
-    std::string title;
-    std::string description;
+    Task(QString title, QString description, int pomodorosToDo);
+    QString title;
+    QString description;
     int pomodorosDone;
     int pomodorodsToDo = 0;
 };

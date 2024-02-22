@@ -17,6 +17,9 @@ set(PROJECT_SOURCES
         pomopeak.cpp
         pomopeak.h
         pomopeak.ui
+        taskQT.ui
+        taskQT.h taskQT.cpp
+
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -24,13 +27,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         FlowHandler.h flowhandler.cpp
-
         pomosettings.h pomosettings.cpp
         taskmanager.h taskmanager.cpp
         task.h
         task.cpp
-        taskUI.ui
-
 
     )
 # Define target properties for Android with Qt 6 as:
