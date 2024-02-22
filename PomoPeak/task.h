@@ -4,6 +4,7 @@
 struct Task
 {
 public:
+    Task();
     Task(QString title, QString description, int pomodorosToDo);
     QString title;
     QString description;

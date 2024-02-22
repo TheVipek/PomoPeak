@@ -5,6 +5,7 @@ taskQT::taskQT(std::shared_ptr<Task> task, QWidget *parent)
     , ui(new Ui::taskQT)
     , task(task)
 {
+    ui->setupUi(this);
     Init();
     connect(ui->okBtn,&QPushButton::clicked, this, &taskQT::OnModify);
 
@@ -32,4 +33,8 @@ void taskQT::OnModify()
     task->description = ui->taskDescription->toPlainText();
     task->pomodorodsToDo = ui->taskCurrent->toPlainText().toInt();
     task->pomodorosDone = ui->taskEstimate->toPlainText().toInt();
+}
+void taskQT::OnDelete()
+{
+
 }

@@ -7,11 +7,11 @@ class TaskManager
 {
 public:
     TaskManager();
-    void AddTask(std::unique_ptr<Task> task);
+    void AddTask(std::shared_ptr<Task> task);
     void RemoveTask(int index);
     void MoveTask(int from, int to);
 private:
-    std::vector<std::unique_ptr<Task>> tasks;
+    std::vector<std::shared_ptr<Task>> tasks;
 };
 
 #endif // TASKMANAGER_H

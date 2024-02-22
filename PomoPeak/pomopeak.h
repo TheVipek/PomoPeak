@@ -6,7 +6,8 @@
 #include "pomosettings.h"
 #include "flowhandler.h"
 #include "taskmanager.h"
-
+#include <vector>
+#include "taskQT.h"
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class PomoPeak;
@@ -26,6 +27,7 @@ public slots:
     void OnAddTask();
 private:
     Ui::PomoPeak* ui;
+    std::vector<Ui::taskQT*> avaliableTasks;
     QTimer timer;
     PomoSettings settings;
     FlowHandler flowHandler;

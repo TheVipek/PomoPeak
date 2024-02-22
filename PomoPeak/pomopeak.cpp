@@ -21,6 +21,8 @@ PomoPeak::PomoPeak(QWidget *parent)
     connect(&timer,  &QTimer::timeout, this, &PomoPeak::OnTimerTimeout);
     connect(ui->ChangeFlowBtn, &QPushButton::clicked, this, &PomoPeak::OnChangeState);
     connect(ui->SkipBtn, &QPushButton::clicked, this, &PomoPeak::Skip);
+    connect(ui->AddTaskBtn, &QPushButton::clicked, this, &PomoPeak::OnAddTask);
+
 }
 
 PomoPeak::~PomoPeak()
@@ -53,6 +55,14 @@ void PomoPeak::OnTimerTimeout()
 }
 void PomoPeak::OnAddTask()
 {
+    std::shared_ptr<Task> newTask = std::make_shared<Task>();
+
+    taskManager.AddTask(newTask);
+    taskQT* newTaskUI = new taskQT(newTask,this);
+
+    ui->TasksLayout->addWidget(newTaskUI);
+
+
 
 }
 void PomoPeak::UpdateCounter()

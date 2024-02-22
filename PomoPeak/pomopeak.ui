@@ -40,7 +40,7 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <layout class="QVBoxLayout" name="allElementsLayout" stretch="0,9,0,1,1,1">
+     <layout class="QVBoxLayout" name="allElementsLayout" stretch="0,9,0,1,0,1,1">
       <property name="spacing">
        <number>15</number>
       </property>
@@ -141,6 +141,13 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="AddTaskBtn">
+        <property name="text">
+         <string>Add Task</string>
+        </property>
+       </widget>
       </item>
       <item>
        <layout class="QHBoxLayout" name="ManagingStateLayout" stretch="0,0">

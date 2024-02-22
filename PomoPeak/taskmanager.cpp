@@ -4,7 +4,7 @@ TaskManager::TaskManager()
 {
 
 }
-void TaskManager::AddTask(std::unique_ptr<Task> task)
+void TaskManager::AddTask(std::shared_ptr<Task> task)
 {
     tasks.push_back(std::move(task));
 }
