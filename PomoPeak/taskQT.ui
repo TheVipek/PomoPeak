@@ -96,7 +96,7 @@
         </size>
        </property>
        <property name="placeholderText">
-        <string>current</string>
+        <string>0</string>
        </property>
       </widget>
      </item>
@@ -109,7 +109,7 @@
         </size>
        </property>
        <property name="placeholderText">
-        <string>taskEstimate</string>
+        <string>0</string>
        </property>
       </widget>
      </item>
