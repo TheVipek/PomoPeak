@@ -8,7 +8,7 @@ public:
     Task(QString title, QString description, int pomodorosToDo);
     QString title;
     QString description;
-    int pomodorosDone;
+    int pomodorosDone = 0;
     int pomodorodsToDo = 0;
 };
 

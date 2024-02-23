@@ -18,10 +18,16 @@ PomoPeak::PomoPeak(QWidget *parent)
     AdjustButtonsVisibilityDependingOnCurrentState();
 
     timer.setInterval(1000);
+
     connect(&timer,  &QTimer::timeout, this, &PomoPeak::OnTimerTimeout);
     connect(ui->ChangeFlowBtn, &QPushButton::clicked, this, &PomoPeak::OnChangeState);
     connect(ui->SkipBtn, &QPushButton::clicked, this, &PomoPeak::Skip);
     connect(ui->AddTaskBtn, &QPushButton::clicked, this, &PomoPeak::OnAddTask);
+
+
+
+
+
 
 }
 
@@ -59,10 +65,10 @@ void PomoPeak::OnAddTask()
 
     taskManager.AddTask(newTask);
     taskQT* newTaskUI = new taskQT(newTask,this);
+    newTaskUI -> setMinimumSize(ui->taskScollArea->width(),100);
+    newTaskUI -> setMaximumSize(1000, 100);
 
-    ui->TasksLayout->addWidget(newTaskUI);
-
-
+    ui->tasksContentV2->addWidget(newTaskUI);
 
 }
 void PomoPeak::UpdateCounter()

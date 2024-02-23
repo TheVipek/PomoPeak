@@ -8,6 +8,7 @@
 #include "taskmanager.h"
 #include <vector>
 #include "taskQT.h"
+#include <QVBoxLayout>
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class PomoPeak;
