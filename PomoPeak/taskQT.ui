@@ -95,6 +95,12 @@
          <height>40</height>
         </size>
        </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="tabChangesFocus">
+        <bool>false</bool>
+       </property>
        <property name="placeholderText">
         <string>0</string>
        </property>

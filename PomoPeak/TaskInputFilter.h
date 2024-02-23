@@ -10,9 +10,14 @@ class TaskInputFilter : public QObject
     protected:
     bool eventFilter(QObject *obj, QEvent *event) override
     {
+        qDebug() << event->type();
         if(event->type() == QEvent::KeyPress)
         {
             QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+            if(keyEvent->text() == "\b")
+            {
+                return false;
+            }
             if(NON_LETTER_SPECIAL_CHAR.match(keyEvent->text()).hasMatch())
             {
                 return true;
@@ -25,6 +30,7 @@ class TaskInputFilter : public QObject
             {
                 return true;
             }
+            return false;
         }
         return QObject::eventFilter(obj, event);
     }

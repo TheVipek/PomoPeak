@@ -12,8 +12,10 @@ taskQT::taskQT(QWidget *parent)
     connect(ui->delBtn,&QPushButton::clicked, this, &taskQT::OnDelete);
     connect(ui->taskName,&QTextEdit::textChanged, this, &taskQT::OnTaskTitleChanged);
 
-    ui->taskEstimate->setText(0);
-    ui->taskCurrent->setText(0);
+    ui->taskEstimate->setText("0");
+    ui->taskEstimate->setAlignment(Qt::AlignCenter);
+    ui->taskCurrent->setText("0");
+     ui->taskCurrent->setAlignment(Qt::AlignCenter);
     ui->taskEstimate->installEventFilter(filter);
     ui->taskCurrent->installEventFilter(filter);
 }
