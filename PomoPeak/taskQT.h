@@ -29,6 +29,5 @@ private:
     bool isCreated = false;
     Ui::taskQT* ui;
     std::shared_ptr<Task> task;
-    void Init();
 };
 #endif // TASKQT_H

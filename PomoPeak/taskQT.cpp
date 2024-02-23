@@ -6,7 +6,6 @@ taskQT::taskQT(QWidget *parent)
     , task(std::make_shared<Task>())
 {
     ui->setupUi(this);
-    Init();
     connect(ui->okBtn,&QPushButton::clicked, this, &taskQT::OnModify);
     connect(ui->delBtn,&QPushButton::clicked, this, &taskQT::OnDelete);
 }
@@ -19,16 +18,9 @@ void taskQT::UpdateElapsed(int elapsed)
 {
     ui->taskCurrent->setText(QString::number(elapsed));
 }
-void taskQT::Init()
-{
-    ui->taskName->setText(task->title);
-    ui->taskDescription->setText(task->description);
-    ui->taskCurrent->setText(QString::number(task->pomodorosDone));
-    ui->taskEstimate->setText(QString::number(task->pomodorodsToDo));
-
-}
 void taskQT::OnModify()
 {
+    qDebug() << "Modify start";
     task->title = ui->taskName->toPlainText();
     task->description = ui->taskDescription->toPlainText();
     task->pomodorodsToDo = ui->taskCurrent->toPlainText().toInt();
@@ -37,6 +29,12 @@ void taskQT::OnModify()
     {
         OnCreate();
     }
+    ui->taskName->setTextInteractionFlags(Qt::NoTextInteraction);
+    ui->taskDescription->setTextInteractionFlags(Qt::NoTextInteraction);
+    ui->taskCurrent->setTextInteractionFlags(Qt::NoTextInteraction);
+    ui->taskEstimate->setTextInteractionFlags(Qt::NoTextInteraction);
+    ui->okBtn->setVisible(false);
+    ui->delBtn->setVisible(false);
 }
 void taskQT::OnDelete()
 {
@@ -44,6 +42,7 @@ void taskQT::OnDelete()
 }
 void taskQT::OnCreate()
 {
+    qDebug() << "Create request";
     emit CreateRequest(task);
     isCreated = true;
 }

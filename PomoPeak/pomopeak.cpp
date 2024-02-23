@@ -72,6 +72,7 @@ void PomoPeak::OnTryAddTask()
 }
 void PomoPeak::AddTask(std::shared_ptr<Task> task)
 {
+    qDebug() << "Adding task in response";
     taskManager.AddTask(task);
 }
 void PomoPeak::RemoveTask(std::shared_ptr<Task> task)
