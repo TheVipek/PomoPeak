@@ -6,8 +6,10 @@ taskQT::taskQT(QWidget *parent)
     , task(std::make_shared<Task>())
 {
     ui->setupUi(this);
+    OnTaskTitleChanged();
     connect(ui->okBtn,&QPushButton::clicked, this, &taskQT::OnModify);
     connect(ui->delBtn,&QPushButton::clicked, this, &taskQT::OnDelete);
+    connect(ui->taskName,&QTextEdit::textChanged, this, &taskQT::OnTaskTitleChanged);
 }
 
 taskQT::~taskQT()
@@ -20,7 +22,6 @@ void taskQT::UpdateElapsed(int elapsed)
 }
 void taskQT::OnModify()
 {
-    qDebug() << "Modify start";
     task->title = ui->taskName->toPlainText();
     task->description = ui->taskDescription->toPlainText();
     task->pomodorodsToDo = ui->taskCurrent->toPlainText().toInt();
@@ -42,7 +43,18 @@ void taskQT::OnDelete()
 }
 void taskQT::OnCreate()
 {
-    qDebug() << "Create request";
     emit CreateRequest(task);
     isCreated = true;
+}
+void taskQT::OnTaskTitleChanged()
+{
+    qDebug() << ui->taskName->toPlainText().trimmed().length();
+    if(ui->taskName->toPlainText().trimmed().length() > MIN_TITLE_SIZE)
+    {
+        ui->okBtn->setEnabled(true);
+    }
+    else
+    {
+        ui->okBtn->setEnabled(false);
+    }
 }

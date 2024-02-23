@@ -26,8 +26,11 @@ private slots:
     void OnDelete();
     void OnCreate();
 private:
+    const int MIN_TITLE_SIZE = 3;
     bool isCreated = false;
     Ui::taskQT* ui;
     std::shared_ptr<Task> task;
+
+    void OnTaskTitleChanged();
 };
 #endif // TASKQT_H
