@@ -52,7 +52,7 @@
      <number>50</number>
     </property>
     <item>
-     <layout class="QVBoxLayout" name="allElementsLayout" stretch="0,3,10,0,0,1,1">
+     <layout class="QVBoxLayout" name="allElementsLayout" stretch="3,10,0,0,1,1">
       <property name="spacing">
        <number>15</number>
       </property>
@@ -68,29 +68,6 @@
       <property name="bottomMargin">
        <number>15</number>
       </property>
-      <item>
-       <widget class="QLabel" name="CounterLabel">
-        <property name="font">
-         <font>
-          <family>BIZ UDPMincho</family>
-          <pointsize>10</pointsize>
-          <italic>false</italic>
-          <underline>false</underline>
-          <strikeout>false</strikeout>
-          <stylestrategy>PreferDefault</stylestrategy>
-          <kerning>true</kerning>
-          <hintingpreference>PreferDefaultHinting</hintingpreference>
-          <fontweight>Thin</fontweight>
-         </font>
-        </property>
-        <property name="text">
-         <string>0</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
       <item>
        <widget class="QLabel" name="TimeLabel">
         <property name="minimumSize">
@@ -154,7 +131,7 @@
               <x>0</x>
               <y>0</y>
               <width>981</width>
-              <height>305</height>
+              <height>324</height>
              </rect>
             </property>
             <property name="sizePolicy">

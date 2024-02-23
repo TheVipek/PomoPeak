@@ -12,28 +12,44 @@ taskQT::taskQT(QWidget *parent)
     connect(ui->delBtn,&QPushButton::clicked, this, &taskQT::OnDelete);
     connect(ui->taskName,&QTextEdit::textChanged, this, &taskQT::OnTaskTitleChanged);
 
+    ui->taskEstimate->setText(0);
+    ui->taskCurrent->setText(0);
     ui->taskEstimate->installEventFilter(filter);
     ui->taskCurrent->installEventFilter(filter);
-
-    //connect(ui->taskEstimate,&QTextEdit::textChanged, this, &taskQT::OnNumberTextsChanged);
-    //connect(ui->taskCurrent,&QTextEdit::textChanged, this, &taskQT::OnNumberTextsChanged);
-
 }
 
 taskQT::~taskQT()
 {
     delete ui;
+    delete filter;
 }
-void taskQT::UpdateElapsed(int elapsed)
+void taskQT::ElapsedResponse()
 {
-    ui->taskCurrent->setText(QString::number(elapsed));
+    int v = ui->taskCurrent->toPlainText().toInt();
+    ui->taskCurrent->setText(QString::number(v+1));
 }
 void taskQT::OnModify()
 {
     task->title = ui->taskName->toPlainText();
     task->description = ui->taskDescription->toPlainText();
-    task->pomodorodsToDo = ui->taskCurrent->toPlainText().toInt();
-    task->pomodorosDone = ui->taskEstimate->toPlainText().toInt();
+    QString toDoText = ui->taskEstimate->toPlainText();
+
+    //should be changed in future
+    if(toDoText.isEmpty())
+    {
+        ui->taskEstimate->setText("0");
+    }
+    task->pomodorodsToDo = toDoText.toInt();
+
+
+    QString doneText = ui->taskCurrent->toPlainText();
+
+    if(doneText.isEmpty())
+    {
+        ui->taskCurrent->setText("0");
+    }
+    task->pomodorosDone = doneText.toInt();
+
     if(!isCreated)
     {
         OnCreate();
@@ -64,23 +80,4 @@ void taskQT::OnTaskTitleChanged()
     {
         ui->okBtn->setEnabled(false);
     }
-}
-void taskQT::OnNumberTextsChanged()
-{
-    // QTextEdit* textEdit = qobject_cast<QTextEdit*>(sender());
-    // if(textEdit)
-    // {
-    //     QString text = textEdit->toPlainText();
-    //     qDebug() << "pre text " + text;
-    //     if(text.length() > 0)
-    //     {
-    //         bool hasAnyLetter = NON_AV_CHAR_F_ESTIMATION_FIELDS.match(textEdit->toPlainText()).hasMatch();
-    //         if(hasAnyLetter)
-    //         {
-    //             qDebug()<<"letter exist undo";
-    //             textEdit->undo();
-    //             qDebug() << "post text " + textEdit->toPlainText();
-    //         }
-    //     }
-    // }
 }

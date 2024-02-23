@@ -50,7 +50,7 @@ void PomoPeak::OnTimerTimeout()
         OnChangeState();
         if(flowHandler.GetCurrentSequence() == FlowSequence::Session)
         {
-            UpdateCounter();
+            //Call to current task update
         }
 
         flowHandler.Next();
@@ -72,17 +72,11 @@ void PomoPeak::OnTryAddTask()
 }
 void PomoPeak::AddTask(std::shared_ptr<Task> task)
 {
-    qDebug() << "Adding task in response";
     taskManager.AddTask(task);
 }
 void PomoPeak::RemoveTask(std::shared_ptr<Task> task)
 {
     taskManager.RemoveTask(task);
-}
-void PomoPeak::UpdateCounter()
-{
-    globalCounter++;
-    ui->CounterLabel->setText(QString("%1").arg(globalCounter));
 }
 void PomoPeak::Skip()
 {

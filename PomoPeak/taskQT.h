@@ -18,10 +18,11 @@ class taskQT: public QWidget
 public:
     explicit taskQT(QWidget *parent = nullptr);
     ~taskQT();
-    void UpdateElapsed(int elapsed);
+    void ElapsedResponse();
 signals:
-    void DeleteRequest(std::shared_ptr<Task> task);     // connect to it outside of this cpp to get notified when user click it
+    void DeleteRequest(std::shared_ptr<Task> task);
     void CreateRequest(std::shared_ptr<Task> task);
+
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event) override
@@ -42,6 +43,5 @@ private:
     std::shared_ptr<Task> task;
 
     void OnTaskTitleChanged();
-    void OnNumberTextsChanged();
 };
 #endif // TASKQT_H
