@@ -1,14 +1,14 @@
 #include "taskQT.h"
 #include "./ui_taskQT.h"
-taskQT::taskQT(std::shared_ptr<Task> task, QWidget *parent)
+taskQT::taskQT(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::taskQT)
-    , task(task)
+    , task(std::make_shared<Task>())
 {
     ui->setupUi(this);
     Init();
     connect(ui->okBtn,&QPushButton::clicked, this, &taskQT::OnModify);
-
+    connect(ui->delBtn,&QPushButton::clicked, this, &taskQT::OnDelete);
 }
 
 taskQT::~taskQT()
@@ -33,8 +33,17 @@ void taskQT::OnModify()
     task->description = ui->taskDescription->toPlainText();
     task->pomodorodsToDo = ui->taskCurrent->toPlainText().toInt();
     task->pomodorosDone = ui->taskEstimate->toPlainText().toInt();
+    if(!isCreated)
+    {
+        OnCreate();
+    }
 }
 void taskQT::OnDelete()
 {
-
+    emit DeleteRequest(task);
+}
+void taskQT::OnCreate()
+{
+    emit CreateRequest(task);
+    isCreated = true;
 }

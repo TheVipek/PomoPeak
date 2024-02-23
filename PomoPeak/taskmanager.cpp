@@ -16,6 +16,10 @@ void TaskManager::RemoveTask(int index)
         tasks.erase(tasks.begin() + index);
     }
 }
+void TaskManager::RemoveTask(std::shared_ptr<Task> task)
+{
+
+}
 void TaskManager::MoveTask(int from, int to)
 {
    //TODO

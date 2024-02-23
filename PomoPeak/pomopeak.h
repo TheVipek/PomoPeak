@@ -25,7 +25,7 @@ public:
 public slots:
     void OnChangeState();
     void OnTimerTimeout();
-    void OnAddTask();
+    void OnTryAddTask();
 private:
     Ui::PomoPeak* ui;
     std::vector<Ui::taskQT*> avaliableTasks;
@@ -44,5 +44,7 @@ private:
     void UpdateTimerLabel(QString value);
     void UpdateTimerDuration(FlowSequence sequence);
     void AdjustButtonsVisibilityDependingOnCurrentState();
+    void AddTask(std::shared_ptr<Task> task);
+    void RemoveTask(std::shared_ptr<Task> task);
 };
 #endif // POMOPEAK_H

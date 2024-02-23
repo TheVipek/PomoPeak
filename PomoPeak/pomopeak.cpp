@@ -22,7 +22,7 @@ PomoPeak::PomoPeak(QWidget *parent)
     connect(&timer,  &QTimer::timeout, this, &PomoPeak::OnTimerTimeout);
     connect(ui->ChangeFlowBtn, &QPushButton::clicked, this, &PomoPeak::OnChangeState);
     connect(ui->SkipBtn, &QPushButton::clicked, this, &PomoPeak::Skip);
-    connect(ui->AddTaskBtn, &QPushButton::clicked, this, &PomoPeak::OnAddTask);
+    connect(ui->AddTaskBtn, &QPushButton::clicked, this, &PomoPeak::OnTryAddTask);
 
 
 
@@ -59,17 +59,24 @@ void PomoPeak::OnTimerTimeout()
 
     UpdateTimerLabel(QString("%1:%2").arg(durationLeft / 60,2,10,QChar('0')).arg((durationLeft % 60),2,10,QChar('0')));
 }
-void PomoPeak::OnAddTask()
+void PomoPeak::OnTryAddTask()
 {
-    std::shared_ptr<Task> newTask = std::make_shared<Task>();
-
-    taskManager.AddTask(newTask);
-    taskQT* newTaskUI = new taskQT(newTask,this);
+    taskQT* newTaskUI = new taskQT(this);
     newTaskUI -> setMinimumSize(ui->taskScollArea->width(),100);
-    newTaskUI -> setMaximumSize(1000, 100);
+    newTaskUI -> setMaximumHeight(100);
+    connect(newTaskUI, &taskQT::CreateRequest, this, &PomoPeak::AddTask);
+    connect(newTaskUI, &taskQT::DeleteRequest, this, &PomoPeak::RemoveTask);
 
     ui->tasksContentV2->addWidget(newTaskUI);
 
+}
+void PomoPeak::AddTask(std::shared_ptr<Task> task)
+{
+    taskManager.AddTask(task);
+}
+void PomoPeak::RemoveTask(std::shared_ptr<Task> task)
+{
+    taskManager.RemoveTask(task);
 }
 void PomoPeak::UpdateCounter()
 {
