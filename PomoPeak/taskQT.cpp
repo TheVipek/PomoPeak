@@ -12,10 +12,14 @@ taskQT::taskQT(QWidget *parent)
     connect(ui->delBtn,&QPushButton::clicked, this, &taskQT::OnDelete);
     connect(ui->taskName,&QTextEdit::textChanged, this, &taskQT::OnTaskTitleChanged);
 
+
+
     ui->taskEstimate->setText("0");
-    ui->taskEstimate->setAlignment(Qt::AlignCenter);
     ui->taskCurrent->setText("0");
-     ui->taskCurrent->setAlignment(Qt::AlignCenter);
+
+    ui->taskEstimate->setAlignment(Qt::AlignCenter);
+    ui->taskCurrent->setAlignment(Qt::AlignCenter);
+
     ui->taskEstimate->installEventFilter(filter);
     ui->taskCurrent->installEventFilter(filter);
 }
@@ -36,7 +40,6 @@ void taskQT::OnModify()
     task->description = ui->taskDescription->toPlainText();
     QString toDoText = ui->taskEstimate->toPlainText();
 
-    //should be changed in future
     if(toDoText.isEmpty())
     {
         ui->taskEstimate->setText("0");
@@ -65,7 +68,12 @@ void taskQT::OnModify()
 }
 void taskQT::OnDelete()
 {
-    emit DeleteRequest(task);
+    //User may want to click 'delete' before actually creating task, so no need to inform the rest of stuff
+    if(isCreated)
+    {
+        emit DeleteRequest(task);
+    }
+    taskQT::~taskQT();
 }
 void taskQT::OnCreate()
 {

@@ -24,7 +24,7 @@ PomoPeak::PomoPeak(QWidget *parent)
     connect(ui->SkipBtn, &QPushButton::clicked, this, &PomoPeak::Skip);
     connect(ui->AddTaskBtn, &QPushButton::clicked, this, &PomoPeak::OnTryAddTask);
 
-
+    ui->tasksContentV2->setAlignment(Qt::AlignTop);
 
 
 
@@ -62,8 +62,8 @@ void PomoPeak::OnTimerTimeout()
 void PomoPeak::OnTryAddTask()
 {
     taskQT* newTaskUI = new taskQT(this);
-    newTaskUI -> setMinimumSize(ui->taskScollArea->width(),100);
-    newTaskUI -> setMaximumHeight(100);
+    //newTaskUI -> setMinimumSize(ui->taskScollArea->width(),100);
+    newTaskUI -> setMaximumHeight(150);
     connect(newTaskUI, &taskQT::CreateRequest, this, &PomoPeak::AddTask);
     connect(newTaskUI, &taskQT::DeleteRequest, this, &PomoPeak::RemoveTask);
 
@@ -76,6 +76,7 @@ void PomoPeak::AddTask(std::shared_ptr<Task> task)
 }
 void PomoPeak::RemoveTask(std::shared_ptr<Task> task)
 {
+
     taskManager.RemoveTask(task);
 }
 void PomoPeak::Skip()

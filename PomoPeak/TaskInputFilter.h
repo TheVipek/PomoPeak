@@ -10,7 +10,6 @@ class TaskInputFilter : public QObject
     protected:
     bool eventFilter(QObject *obj, QEvent *event) override
     {
-        qDebug() << event->type();
         if(event->type() == QEvent::KeyPress)
         {
             QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
