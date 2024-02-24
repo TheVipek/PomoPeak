@@ -23,11 +23,9 @@ void TaskManager::RemoveTask(std::shared_ptr<Task> task)
         if(*iterator == task)
         {
             tasks.erase(iterator);
-            qDebug() << "Sucessfuly erased";
             return;
         }
     }
-    qDebug() << "Not erased";
 }
 void TaskManager::MoveTask(int from, int to)
 {

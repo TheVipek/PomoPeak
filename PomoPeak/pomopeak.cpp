@@ -62,7 +62,6 @@ void PomoPeak::OnTimerTimeout()
 void PomoPeak::OnTryAddTask()
 {
     taskQT* newTaskUI = new taskQT(this);
-    //newTaskUI -> setMinimumSize(ui->taskScollArea->width(),100);
     newTaskUI -> setMaximumHeight(150);
     connect(newTaskUI, &taskQT::CreateRequest, this, &PomoPeak::AddTask);
     connect(newTaskUI, &taskQT::DeleteRequest, this, &PomoPeak::RemoveTask);
@@ -90,7 +89,6 @@ void PomoPeak::UpdateTimerLabel(QString value)
 }
 void PomoPeak::UpdateTimerDuration(FlowSequence sequence)
 {
-    qDebug() << sequence;
     switch(sequence)
     {
         case FlowSequence::Session:
