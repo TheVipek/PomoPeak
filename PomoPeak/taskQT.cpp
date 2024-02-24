@@ -38,7 +38,7 @@ void taskQT::OnCreate()
     isCreated = true;
 }
 
-void taskQT::ElapsedResponse()
+void taskQT::ElapsedIncrease()
 {
     int v = ui->taskCurrent->toPlainText().toInt();
     ui->taskCurrent->setText(QString::number(v+1));
@@ -110,12 +110,7 @@ void taskQT::DisableEditMode()
 
 void taskQT::OnTaskTitleChanged()
 {
-    if(ui->taskName->toPlainText().trimmed().length() > MIN_TITLE_SIZE)
-    {
-        ui->okBtn->setEnabled(true);
-    }
-    else
-    {
-        ui->okBtn->setEnabled(false);
-    }
+    ui->taskName->toPlainText().trimmed().length() > MIN_TITLE_SIZE
+        ? ui->okBtn->setEnabled(true)
+        : ui->okBtn->setEnabled(false);
 }

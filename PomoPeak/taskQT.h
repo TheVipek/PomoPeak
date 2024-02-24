@@ -18,11 +18,10 @@ class taskQT: public QWidget
 public:
     explicit taskQT(QWidget *parent = nullptr);
     ~taskQT();
-    void ElapsedResponse();
+    void ElapsedIncrease();
 signals:
     void DeleteRequest(std::shared_ptr<Task> task);
     void CreateRequest(std::shared_ptr<Task> task);
-
 
 protected:
     void mousePressEvent(QMouseEvent* event) override
@@ -43,9 +42,6 @@ private:
 
     Ui::taskQT* ui;
     TaskInputFilter* filter;
-
-
-
 
     std::shared_ptr<Task> task;
 
