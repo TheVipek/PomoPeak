@@ -10,26 +10,16 @@ taskQT::taskQT(QWidget *parent)
 
     OnTaskTitleChanged();
 
-    isActive = true;
-
-
-
-
-    EnableEditMode();
+    OnModifyEnter();
 
     ui->activeBtn->setStyleSheet(unselectedTaskSheet);
     ui->activeBtn->setVisible(false);
 
     connect(ui->okBtn,&QPushButton::clicked, this, &taskQT::OnProceedButton);
-
     connect(ui->delBtn,&QPushButton::clicked, this, &taskQT::OnCancelButton);
-
     connect(ui->modifyBtn,&QPushButton::clicked, this, &taskQT::OnModifyButton);
-
     connect(ui->taskName,&QTextEdit::textChanged, this, &taskQT::OnTaskTitleChanged);
-
     connect(ui->activeBtn,&QPushButton::clicked, this, &taskQT::OnChangeSelectState);
-
 
     ui->taskEstimate->installEventFilter(filter);
     ui->taskCurrent->installEventFilter(filter);
@@ -40,7 +30,6 @@ taskQT::~taskQT()
     delete ui;
     delete filter;
 }
-
 
 void taskQT::OnModifyButton()
 {
@@ -69,24 +58,35 @@ void taskQT::OnModifyProceed()
     }
     OnModifyExit();
 }
+
 void taskQT::OnCreate()
 {
     emit CreateRequest(task);
     isCreated = true;
 }
+
 void taskQT::OnModifyCancel()
 {
     CancelTaskModifications();
     OnModifyExit();
 }
+
 void taskQT::OnModifyEnter()
 {
     EnableEditMode();
+
+    ui->modifyBtn->setEnabled(false);
+    UpdateModeLabel(editLabelValue);
 }
+
 void taskQT::OnModifyExit()
 {
     DisableEditMode();
+
+    ui->modifyBtn->setEnabled(true);
+    UpdateModeLabel(viewLabelValue);
 }
+
 void taskQT::OnDelete()
 {
     if(isCreated)
@@ -95,6 +95,7 @@ void taskQT::OnDelete()
     }
     taskQT::~taskQT();
 }
+
 void taskQT::ProceedTaskModifications()
 {
     task->title = ui->taskName->toPlainText();
@@ -114,6 +115,7 @@ void taskQT::ProceedTaskModifications()
     }
     task->pomodorosDone = doneText.toInt();
 }
+
 void taskQT::CancelTaskModifications()
 {
     ui->taskName->setText(task->title);
@@ -122,6 +124,7 @@ void taskQT::CancelTaskModifications()
     ui->taskCurrent->setText(QString::number(task->pomodorosDone));
 
 }
+
 void taskQT::OnChangeSelectState()
 {
     isSelected = !isSelected;
@@ -139,7 +142,9 @@ void taskQT::Active()
     ui->delBtn->setVisible(true);
 
     ui->activeBtn->setVisible(false);
+    ui->modeLabel->setVisible(true);
 }
+
 void taskQT::Deactive()
 {
     if(!isActive)
@@ -151,6 +156,7 @@ void taskQT::Deactive()
     ui->delBtn->setVisible(false);
 
     ui->activeBtn->setVisible(true);
+    ui->modeLabel->setVisible(false);
 }
 
 void taskQT::EnableEditMode()
@@ -160,8 +166,6 @@ void taskQT::EnableEditMode()
     ui->taskDescription->setTextInteractionFlags(Qt::TextEditable);
     ui->taskCurrent->setTextInteractionFlags(Qt::TextEditable);
     ui->taskEstimate->setTextInteractionFlags(Qt::TextEditable);
-
-    ui->modifyBtn->setEnabled(false);
 }
 
 void taskQT::DisableEditMode()
@@ -171,8 +175,6 @@ void taskQT::DisableEditMode()
     ui->taskDescription->setTextInteractionFlags(Qt::NoTextInteraction);
     ui->taskCurrent->setTextInteractionFlags(Qt::NoTextInteraction);
     ui->taskEstimate->setTextInteractionFlags(Qt::NoTextInteraction);
-
-    ui->modifyBtn->setEnabled(true);
 }
 
 void taskQT::OnTaskTitleChanged()
@@ -182,9 +184,13 @@ void taskQT::OnTaskTitleChanged()
         : ui->okBtn->setEnabled(false);
 }
 
-
 void taskQT::ElapsedIncrease()
 {
     int v = ui->taskCurrent->toPlainText().toInt();
     ui->taskCurrent->setText(QString::number(v+1));
+}
+
+void taskQT::UpdateModeLabel(QString val)
+{
+    ui->modeLabel->setText(val);
 }
