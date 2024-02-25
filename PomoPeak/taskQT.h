@@ -48,9 +48,10 @@ private slots:
     void OnChangeSelectState();
 private:
     const int MIN_TITLE_SIZE = 3;
+    const QString selectedTaskSheet = "background-color:rgba(0, 255, 0, 96)";
+    const QString unselectedTaskSheet = "background-color:rgba(170, 0, 0, 96)";
 
     bool isCreated = false;
-
     bool isEditMode = false;
     bool isSelected = false;
     bool isActive = false;

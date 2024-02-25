@@ -11,7 +11,14 @@ taskQT::taskQT(QWidget *parent)
     OnTaskTitleChanged();
 
     isActive = true;
+
+
+
+
     EnableEditMode();
+
+    ui->activeBtn->setStyleSheet(unselectedTaskSheet);
+    ui->activeBtn->setVisible(false);
 
     connect(ui->okBtn,&QPushButton::clicked, this, &taskQT::OnProceedButton);
 
@@ -20,6 +27,9 @@ taskQT::taskQT(QWidget *parent)
     connect(ui->modifyBtn,&QPushButton::clicked, this, &taskQT::OnModifyButton);
 
     connect(ui->taskName,&QTextEdit::textChanged, this, &taskQT::OnTaskTitleChanged);
+
+    connect(ui->activeBtn,&QPushButton::clicked, this, &taskQT::OnChangeSelectState);
+
 
     ui->taskEstimate->installEventFilter(filter);
     ui->taskCurrent->installEventFilter(filter);
@@ -42,26 +52,12 @@ void taskQT::OnModifyButton()
 
 void taskQT::OnProceedButton()
 {
-    if(isEditMode)
-    {
-        OnModifyProceed();
-    }
-    else
-    {
-        Deactive();
-    }
+    isEditMode ? OnModifyProceed() : Deactive();
 }
 
 void taskQT::OnCancelButton()
 {
-    if(isEditMode)
-    {
-        OnModifyCancel();
-    }
-    else
-    {
-        OnDelete();
-    }
+    isEditMode ? OnModifyCancel() :  OnDelete();
 }
 
 void taskQT::OnModifyProceed()
@@ -103,17 +99,15 @@ void taskQT::ProceedTaskModifications()
 {
     task->title = ui->taskName->toPlainText();
     task->description = ui->taskDescription->toPlainText();
-    QString toDoText = ui->taskEstimate->toPlainText();
 
+    QString toDoText = ui->taskEstimate->toPlainText();
     if(toDoText.isEmpty())
     {
         ui->taskEstimate->setText("0");
     }
     task->pomodorodsToDo = toDoText.toInt();
 
-
     QString doneText = ui->taskCurrent->toPlainText();
-
     if(doneText.isEmpty())
     {
         ui->taskCurrent->setText("0");
@@ -131,16 +125,7 @@ void taskQT::CancelTaskModifications()
 void taskQT::OnChangeSelectState()
 {
     isSelected = !isSelected;
-
-    if(isSelected)
-    {
-        //adjust btn
-    }
-    else
-    {
-        //adjust btn
-    }
-
+    isSelected ?  ui->activeBtn->setStyleSheet(selectedTaskSheet) :  ui->activeBtn->setStyleSheet(unselectedTaskSheet);
 }
 
 void taskQT::Active()
@@ -152,6 +137,8 @@ void taskQT::Active()
     ui->modifyBtn->setVisible(true);
     ui->okBtn->setVisible(true);
     ui->delBtn->setVisible(true);
+
+    ui->activeBtn->setVisible(false);
 }
 void taskQT::Deactive()
 {
@@ -162,6 +149,8 @@ void taskQT::Deactive()
     ui->modifyBtn->setVisible(false);
     ui->okBtn->setVisible(false);
     ui->delBtn->setVisible(false);
+
+    ui->activeBtn->setVisible(true);
 }
 
 void taskQT::EnableEditMode()
