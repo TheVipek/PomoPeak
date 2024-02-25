@@ -19,10 +19,14 @@ public:
     explicit taskQT(QWidget *parent = nullptr);
     ~taskQT();
     void ElapsedIncrease();
+    void SwitchSelectState();
+    void Active();
+    void Deactive();
 signals:
     void DeleteRequest(std::shared_ptr<Task> task);
     void CreateRequest(std::shared_ptr<Task> task);
-
+    void ActiveRequest(taskQT* ui);
+    void SelectRequest(taskQT* ui);
 protected:
     void mousePressEvent(QMouseEvent* event) override
     {
@@ -45,8 +49,6 @@ private slots:
 
     void OnDelete();
     void OnCreate();
-
-    void OnChangeSelectState();
 private:
     const int MIN_TITLE_SIZE = 3;
     const QString selectedTaskSheet = "background-color:rgba(0, 255, 0, 96)";
@@ -71,10 +73,6 @@ private:
     void ProceedTaskModifications();
     void CancelTaskModifications();
 
-    void Active();
-    void Deactive();
-
     void UpdateModeLabel(QString val);
-
 };
 #endif // TASKQT_H

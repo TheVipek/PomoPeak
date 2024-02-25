@@ -19,7 +19,7 @@ taskQT::taskQT(QWidget *parent)
     connect(ui->delBtn,&QPushButton::clicked, this, &taskQT::OnCancelButton);
     connect(ui->modifyBtn,&QPushButton::clicked, this, &taskQT::OnModifyButton);
     connect(ui->taskName,&QTextEdit::textChanged, this, &taskQT::OnTaskTitleChanged);
-    connect(ui->activeBtn,&QPushButton::clicked, this, &taskQT::OnChangeSelectState);
+    connect(ui->activeBtn,&QPushButton::clicked, this, &taskQT::SwitchSelectState);
 
     ui->taskEstimate->installEventFilter(filter);
     ui->taskCurrent->installEventFilter(filter);
@@ -125,10 +125,18 @@ void taskQT::CancelTaskModifications()
 
 }
 
-void taskQT::OnChangeSelectState()
+void taskQT::SwitchSelectState()
 {
     isSelected = !isSelected;
-    isSelected ?  ui->activeBtn->setStyleSheet(selectedTaskSheet) :  ui->activeBtn->setStyleSheet(unselectedTaskSheet);
+    if(isSelected)
+    {
+        ui->activeBtn->setStyleSheet(selectedTaskSheet);
+        emit SelectRequest(this);
+    }
+    else
+    {
+        ui->activeBtn->setStyleSheet(unselectedTaskSheet);
+    }
 }
 
 void taskQT::Active()
@@ -143,6 +151,8 @@ void taskQT::Active()
 
     ui->activeBtn->setVisible(false);
     ui->modeLabel->setVisible(true);
+
+    emit ActiveRequest(this);
 }
 
 void taskQT::Deactive()

@@ -26,9 +26,13 @@ public slots:
     void OnChangeState();
     void OnTimerTimeout();
     void OnTryAddTask();
+    void SelectTask(taskQT* task);
+    void ActiveTask(taskQT* task);
 private:
     Ui::PomoPeak* ui;
     std::vector<Ui::taskQT*> avaliableTasks;
+    taskQT* selectedTask = nullptr;
+    taskQT* activatedTask = nullptr;
     QTimer timer;
     PomoSettings settings;
     FlowHandler flowHandler;
@@ -36,8 +40,6 @@ private:
     int globalCounter;
     int durationLeft;
     bool isRunning;
-
-
 
     void UpdateCounter();
     void Skip();

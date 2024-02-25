@@ -1,5 +1,6 @@
 #include "pomopeak.h"
 #include "./ui_pomopeak.h"
+#include "ui_taskQT.h"
 
 PomoPeak::PomoPeak(QWidget *parent)
     : QMainWindow(parent)
@@ -25,10 +26,6 @@ PomoPeak::PomoPeak(QWidget *parent)
     connect(ui->AddTaskBtn, &QPushButton::clicked, this, &PomoPeak::OnTryAddTask);
 
     ui->tasksContentV2->setAlignment(Qt::AlignTop);
-
-
-
-
 }
 
 PomoPeak::~PomoPeak()
@@ -65,6 +62,8 @@ void PomoPeak::OnTryAddTask()
     newTaskUI -> setMaximumHeight(150);
     connect(newTaskUI, &taskQT::CreateRequest, this, &PomoPeak::AddTask);
     connect(newTaskUI, &taskQT::DeleteRequest, this, &PomoPeak::RemoveTask);
+    connect(newTaskUI, &taskQT::ActiveRequest, this, &PomoPeak::ActiveTask);
+    connect(newTaskUI, &taskQT::SelectRequest, this, &PomoPeak::SelectTask);
 
     ui->tasksContentV2->addWidget(newTaskUI);
 
@@ -75,8 +74,26 @@ void PomoPeak::AddTask(std::shared_ptr<Task> task)
 }
 void PomoPeak::RemoveTask(std::shared_ptr<Task> task)
 {
-
     taskManager.RemoveTask(task);
+}
+void PomoPeak::ActiveTask(taskQT* task)
+{
+    if(activatedTask != nullptr && activatedTask != task)
+    {
+        activatedTask->Deactive();
+        qDebug() << "activated is null";
+    }
+    activatedTask = task;
+
+}
+void PomoPeak::SelectTask(taskQT* task)
+{
+    if(selectedTask != nullptr && selectedTask != task)
+    {
+        selectedTask->SwitchSelectState();
+        qDebug() << "selected is null";
+    }
+    selectedTask = task;
 }
 void PomoPeak::Skip()
 {
