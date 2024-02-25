@@ -26,28 +26,53 @@ signals:
 protected:
     void mousePressEvent(QMouseEvent* event) override
     {
-        if(event->button() == Qt::LeftButton && !isEditMode)
+        if(event->button() == Qt::LeftButton && !isActive)
         {
-            EnableEditMode();
+            Active();
         }
     }
 private slots:
-    void OnModify();
+
+    void OnModifyButton();
+    void OnProceedButton();
+    void OnCancelButton();
+
+    void OnModifyEnter();
+    void OnModifyProceed();
+    void OnModifyCancel();
+    void OnModifyExit();
+
     void OnDelete();
     void OnCreate();
+
+    void OnChangeSelectState();
 private:
     const int MIN_TITLE_SIZE = 3;
+
     bool isCreated = false;
+
     bool isEditMode = false;
+    bool isSelected = false;
+    bool isActive = false;
 
     Ui::taskQT* ui;
     TaskInputFilter* filter;
 
     std::shared_ptr<Task> task;
 
+
+
     void OnTaskTitleChanged();
+
     void EnableEditMode();
     void DisableEditMode();
-    void UpdateTask();
+
+    void ProceedTaskModifications();
+    void CancelTaskModifications();
+
+    void Active();
+    void Deactive();
+
+
 };
 #endif // TASKQT_H
