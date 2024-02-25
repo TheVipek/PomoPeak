@@ -20,19 +20,19 @@ public:
     ~taskQT();
     void ElapsedIncrease();
     void SwitchSelectState();
-    void Active();
-    void Deactive();
+    void EnableViewMode();
+    void DisableViewMode();
 signals:
     void DeleteRequest(std::shared_ptr<Task> task);
     void CreateRequest(std::shared_ptr<Task> task);
-    void ActiveRequest(taskQT* ui);
-    void SelectRequest(taskQT* ui);
+    void OnEnableViewModeRequest(taskQT* ui);
+    void OnSelectRequest(taskQT* ui);
 protected:
     void mousePressEvent(QMouseEvent* event) override
     {
-        if(event->button() == Qt::LeftButton && !isActive)
+        if(event->button() == Qt::LeftButton && !isViewMode)
         {
-            Active();
+            EnableViewMode();
         }
     }
 
@@ -55,10 +55,11 @@ private:
     const QString unselectedTaskSheet = "background-color:rgba(170, 0, 0, 96)";
     const QString viewLabelValue = "Currently in View Mode";
     const QString editLabelValue = "Currently in Edit Mode";
+
     bool isCreated = false;
     bool isEditMode = false;
     bool isSelected = false;
-    bool isActive = true;
+    bool isViewMode = true;
 
     Ui::taskQT* ui;
     TaskInputFilter* filter;

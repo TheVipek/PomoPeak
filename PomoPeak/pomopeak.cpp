@@ -48,6 +48,12 @@ void PomoPeak::OnTimerTimeout()
         if(flowHandler.GetCurrentSequence() == FlowSequence::Session)
         {
             //Call to current task update
+            if(currentActiveTask != nullptr)
+            {
+                currentActiveTask->ElapsedIncrease();
+            }
+
+            globalCounter++;
         }
 
         flowHandler.Next();
@@ -62,8 +68,8 @@ void PomoPeak::OnTryAddTask()
     newTaskUI -> setMaximumHeight(150);
     connect(newTaskUI, &taskQT::CreateRequest, this, &PomoPeak::AddTask);
     connect(newTaskUI, &taskQT::DeleteRequest, this, &PomoPeak::RemoveTask);
-    connect(newTaskUI, &taskQT::ActiveRequest, this, &PomoPeak::ActiveTask);
-    connect(newTaskUI, &taskQT::SelectRequest, this, &PomoPeak::SelectTask);
+    connect(newTaskUI, &taskQT::OnEnableViewModeRequest, this, &PomoPeak::OnViewModeTaskChanged);
+    connect(newTaskUI, &taskQT::OnSelectRequest, this, &PomoPeak::OnCurrentActiveTaskChanged);
 
     ui->tasksContentV2->addWidget(newTaskUI);
 
@@ -76,24 +82,24 @@ void PomoPeak::RemoveTask(std::shared_ptr<Task> task)
 {
     taskManager.RemoveTask(task);
 }
-void PomoPeak::ActiveTask(taskQT* task)
+void PomoPeak::OnViewModeTaskChanged(taskQT* task)
 {
-    if(activatedTask != nullptr && activatedTask != task)
+    qDebug() << "requested task:" << task;
+    qDebug() << currentInViewModeTask;
+    if(currentInViewModeTask != nullptr && currentInViewModeTask != task)
     {
-        activatedTask->Deactive();
-        qDebug() << "activated is null";
+        currentInViewModeTask->DisableViewMode();
     }
-    activatedTask = task;
+    currentInViewModeTask = task;
 
 }
-void PomoPeak::SelectTask(taskQT* task)
+void PomoPeak::OnCurrentActiveTaskChanged(taskQT* task)
 {
-    if(selectedTask != nullptr && selectedTask != task)
+    if(currentActiveTask != nullptr && currentActiveTask != task)
     {
-        selectedTask->SwitchSelectState();
-        qDebug() << "selected is null";
+        currentActiveTask->SwitchSelectState();
     }
-    selectedTask = task;
+    currentActiveTask = task;
 }
 void PomoPeak::Skip()
 {

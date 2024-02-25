@@ -41,7 +41,7 @@ void taskQT::OnModifyButton()
 
 void taskQT::OnProceedButton()
 {
-    isEditMode ? OnModifyProceed() : Deactive();
+    isEditMode ? OnModifyProceed() : DisableViewMode();
 }
 
 void taskQT::OnCancelButton()
@@ -131,7 +131,7 @@ void taskQT::SwitchSelectState()
     if(isSelected)
     {
         ui->activeBtn->setStyleSheet(selectedTaskSheet);
-        emit SelectRequest(this);
+        emit OnSelectRequest(this);
     }
     else
     {
@@ -139,11 +139,11 @@ void taskQT::SwitchSelectState()
     }
 }
 
-void taskQT::Active()
+void taskQT::EnableViewMode()
 {
-    if(isActive)
+    if(isViewMode)
         return;
-    isActive = true;
+    isViewMode = true;
 
     ui->modifyBtn->setVisible(true);
     ui->okBtn->setVisible(true);
@@ -152,14 +152,14 @@ void taskQT::Active()
     ui->activeBtn->setVisible(false);
     ui->modeLabel->setVisible(true);
 
-    emit ActiveRequest(this);
+    emit OnEnableViewModeRequest(this);
 }
 
-void taskQT::Deactive()
+void taskQT::DisableViewMode()
 {
-    if(!isActive)
+    if(!isViewMode)
         return;
-    isActive = false;
+    isViewMode = false;
 
     ui->modifyBtn->setVisible(false);
     ui->okBtn->setVisible(false);
@@ -198,6 +198,7 @@ void taskQT::ElapsedIncrease()
 {
     int v = ui->taskCurrent->toPlainText().toInt();
     ui->taskCurrent->setText(QString::number(v+1));
+    task->pomodorosDone++;
 }
 
 void taskQT::UpdateModeLabel(QString val)
