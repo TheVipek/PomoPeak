@@ -6,21 +6,24 @@ taskQT::taskQT(QWidget *parent)
     , filter(new TaskInputFilter)
     , task(std::make_shared<Task>())
 {
+    setAttribute(Qt::WA_StyledBackground, true);
+    this->setStyleSheet(selectedTaskWidgetSheet);
     ui->setupUi(this);
 
     OnTaskTitleChanged();
 
+    EnableViewMode();
     OnModifyEnter();
 
-    ui->activeBtn->setStyleSheet(unselectedTaskSheet);
+    ui->activeBtn->setStyleSheet(unselectedTaskBar);
     ui->activeBtn->setVisible(false);
 
-    connect(ui->okBtn,&QPushButton::clicked, this, &taskQT::OnProceedButton);
-    connect(ui->delBtn,&QPushButton::clicked, this, &taskQT::OnCancelButton);
-    connect(ui->modifyBtn,&QPushButton::clicked, this, &taskQT::OnModifyButton);
-    connect(ui->taskName,&QTextEdit::textChanged, this, &taskQT::OnTaskTitleChanged);
-    connect(ui->activeBtn,&QPushButton::clicked, this, &taskQT::SwitchSelectState);
-
+    connect(ui->okBtn, &QPushButton::clicked, this, &taskQT::OnProceedButton);
+    connect(ui->delBtn, &QPushButton::clicked, this, &taskQT::OnCancelButton);
+    connect(ui->modifyBtn, &QPushButton::clicked, this, &taskQT::OnModifyButton);
+    connect(ui->taskName, &QTextEdit::textChanged, this, &taskQT::OnTaskTitleChanged);
+    connect(ui->activeBtn, &QPushButton::clicked, this, &taskQT::SwitchSelectState);
+    connect(ui->taskStatusBtn, &QPushButton::clicked, this, &taskQT::OnChangeStatus);
     ui->taskEstimate->installEventFilter(filter);
     ui->taskCurrent->installEventFilter(filter);
 }
@@ -131,12 +134,12 @@ void taskQT::SwitchSelectState()
     isSelected = !isSelected;
     if(isSelected)
     {
-        ui->activeBtn->setStyleSheet(selectedTaskSheet);
+        ui->activeBtn->setStyleSheet(selectedTaskBar);
         emit OnSelectRequest(this);
     }
     else
     {
-        ui->activeBtn->setStyleSheet(unselectedTaskSheet);
+        ui->activeBtn->setStyleSheet(unselectedTaskBar);
     }
 }
 
@@ -145,13 +148,15 @@ void taskQT::EnableViewMode()
     if(isViewMode)
         return;
     isViewMode = true;
-
+    this->setStyleSheet(selectedTaskWidgetSheet);
     ui->modifyBtn->setVisible(true);
     ui->okBtn->setVisible(true);
     ui->delBtn->setVisible(true);
 
     ui->activeBtn->setVisible(false);
     ui->modeLabel->setVisible(true);
+
+    ui->taskStatusBtn->setEnabled(false);
 
     emit OnEnableViewModeRequest(this);
 }
@@ -161,13 +166,15 @@ void taskQT::DisableViewMode()
     if(!isViewMode)
         return;
     isViewMode = false;
-
+    this->setStyleSheet(unselectedTaskWidgetSheet);
     ui->modifyBtn->setVisible(false);
     ui->okBtn->setVisible(false);
     ui->delBtn->setVisible(false);
 
     ui->activeBtn->setVisible(true);
     ui->modeLabel->setVisible(false);
+
+    ui->taskStatusBtn->setEnabled(true);
 }
 
 void taskQT::EnableEditMode()
@@ -177,6 +184,8 @@ void taskQT::EnableEditMode()
     ui->taskDescription->setTextInteractionFlags(Qt::TextEditable);
     ui->taskCurrent->setTextInteractionFlags(Qt::TextEditable);
     ui->taskEstimate->setTextInteractionFlags(Qt::TextEditable);
+
+
 }
 
 void taskQT::DisableEditMode()
@@ -186,6 +195,8 @@ void taskQT::DisableEditMode()
     ui->taskDescription->setTextInteractionFlags(Qt::NoTextInteraction);
     ui->taskCurrent->setTextInteractionFlags(Qt::NoTextInteraction);
     ui->taskEstimate->setTextInteractionFlags(Qt::NoTextInteraction);
+
+
 }
 
 void taskQT::OnTaskTitleChanged()
@@ -194,7 +205,31 @@ void taskQT::OnTaskTitleChanged()
         ? ui->okBtn->setEnabled(true)
         : ui->okBtn->setEnabled(false);
 }
+void taskQT::OnChangeStatus()
+{
+    task->isDone = !task->isDone;
 
+    if(task->isDone)
+    {
+        ui->taskStatusBtn->setText("Mark as incompleted");
+        SetAsDone();
+    }
+    else
+    {
+        ui->taskStatusBtn->setText("Mark as completed");
+        SetAsUndone();
+    }
+}
+void taskQT::SetAsDone()
+{
+    this->setStyleSheet(doneTaskSheet);
+    task->isDone = true;
+}
+void taskQT::SetAsUndone()
+{
+    this->setStyleSheet(unselectedTaskWidgetSheet);
+    task->isDone = false;
+}
 //Called from pomopeak.cpp when session is finished
 void taskQT::ElapsedIncrease()
 {

@@ -25,14 +25,11 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
   <property name="styleSheet">
-   <string notr="true">#taskQT
-{
-background-color: rgb(162, 162, 162);
-	border-style: solid;
-	border-color: gray;
-	border-width:2px;
-}</string>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,3,0,1,2,0">
    <property name="spacing">
@@ -59,6 +56,9 @@ background-color: rgb(162, 162, 162);
    </item>
    <item>
     <widget class="QTextEdit" name="taskName">
+     <property name="autoFillBackground">
+      <bool>true</bool>
+     </property>
      <property name="placeholderText">
       <string>taskName</string>
      </property>
@@ -78,6 +78,9 @@ background-color: rgb(162, 162, 162);
        <height>0</height>
       </size>
      </property>
+     <property name="autoFillBackground">
+      <bool>true</bool>
+     </property>
      <property name="frameShadow">
       <enum>QFrame::Sunken</enum>
      </property>
@@ -87,7 +90,7 @@ background-color: rgb(162, 162, 162);
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,0,0,0">
+    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,0,0">
      <property name="spacing">
       <number>20</number>
      </property>
@@ -103,13 +106,6 @@ background-color: rgb(162, 162, 162);
      <property name="bottomMargin">
       <number>0</number>
      </property>
-     <item>
-      <widget class="QLabel" name="isDoneLabel">
-       <property name="text">
-        <string>Done</string>
-       </property>
-      </widget>
-     </item>
      <item>
       <spacer name="horizontalSpacer_4">
        <property name="orientation">
@@ -223,7 +219,7 @@ background-color: rgb(162, 162, 162);
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,0,0">
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,0">
      <property name="spacing">
       <number>20</number>
      </property>
@@ -239,13 +235,6 @@ background-color: rgb(162, 162, 162);
      <property name="bottomMargin">
       <number>0</number>
      </property>
-     <item>
-      <widget class="QCheckBox" name="isDoneCheckBox">
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
@@ -393,6 +382,38 @@ li.checked::marker { content: &quot;\2612&quot;; }
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
+      <widget class="QPushButton" name="taskStatusBtn">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>200</width>
+         <height>100</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Mark As Done</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="settingsSpace1">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
       <widget class="QPushButton" name="modifyBtn">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -410,19 +431,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <string>Modify</string>
        </property>
       </widget>
-     </item>
-     <item>
-      <spacer name="settingsSpace1">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
      </item>
      <item>
       <widget class="QPushButton" name="delBtn">
@@ -494,10 +502,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">#activeBtn
-{
-	background-color:rgba(0, 255, 0, 96)
-}</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string/>

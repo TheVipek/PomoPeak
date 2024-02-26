@@ -11,6 +11,7 @@ public:
     int pomodorosDone = 0;
     int pomodorodsToDo = 0;
     int spentTime = 0;
+    bool isDone = false;
 };
 
 #endif // TASK_H

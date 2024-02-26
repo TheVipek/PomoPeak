@@ -31,7 +31,7 @@ signals:
 protected:
     void mousePressEvent(QMouseEvent* event) override
     {
-        if(event->button() == Qt::LeftButton && !isViewMode)
+        if(event->button() == Qt::LeftButton && !isViewMode && !task->isDone)
         {
             EnableViewMode();
         }
@@ -50,17 +50,50 @@ private slots:
 
     void OnDelete();
     void OnCreate();
+
+    void OnChangeStatus();
 private:
     const int MIN_TITLE_SIZE = 3;
-    const QString selectedTaskSheet = "background-color:rgba(0, 255, 0, 96)";
-    const QString unselectedTaskSheet = "background-color:rgba(170, 0, 0, 96)";
+    const QString selectedTaskWidgetSheet =
+        R"(#taskQT
+        {
+            background-color: rgba(34, 34, 34, 128);
+            border-style: solid;
+            border-color: gray;
+            border-width:2px;
+        })";
+
+    const QString unselectedTaskWidgetSheet = R"(#taskQT
+        {
+            background-color: rgba(34, 34, 34, 64);
+            border-style: solid;
+            border-color: gray;
+            border-width:2px;
+        })";
+
+    const QString doneTaskSheet = R"(QWidget
+        {
+            background-color: rgba(34, 34, 34, 32);
+
+        })";
+
+    const QString selectedTaskBar = R"(#activeBtn
+        {
+            background-color:rgba(0, 255, 0, 96)
+
+        })";
+    const QString unselectedTaskBar = R"(#activeBtn
+        {
+            background-color:rgba(255, 0, 0, 96)
+
+        })";
     const QString viewLabelValue = "Currently in View Mode";
     const QString editLabelValue = "Currently in Edit Mode";
 
     bool isCreated = false;
     bool isEditMode = false;
     bool isSelected = false;
-    bool isViewMode = true;
+    bool isViewMode = false;
 
     Ui::taskQT* ui;
     TaskInputFilter* filter;
@@ -77,5 +110,8 @@ private:
 
     void UpdateModeLabel(QString val);
     void UpdateTimeSpent();
+
+    void SetAsDone();
+    void SetAsUndone();
 };
 #endif // TASKQT_H
