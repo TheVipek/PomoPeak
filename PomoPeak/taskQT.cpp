@@ -114,6 +114,7 @@ void taskQT::ProceedTaskModifications()
         ui->taskCurrent->setText("0");
     }
     task->pomodorosDone = doneText.toInt();
+    UpdateTimeSpent();
 }
 
 void taskQT::CancelTaskModifications()
@@ -194,6 +195,7 @@ void taskQT::OnTaskTitleChanged()
         : ui->okBtn->setEnabled(false);
 }
 
+//Called from pomopeak.cpp when session is finished
 void taskQT::ElapsedIncrease()
 {
     int v = ui->taskCurrent->toPlainText().toInt();
@@ -206,7 +208,7 @@ void taskQT::ElapsedIncrease()
 void taskQT::UpdateTimeSpent()
 {
     task->spentTime = task->pomodorosDone * PomoSettings::SessionDuration;
-    ui->timeSpentOnTask->setText(QString::number(task->spentTime));
+    ui->timeSpentOnTask->setText(QString::number(task->spentTime/60));
 }
 void taskQT::UpdateModeLabel(QString val)
 {
