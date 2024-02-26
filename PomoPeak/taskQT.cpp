@@ -199,8 +199,15 @@ void taskQT::ElapsedIncrease()
     int v = ui->taskCurrent->toPlainText().toInt();
     ui->taskCurrent->setText(QString::number(v+1));
     task->pomodorosDone++;
+    UpdateTimeSpent();
+
 }
 
+void taskQT::UpdateTimeSpent()
+{
+    task->spentTime = task->pomodorosDone * PomoSettings::SessionDuration;
+    ui->timeSpentOnTask->setText(QString::number(task->spentTime));
+}
 void taskQT::UpdateModeLabel(QString val)
 {
     ui->modeLabel->setText(val);

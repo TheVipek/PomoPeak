@@ -5,6 +5,7 @@
 #include "task.h"
 #include <memory>
 #include "TaskInputFilter.h"
+#include "pomosettings.h"
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class taskQT;
@@ -75,5 +76,6 @@ private:
     void CancelTaskModifications();
 
     void UpdateModeLabel(QString val);
+    void UpdateTimeSpent();
 };
 #endif // TASKQT_H

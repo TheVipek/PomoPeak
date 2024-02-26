@@ -34,7 +34,6 @@ private:
     taskQT* currentActiveTask = nullptr;
     taskQT* currentInViewModeTask = nullptr;
     QTimer timer;
-    PomoSettings settings;
     FlowHandler flowHandler;
     TaskManager taskManager;
     int globalCounter;

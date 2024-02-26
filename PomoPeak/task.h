@@ -10,6 +10,7 @@ public:
     QString description;
     int pomodorosDone = 0;
     int pomodorodsToDo = 0;
+    int spentTime = 0;
 };
 
 #endif // TASK_H

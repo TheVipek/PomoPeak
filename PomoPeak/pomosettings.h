@@ -1,12 +1,11 @@
 #ifndef POMOSETTINGS_H
 #define POMOSETTINGS_H
-struct PomoSettings
+class PomoSettings
 {
 public:
-    PomoSettings(float sessionDuration, float shortBreakDuration, float longBreakDuration);
-    float SessionDuration;
-    float ShortBreakDuration;
-    float LongBreakDuration;
+    static float SessionDuration;
+    static float ShortBreakDuration;
+    static float LongBreakDuration;
 };
 
 #endif // POMOSETTINGS_H

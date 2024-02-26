@@ -1,18 +1,16 @@
 #include "pomopeak.h"
 #include "./ui_pomopeak.h"
-#include "ui_taskQT.h"
 
 PomoPeak::PomoPeak(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::PomoPeak)
     , timer(new QTimer)
-    , settings(1,.5f,1.5f)
     , flowHandler(2,1)
     , taskManager()
 {
     ui->setupUi(this);
     isRunning = false;
-    durationLeft = settings.SessionDuration;
+    durationLeft = PomoSettings::SessionDuration;
     globalCounter = 0;
 
     UpdateTimerLabel(QString("%1:%2").arg(durationLeft / 60,2,10,QChar('0')).arg((durationLeft % 60),2,10,QChar('0')));
@@ -115,13 +113,13 @@ void PomoPeak::UpdateTimerDuration(FlowSequence sequence)
     switch(sequence)
     {
         case FlowSequence::Session:
-            durationLeft = settings.SessionDuration;
+        durationLeft = PomoSettings::SessionDuration;
             break;
         case FlowSequence::ShortBreak:
-            durationLeft = settings.ShortBreakDuration;
+            durationLeft = PomoSettings::ShortBreakDuration;
             break;
         case FlowSequence::LongBreak:
-            durationLeft = settings.LongBreakDuration;
+            durationLeft = PomoSettings::LongBreakDuration;
             break;
         default:
             qDebug() << "something wrong with updatingTimerDuration";
