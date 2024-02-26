@@ -21,19 +21,20 @@ FlowSequence FlowHandler::GetCurrentSequence()
 
 void FlowHandler::Next()
 {
-    if(currentToShortBreak == 0)
+    if(GetCurrentSequence() == FlowSequence::Session)
     {
-        currentToShortBreak = toShortBreak;
-        if(currentToLongBreak == 0)
-        {
+        currentToShortBreak--;
+    }
+    else
+    {
+        if (GetCurrentSequence() == FlowSequence::LongBreak) {
             currentToLongBreak = toLongBreak;
-        }
-        else
-        {
+            currentToShortBreak = toShortBreak;
+        } else if (GetCurrentSequence() == FlowSequence::ShortBreak) {
+            currentToShortBreak = toShortBreak;
             currentToLongBreak--;
         }
     }
-    currentToShortBreak--;
 
 
 }

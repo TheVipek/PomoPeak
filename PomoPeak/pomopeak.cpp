@@ -5,7 +5,7 @@ PomoPeak::PomoPeak(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::PomoPeak)
     , timer(new QTimer)
-    , flowHandler(2,1)
+    , flowHandler(PomoSettings::ShortBreakAfterSessions, PomoSettings::LongBreakAfterShortBreaks)
     , taskManager()
 {
     ui->setupUi(this);
@@ -43,6 +43,8 @@ void PomoPeak::OnTimerTimeout()
     if(durationLeft <= 0)
     {
         OnChangeState();
+
+
         if(flowHandler.GetCurrentSequence() == FlowSequence::Session)
         {
             //Call to current task update
@@ -50,8 +52,8 @@ void PomoPeak::OnTimerTimeout()
             {
                 currentActiveTask->ElapsedIncrease();
             }
-
             globalCounter++;
+
         }
 
         flowHandler.Next();
