@@ -9,6 +9,7 @@
 #include <vector>
 #include "taskQT.h"
 #include <QVBoxLayout>
+#include <QSoundEffect>
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class PomoPeak;
@@ -36,10 +37,15 @@ private:
     QTimer timer;
     FlowHandler flowHandler;
     TaskManager taskManager;
+
     int globalCounter;
     int durationLeft;
     bool isRunning;
     bool isTaskBeingCreated = false;
+
+    //Sounds
+    QSoundEffect* startButtonClickEffect;
+
     void UpdateCounter();
     void Skip();
     void UpdateTimerLabel(QString value);

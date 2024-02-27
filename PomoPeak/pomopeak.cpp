@@ -7,11 +7,16 @@ PomoPeak::PomoPeak(QWidget *parent)
     , timer(new QTimer)
     , flowHandler(PomoSettings::ShortBreakAfterSessions, PomoSettings::LongBreakAfterShortBreaks)
     , taskManager()
+    , startButtonClickEffect(new QSoundEffect(this))
+
 {
     ui->setupUi(this);
     isRunning = false;
     durationLeft = PomoSettings::SessionDuration;
     globalCounter = 0;
+\
+    startButtonClickEffect->setSource(QUrl("qrc:/sounds/sounds/clickButtonSound.wav"));
+    startButtonClickEffect->setVolume(.5f);
 
     UpdateTimerLabel(QString("%1:%2").arg(durationLeft / 60,2,10,QChar('0')).arg((durationLeft % 60),2,10,QChar('0')));
     AdjustButtonsVisibilityDependingOnCurrentState();
@@ -34,7 +39,16 @@ PomoPeak::~PomoPeak()
 void PomoPeak::OnChangeState()
 {
     isRunning = !isRunning;
-    isRunning == true ? timer.start() : timer.stop();
+    if(isRunning == true)
+    {
+        timer.start();
+        startButtonClickEffect->play();
+    }
+    else
+    {
+        timer.stop();
+    }
+
     AdjustButtonsVisibilityDependingOnCurrentState();
 }
 void PomoPeak::OnTimerTimeout()
