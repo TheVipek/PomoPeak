@@ -6,6 +6,7 @@
 #include <memory>
 #include "TaskInputFilter.h"
 #include "pomosettings.h"
+#include <QGraphicsBlurEffect>
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class taskQT;
@@ -54,6 +55,8 @@ private slots:
     void OnChangeStatus();
 private:
     const int MIN_TITLE_SIZE = 3;
+    const float UNDONE_BLUR = 0;
+    const float DONE_BLUR = 20.0f;
     const QString selectedTaskWidgetSheet =
         R"(#taskQT
         {
@@ -71,12 +74,16 @@ private:
             border-width:2px;
         })";
 
-    const QString doneTaskSheet = R"(QWidget
+    const QString doneTextEditSheet = R"(QWidget
         {
-            background-color: rgba(34, 34, 34, 32);
+            background: rgba(0,0,0,0); color: rgba(0, 0, 0, 127);
 
         })";
+    const QString undoneTextEditSheet = R"(QWidget
+        {
+            background: rgba(255,255,255,255); color: rgba(0, 0, 0, 255);
 
+        })";
     const QString selectedTaskBar = R"(#activeBtn
         {
             background-color:rgba(0, 255, 0, 96)
@@ -97,7 +104,7 @@ private:
 
     Ui::taskQT* ui;
     TaskInputFilter* filter;
-
+    QGraphicsBlurEffect* opacityEffect;
     std::shared_ptr<Task> task;
 
     void OnTaskTitleChanged();

@@ -1,14 +1,21 @@
 #include "taskQT.h"
 #include "./ui_taskQT.h"
+
 taskQT::taskQT(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::taskQT)
     , filter(new TaskInputFilter)
+    , opacityEffect(new QGraphicsBlurEffect(this))
     , task(std::make_shared<Task>())
+
 {
     setAttribute(Qt::WA_StyledBackground, true);
     this->setStyleSheet(selectedTaskWidgetSheet);
+
     ui->setupUi(this);
+
+    opacityEffect->setBlurRadius(UNDONE_BLUR);
+    ui->taskLayout->setGraphicsEffect(opacityEffect);
 
     OnTaskTitleChanged();
 
@@ -222,13 +229,31 @@ void taskQT::OnChangeStatus()
 }
 void taskQT::SetAsDone()
 {
-    this->setStyleSheet(doneTaskSheet);
     task->isDone = true;
+
+
+
+    //TEMPORARY, no idea for another solution, looks like opaciy from parent container doesnt work on QTextEdit objects
+    ui->taskName->setStyleSheet(doneTextEditSheet);
+    ui->taskCurrent->setStyleSheet(doneTextEditSheet);
+    ui->taskDescription->setStyleSheet(doneTextEditSheet);
+    ui->taskEstimate->setStyleSheet(doneTextEditSheet);
+
+    opacityEffect->setBlurRadius(DONE_BLUR);
 }
 void taskQT::SetAsUndone()
 {
-    this->setStyleSheet(unselectedTaskWidgetSheet);
     task->isDone = false;
+
+
+
+    //TEMPORARY, no idea for another solution, looks like opaciy from parent container doesnt work on QTextEdit objects
+    ui->taskName->setStyleSheet(undoneTextEditSheet);
+    ui->taskCurrent->setStyleSheet(undoneTextEditSheet);
+    ui->taskDescription->setStyleSheet(undoneTextEditSheet);
+    ui->taskEstimate->setStyleSheet(undoneTextEditSheet);
+
+    opacityEffect->setBlurRadius(UNDONE_BLUR);
 }
 //Called from pomopeak.cpp when session is finished
 void taskQT::ElapsedIncrease()
