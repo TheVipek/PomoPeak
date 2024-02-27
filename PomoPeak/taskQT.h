@@ -5,7 +5,6 @@
 #include "task.h"
 #include <memory>
 #include "TaskInputFilter.h"
-#include "pomosettings.h"
 #include <QGraphicsBlurEffect>
 QT_BEGIN_NAMESPACE
 namespace Ui {

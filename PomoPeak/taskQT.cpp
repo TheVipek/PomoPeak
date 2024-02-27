@@ -1,25 +1,24 @@
 #include "taskQT.h"
 #include "./ui_taskQT.h"
-
+#include <QFontMetrics>
 taskQT::taskQT(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::taskQT)
     , filter(new TaskInputFilter)
     , opacityEffect(new QGraphicsBlurEffect(this))
     , task(std::make_shared<Task>())
-
 {
     setAttribute(Qt::WA_StyledBackground, true);
     this->setStyleSheet(selectedTaskWidgetSheet);
 
     ui->setupUi(this);
-
     opacityEffect->setBlurRadius(UNDONE_BLUR);
     ui->taskLayout->setGraphicsEffect(opacityEffect);
-
     OnTaskTitleChanged();
 
     EnableViewMode();
+
+
     OnModifyEnter();
 
     ui->activeBtn->setStyleSheet(unselectedTaskBar);
@@ -56,6 +55,11 @@ void taskQT::OnProceedButton()
 
 void taskQT::OnCancelButton()
 {
+    if(!isCreated)
+    {
+        OnDelete();
+        return;
+    }
     isEditMode ? OnModifyCancel() :  OnDelete();
 }
 
@@ -133,7 +137,6 @@ void taskQT::CancelTaskModifications()
     ui->taskDescription->setText(task->description);
     ui->taskEstimate->setText(QString::number(task->pomodorodsToDo));
     ui->taskCurrent->setText(QString::number(task->pomodorosDone));
-
 }
 
 void taskQT::SwitchSelectState()
@@ -191,8 +194,7 @@ void taskQT::EnableEditMode()
     ui->taskDescription->setTextInteractionFlags(Qt::TextEditable);
     ui->taskCurrent->setTextInteractionFlags(Qt::TextEditable);
     ui->taskEstimate->setTextInteractionFlags(Qt::TextEditable);
-
-
+    ui->delBtn->setText("Cancel");
 }
 
 void taskQT::DisableEditMode()
@@ -202,8 +204,7 @@ void taskQT::DisableEditMode()
     ui->taskDescription->setTextInteractionFlags(Qt::NoTextInteraction);
     ui->taskCurrent->setTextInteractionFlags(Qt::NoTextInteraction);
     ui->taskEstimate->setTextInteractionFlags(Qt::NoTextInteraction);
-
-
+    ui->delBtn->setText("Delete");
 }
 
 void taskQT::OnTaskTitleChanged()
@@ -231,8 +232,6 @@ void taskQT::SetAsDone()
 {
     task->isDone = true;
 
-
-
     //TEMPORARY, no idea for another solution, looks like opaciy from parent container doesnt work on QTextEdit objects
     ui->taskName->setStyleSheet(doneTextEditSheet);
     ui->taskCurrent->setStyleSheet(doneTextEditSheet);
@@ -244,8 +243,6 @@ void taskQT::SetAsDone()
 void taskQT::SetAsUndone()
 {
     task->isDone = false;
-
-
 
     //TEMPORARY, no idea for another solution, looks like opaciy from parent container doesnt work on QTextEdit objects
     ui->taskName->setStyleSheet(undoneTextEditSheet);
