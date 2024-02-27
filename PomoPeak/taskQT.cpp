@@ -1,6 +1,6 @@
 #include "taskQT.h"
 #include "./ui_taskQT.h"
-#include <QFontMetrics>
+#include "pomosettings.h"
 taskQT::taskQT(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::taskQT)
