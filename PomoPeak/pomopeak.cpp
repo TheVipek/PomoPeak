@@ -8,6 +8,7 @@ PomoPeak::PomoPeak(QWidget *parent)
     , flowHandler(PomoSettings::ShortBreakAfterSessions, PomoSettings::LongBreakAfterShortBreaks)
     , taskManager()
     , startButtonClickEffect(new QSoundEffect(this))
+    , endBreakEffect(new QSoundEffect(this))
 
 {
     ui->setupUi(this);
@@ -15,8 +16,12 @@ PomoPeak::PomoPeak(QWidget *parent)
     durationLeft = PomoSettings::SessionDuration;
     globalCounter = 0;
 \
+
     startButtonClickEffect->setSource(QUrl("qrc:/sounds/sounds/clickButtonSound.wav"));
     startButtonClickEffect->setVolume(.5f);
+    endBreakEffect->setSource(QUrl("qrc:/sounds/sounds/breakEndNotification.wav"));
+    endBreakEffect->setVolume(.5f);
+    endBreakEffect->setLoopCount(10);
 
     UpdateTimerLabel(QString("%1:%2").arg(durationLeft / 60,2,10,QChar('0')).arg((durationLeft % 60),2,10,QChar('0')));
     AdjustButtonsVisibilityDependingOnCurrentState();
@@ -41,8 +46,13 @@ void PomoPeak::OnChangeState()
     isRunning = !isRunning;
     if(isRunning == true)
     {
-        timer.start();
+        if(endBreakEffect->isPlaying())
+        {
+            endBreakEffect->stop();
+        }
         startButtonClickEffect->play();
+        timer.start();
+
     }
     else
     {
@@ -68,6 +78,10 @@ void PomoPeak::OnTimerTimeout()
             }
             globalCounter++;
 
+        }
+        if(flowHandler.GetCurrentSequence() == FlowSequence::LongBreak || flowHandler.GetCurrentSequence() == FlowSequence::ShortBreak)
+        {
+            endBreakEffect->play();
         }
 
         flowHandler.Next();

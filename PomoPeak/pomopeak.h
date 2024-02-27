@@ -45,7 +45,7 @@ private:
 
     //Sounds
     QSoundEffect* startButtonClickEffect;
-
+    QSoundEffect* endBreakEffect;
     void UpdateCounter();
     void Skip();
     void UpdateTimerLabel(QString value);
