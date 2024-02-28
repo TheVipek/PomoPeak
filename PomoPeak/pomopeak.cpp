@@ -9,9 +9,15 @@ PomoPeak::PomoPeak(QWidget *parent)
     , taskManager()
     , startButtonClickEffect(new QSoundEffect(this))
     , endBreakEffect(new QSoundEffect(this))
-
 {
     ui->setupUi(this);
+    ui->widgetsLayout->setAlignment(Qt::AlignCenter);
+    pomopeakSettings = new pomopeaksettings();
+    pomopeakSettings->hide();
+    ui->widgetsLayout->addWidget(pomopeakSettings);
+
+    //pomopeakSettings->move(screen()->geometry().center() - frameGeometry().center());
+    //pomopeakSettings->hide();
     isRunning = false;
     durationLeft = PomoSettings::SessionDuration;
     globalCounter = 0;
@@ -28,6 +34,7 @@ PomoPeak::PomoPeak(QWidget *parent)
 
     timer.setInterval(1000);
 
+    connect(ui->settingsBtn, &QPushButton::clicked, this, &PomoPeak::OnOpenSettings);
     connect(&timer,  &QTimer::timeout, this, &PomoPeak::OnTimerTimeout);
     connect(ui->ChangeFlowBtn, &QPushButton::clicked, this, &PomoPeak::OnChangeState);
     connect(ui->SkipBtn, &QPushButton::clicked, this, &PomoPeak::Skip);
@@ -167,5 +174,13 @@ void PomoPeak::AdjustButtonsVisibilityDependingOnCurrentState()
     {
         ui->ChangeFlowBtn->setText("Start");
         ui->SkipBtn->setVisible(false);
+    }
+}
+void PomoPeak::OnOpenSettings()
+{
+    if(!settingsOpen)
+    {
+        ui->widget->hide();
+        pomopeakSettings->show();
     }
 }

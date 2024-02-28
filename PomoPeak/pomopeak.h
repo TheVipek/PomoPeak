@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QTimer>
 #include "pomosettings.h"
+#include "pomopeaksettings.h"
 #include "flowhandler.h"
 #include "taskmanager.h"
 #include <vector>
@@ -23,14 +24,16 @@ class PomoPeak : public QMainWindow
 public:
     PomoPeak(QWidget *parent = nullptr);
     ~PomoPeak();
-public slots:
+protected slots:
     void OnChangeState();
     void OnTimerTimeout();
     void OnTryAddTask();
     void OnCurrentActiveTaskChanged(taskQT* task);
     void OnViewModeTaskChanged(taskQT* task);
+    void OnOpenSettings();
 private:
     Ui::PomoPeak* ui;
+    pomopeaksettings* pomopeakSettings;
     std::vector<Ui::taskQT*> avaliableTasks;
     taskQT* currentActiveTask = nullptr;
     taskQT* currentInViewModeTask = nullptr;
@@ -40,9 +43,10 @@ private:
 
     int globalCounter;
     int durationLeft;
+
     bool isRunning;
     bool isTaskBeingCreated = false;
-
+    bool settingsOpen = false;
     //Sounds
     QSoundEffect* startButtonClickEffect;
     QSoundEffect* endBreakEffect;
