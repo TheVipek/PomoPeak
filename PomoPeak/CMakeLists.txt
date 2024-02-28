@@ -33,6 +33,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         task.cpp
         TaskInputFilter.h
         sounds.qrc
+        pomopeaksettings.h pomopeaksettings.cpp pomopeaksettings.ui
 
     )
 # Define target properties for Android with Qt 6 as:
