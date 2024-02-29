@@ -12,6 +12,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Multimedia)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Sql)
+
 set(PROJECT_SOURCES
         main.cpp
         pomopeak.cpp
@@ -34,6 +36,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         TaskInputFilter.h
         sounds.qrc
         pomopeaksettings.h pomopeaksettings.cpp pomopeaksettings.ui
+        sqliteHandler.h sqliteHandler.cpp
+        databasetables.h databasetables.cpp
+        settingsDTO.cpp
 
     )
 # Define target properties for Android with Qt 6 as:
@@ -56,6 +61,8 @@ endif()
 
 target_link_libraries(PomoPeak PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(PomoPeak PRIVATE Qt${QT_VERSION_MAJOR}::Multimedia)
+target_link_libraries(PomoPeak PRIVATE Qt${QT_VERSION_MAJOR}::Sql)
+
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
@@ -80,3 +87,21 @@ install(TARGETS PomoPeak
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(PomoPeak)
 endif()
+
+if(QT_VERSION_MAJOR EQUAL 6)
+    qt_finalize_executable(PomoPeak)
+endif()
+
+set(DATABASE_FILE "${CMAKE_SOURCE_DIR}/database/applicationData.sqlite")
+set(BUILD_DATABASE_FILE "${CMAKE_BINARY_DIR}/database/applicationData.sqlite")
+
+add_custom_command(OUTPUT ${BUILD_DATABASE_FILE}
+                   COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/database"
+                   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${DATABASE_FILE} ${BUILD_DATABASE_FILE}
+                   DEPENDS ${DATABASE_FILE})
+
+add_custom_target(CopySQLite ALL
+                  DEPENDS ${BUILD_DATABASE_FILE})
+
+add_dependencies(CopySQLite PomoPeak)
+
