@@ -29,16 +29,18 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         FlowHandler.h flowhandler.cpp
-        pomosettings.h pomosettings.cpp
+        settings.h settings.cpp
         taskmanager.h taskmanager.cpp
         task.h
         task.cpp
         TaskInputFilter.h
-        sounds.qrc
+
         pomopeaksettings.h pomopeaksettings.cpp pomopeaksettings.ui
         sqliteHandler.h sqliteHandler.cpp
         databasetables.h databasetables.cpp
-        settingsDTO.cpp
+        settingsdto.h settingsdto.cpp
+
+
 
     )
 # Define target properties for Android with Qt 6 as:

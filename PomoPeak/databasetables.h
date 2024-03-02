@@ -1,7 +1,7 @@
 #ifndef DATABASETABLES_H
 #define DATABASETABLES_H
 #include <string>
-class databaseTables
+class DatabaseTables
 {
 public:
     static std::string SETTINGS;

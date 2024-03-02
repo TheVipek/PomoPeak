@@ -1,6 +1,6 @@
 #include "taskQT.h"
 #include "./ui_taskQT.h"
-#include "pomosettings.h"
+#include "settings.h"
 taskQT::taskQT(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::taskQT)
@@ -115,18 +115,8 @@ void taskQT::ProceedTaskModifications()
     task->title = ui->taskName->toPlainText();
     task->description = ui->taskDescription->toPlainText();
 
-    // QString toDoText = ui->estimationSpinBox->text();
-    // if(toDoText.isEmpty())
-    // {
-    //     ui->taskEstimate->setText("0");
-    // }
     task->pomodorodsToDo = ui->estimationSpinBox->text().toInt();
 
-    // QString doneText = ui->taskCurrent->toPlainText();
-    // if(doneText.isEmpty())
-    // {
-    //     ui->taskCurrent->setText("0");
-    // }
     task->pomodorosDone = ui->currentSpinBox->text().toInt();
     UpdateTimeSpent();
 }

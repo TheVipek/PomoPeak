@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/sounds">
-        <file>sounds/clickButtonSound.wav</file>
-        <file>sounds/breakEndNotification.wav</file>
+        <file>sounds/defaultButtonSound.wav</file>
+        <file>sounds/defaultEndNotification.wav</file>
     </qresource>
 </RCC>

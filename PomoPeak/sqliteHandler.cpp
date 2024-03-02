@@ -1,11 +1,11 @@
 #include "sqliteHandler.h"
 
-sqliteHandler::sqliteHandler(QSqlDriver* driver, const QString& connectionName)
+SqliteHandler::SqliteHandler(QSqlDriver* driver, const QString& connectionName)
 {
     db = QSqlDatabase::addDatabase(driver, connectionName);
 }
 template<typename T>
-std::vector<T> sqliteHandler::GetData(const QString queryStr)
+std::vector<T> SqliteHandler::GetData(const QString queryStr)
 {
     QSqlQuery query(db);
     query.prepare(queryStr);

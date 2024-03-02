@@ -1,5 +1,5 @@
 #include "databasetables.h"
 
-std::string SETTINGS = "SETTINGS";
-std::string TASKS = "TASKS";
-std::string ACTIVITY = "RECENT_ACTIVITY";
+std::string DatabaseTables::SETTINGS = "SETTINGS";
+std::string DatabaseTables::TASKS = "TASKS";
+std::string DatabaseTables::ACTIVITY = "RECENT_ACTIVITY";

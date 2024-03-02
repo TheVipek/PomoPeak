@@ -6,10 +6,10 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QSqlRecord>
-class sqliteHandler
+class SqliteHandler
 {
 public:
-    sqliteHandler(QSqlDriver* driver, const QString& connectionName);
+    SqliteHandler(QSqlDriver* driver, const QString& connectionName);
     template<typename T>
     std::vector<T> GetData(const QString query);
 private:

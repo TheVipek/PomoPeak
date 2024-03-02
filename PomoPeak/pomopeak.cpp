@@ -16,8 +16,6 @@ PomoPeak::PomoPeak(QWidget *parent)
     pomopeakSettings->hide();
     ui->widgetsLayout->addWidget(pomopeakSettings);
 
-    //pomopeakSettings->move(screen()->geometry().center() - frameGeometry().center());
-    //pomopeakSettings->hide();
     isRunning = false;
     durationLeft = PomoSettings::SessionDuration;
     globalCounter = 0;

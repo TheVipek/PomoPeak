@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QTimer>
-#include "pomosettings.h"
+#include "settings.h"
 #include "pomopeaksettings.h"
 #include "flowhandler.h"
 #include "taskmanager.h"
