@@ -90,15 +90,24 @@ if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(PomoPeak)
 endif()
 
-set(DATABASE_FILE "${CMAKE_SOURCE_DIR}/database/applicationData.sqlite")
-set(BUILD_DATABASE_FILE "${CMAKE_BINARY_DIR}/database/applicationData.sqlite")
+set(DATABASE_FILE "${CMAKE_SOURCE_DIR}/data/database/applicationData.sqlite")
+set(BUILD_DATABASE_FILE "${CMAKE_BINARY_DIR}/data/database/applicationData.sqlite")
 
-add_custom_command(OUTPUT ${BUILD_DATABASE_FILE}
-                   COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/database"
-                   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${DATABASE_FILE} ${BUILD_DATABASE_FILE}
-                   DEPENDS ${DATABASE_FILE})
+add_custom_target(CopyDatabase ALL
+                   COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/data/database"
+                   COMMAND ${CMAKE_COMMAND} -E copy ${DATABASE_FILE} ${BUILD_DATABASE_FILE}
+                   COMMENT "Copying database to build directory")
 
-add_custom_target(CopySQLite ALL
-                  DEPENDS ${BUILD_DATABASE_FILE})
+add_dependencies(CopyDatabase PomoPeak)
 
-add_dependencies(CopySQLite PomoPeak)
+set(SOUNDS_DIRECTORY "${CMAKE_SOURCE_DIR}/data/sounds")
+set(BUILD_SOUNDS_DIRECTORY "${CMAKE_BINARY_DIR}/data/sounds")
+
+# Create a custom target that always runs
+add_custom_target(CopySounds ALL
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${BUILD_SOUNDS_DIRECTORY}"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${SOUNDS_DIRECTORY}" "${BUILD_SOUNDS_DIRECTORY}"
+    COMMENT "Copying sound files to build directory")
+
+# Ensure your main target depends on this custom target
+add_dependencies(PomoPeak CopySounds)

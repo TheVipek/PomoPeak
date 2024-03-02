@@ -9,9 +9,9 @@ Settings::Settings()
     SessionDuration = 25 * 60;
         ShortBreakDuration = 5 * 60;
     LongBreakDuration = 10 * 60;
-    SessionAlarm = DefaultSessionAlarmPath;
+    SessionAlarm = QCoreApplication::applicationDirPath() + DefaultSessionAlarmPath;
     SessionAlarmVolume = 100;
-    BreakAlarm = DefaultBreakAlarmPath;
+    BreakAlarm = QCoreApplication::applicationDirPath() + DefaultBreakAlarmPath;
     BreakAlarmVolume = 100;
     BreakAlarmRepetitions = 5;
 

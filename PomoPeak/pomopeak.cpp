@@ -41,10 +41,9 @@ PomoPeak::PomoPeak(QWidget *parent)
     durationLeft = settings->SessionDuration;
     globalCounter = 0;
 \
-
-    startButtonClickEffect->setSource(QUrl("qrc:/sounds/sounds/clickButtonSound.wav"));
+    startButtonClickEffect->setSource(QUrl::fromLocalFile(settings->SessionAlarm));
     startButtonClickEffect->setVolume(.5f);
-    endBreakEffect->setSource(QUrl("qrc:/sounds/sounds/breakEndNotification.wav"));
+    endBreakEffect->setSource(QUrl::fromLocalFile(settings->BreakAlarm));
     endBreakEffect->setVolume(.5f);
     endBreakEffect->setLoopCount(10);
 
