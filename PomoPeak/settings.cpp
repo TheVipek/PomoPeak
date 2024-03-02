@@ -10,8 +10,10 @@ Settings::Settings()
         ShortBreakDuration = 5 * 60;
     LongBreakDuration = 10 * 60;
     SessionAlarm = QCoreApplication::applicationDirPath() + DefaultSessionAlarmPath;
+    SessionAlarmName = SessionAlarm.section('/', -1);
     SessionAlarmVolume = 100;
     BreakAlarm = QCoreApplication::applicationDirPath() + DefaultBreakAlarmPath;
+    BreakAlarmName = BreakAlarm.section('/', -1);
     BreakAlarmVolume = 100;
     BreakAlarmRepetitions = 5;
 
@@ -78,6 +80,8 @@ Settings::Settings(const SettingsDTO& dto)
         BreakAlarm = DefaultSessionAlarmPath;
     }
 
+    SessionAlarmName = SessionAlarm.section('/', -1);
+    BreakAlarmName = BreakAlarm.section('/', -1);
 }
 
 QVariantMap Settings::ToVariantMap(QString userID)

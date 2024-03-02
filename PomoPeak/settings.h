@@ -39,7 +39,9 @@ public:
     const QString CustomBreakAlarmPath = "/data/sounds/customBreakNotification.wav";
 
     QString SessionAlarm;
+    QString SessionAlarmName;
     QString BreakAlarm;
+    QString BreakAlarmName;
 
     QVariantMap ToVariantMap(QString userID);
 

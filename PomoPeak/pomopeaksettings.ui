@@ -193,12 +193,15 @@
             </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="sessionSpinBox">
+            <widget class="QDoubleSpinBox" name="sessionDoubleSpinBox">
              <property name="maximumSize">
               <size>
                <width>16777215</width>
                <height>30</height>
               </size>
+             </property>
+             <property name="maximum">
+              <double>1000.000000000000000</double>
              </property>
             </widget>
            </item>
@@ -235,12 +238,15 @@
             </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="shortBreakSpinBox">
+            <widget class="QDoubleSpinBox" name="shortBreakDoubleSpinBox">
              <property name="maximumSize">
               <size>
                <width>16777215</width>
                <height>30</height>
               </size>
+             </property>
+             <property name="maximum">
+              <double>1000.000000000000000</double>
              </property>
             </widget>
            </item>
@@ -277,12 +283,15 @@
             </widget>
            </item>
            <item>
-            <widget class="QDoubleSpinBox" name="longBreakSpinBox">
+            <widget class="QDoubleSpinBox" name="longBreakDoubleSpinBox">
              <property name="maximumSize">
               <size>
                <width>16777215</width>
                <height>30</height>
               </size>
+             </property>
+             <property name="maximum">
+              <double>1000.000000000000000</double>
              </property>
             </widget>
            </item>
