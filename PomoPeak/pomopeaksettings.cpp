@@ -11,10 +11,14 @@ pomopeaksettings::pomopeaksettings(Settings& _settings, QWidget *parent)
     ui->longBreakDoubleSpinBox->setValue(_settings.LongBreakDuration / 60);
     ui->shortBreakDoubleSpinBox->setValue(_settings.ShortBreakDuration / 60);
     ui->alarmEndBreakRepSpinBox->setValue(_settings.BreakAlarmRepetitions);
+
     ui->alarmStartCurrentLabel->setText(_settings.SessionAlarmName);
     ui->alarmEndBreakCurrentLabel->setText(_settings.BreakAlarmName);
+
     ui->alarmStartSlider->setValue(_settings.SessionAlarmVolume);
+    ui->alarmStartSliderValueLabel->setText(QString::number(_settings.SessionAlarmVolume));
     ui->alarmEndBreakVolumeSlider->setValue(_settings.BreakAlarmVolume);
+    ui->alarmEndBreakVolumeLabel->setText(QString::number(_settings.BreakAlarmVolume));
     ui->quickActionSequenceEdit->setKeySequence(_settings.QuickActionShortcut);
 }
 
