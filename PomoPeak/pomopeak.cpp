@@ -4,14 +4,11 @@
 #include <sstream>
 #include "settingsdto.h"
 #include "databasetables.h"
-
 PomoPeak::PomoPeak(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::PomoPeak)
     , timer(new QTimer)
     , taskManager()
-    , startButtonClickEffect(new QSoundEffect(this))
-    , endBreakEffect(new QSoundEffect(this))
 {
     sqliteHandler = new SqliteHandler("applicationData.db");
 
@@ -33,19 +30,28 @@ PomoPeak::PomoPeak(QWidget *parent)
 
     ui->setupUi(this);
     ui->widgetsLayout->setAlignment(Qt::AlignCenter);
-    pomopeakSettings = new pomopeaksettings();
+    pomopeakSettings = new pomopeaksettings(*settings, this);
     pomopeakSettings->hide();
     ui->widgetsLayout->addWidget(pomopeakSettings);
 
     isRunning = false;
     durationLeft = settings->SessionDuration;
     globalCounter = 0;
-\
-    startButtonClickEffect->setSource(QUrl::fromLocalFile(settings->SessionAlarm));
-    startButtonClickEffect->setVolume(.5f);
-    endBreakEffect->setSource(QUrl::fromLocalFile(settings->BreakAlarm));
-    endBreakEffect->setVolume(.5f);
-    endBreakEffect->setLoopCount(10);
+
+    startButtonOutput = new QAudioOutput();
+    startButtonOutput->setVolume(0.5f);
+
+    endBreakOutput = new QAudioOutput();
+    endBreakOutput->setVolume(0.5f);
+
+    QFile file(settings->SessionAlarm);
+    startButtonClickEffect = new QMediaPlayer();
+    startButtonClickEffect->setAudioOutput(startButtonOutput);
+    startButtonClickEffect->setSource(settings->SessionAlarm);
+    endBreakEffect = new QMediaPlayer();
+    endBreakEffect->setSource(QUrl::fromLocalFile(settings->SessionAlarm));
+    endBreakEffect->setAudioOutput(endBreakOutput);
+    endBreakEffect->setLoops(10);
 
     UpdateTimerLabel(QString("%1:%2").arg(durationLeft / 60,2,10,QChar('0')).arg((durationLeft % 60),2,10,QChar('0')));
     AdjustButtonsVisibilityDependingOnCurrentState();
@@ -53,7 +59,7 @@ PomoPeak::PomoPeak(QWidget *parent)
     timer.setInterval(1000);
 
     connect(ui->settingsBtn, &QPushButton::clicked, this, &PomoPeak::OnOpenSettings);
-    connect(&timer,  &QTimer::timeout, this, &PomoPeak::OnTimerTimeout);
+    connect(&timer, &QTimer::timeout, this, &PomoPeak::OnTimerTimeout);
     connect(ui->ChangeFlowBtn, &QPushButton::clicked, this, &PomoPeak::OnChangeState);
     connect(ui->SkipBtn, &QPushButton::clicked, this, &PomoPeak::Skip);
     connect(ui->AddTaskBtn, &QPushButton::clicked, this, &PomoPeak::OnTryAddTask);
@@ -63,10 +69,34 @@ PomoPeak::PomoPeak(QWidget *parent)
 
 PomoPeak::~PomoPeak()
 {
-    delete ui;
-    delete settings;
+
     delete flowHandler;
 
+    delete startButtonClickEffect;
+    delete startButtonOutput;
+
+    delete endBreakEffect;
+    delete endBreakOutput;
+
+    delete sqliteHandler;
+
+
+    delete settings;
+
+
+
+    avaliableTasks.clear(); // Clear the vector
+
+
+    delete ui;
+
+    //https://doc.qt.io/qt-6/objecttrees.html
+
+    //no need to do it?
+       // delete pomopeakSettings;
+    // for (auto taskPtr : avaliableTasks) {
+    //     delete taskPtr;
+    // }
 }
 
 void PomoPeak::OnChangeState()
@@ -100,9 +130,9 @@ void PomoPeak::OnTimerTimeout()
         if(flowHandler->GetCurrentSequence() == FlowSequence::Session)
         {
             //Call to current task update
-            if(currentActiveTask != nullptr)
+            if(currentActiveTaskUI != nullptr)
             {
-                currentActiveTask->ElapsedIncrease();
+                currentActiveTaskUI->ElapsedIncrease();
             }
             globalCounter++;
 
@@ -138,24 +168,24 @@ void PomoPeak::RemoveTask(std::shared_ptr<Task> task)
 {
     taskManager.RemoveTask(task);
 }
-void PomoPeak::OnViewModeTaskChanged(taskQT* task)
+void PomoPeak::OnViewModeTaskChanged(taskQT* taskUI)
 {
-    qDebug() << "requested task:" << task;
-    qDebug() << currentInViewModeTask;
-    if(currentInViewModeTask != nullptr && currentInViewModeTask != task)
+    qDebug() << "requested task:" << taskUI;
+    qDebug() << currentInViewModeTaskUI;
+    if(currentInViewModeTaskUI != nullptr && currentInViewModeTaskUI != taskUI)
     {
-        currentInViewModeTask->DisableViewMode();
+        currentInViewModeTaskUI->DisableViewMode();
     }
-    currentInViewModeTask = task;
+    currentInViewModeTaskUI = taskUI;
 
 }
-void PomoPeak::OnCurrentActiveTaskChanged(taskQT* task)
+void PomoPeak::OnCurrentActiveTaskChanged(taskQT* taskUI)
 {
-    if(currentActiveTask != nullptr && currentActiveTask != task)
+    if(currentActiveTaskUI != nullptr && currentActiveTaskUI != taskUI)
     {
-        currentActiveTask->SwitchSelectState();
+        currentActiveTaskUI->SwitchSelectState();
     }
-    currentActiveTask = task;
+    currentActiveTaskUI = taskUI;
 }
 void PomoPeak::Skip()
 {

@@ -33,15 +33,16 @@ public:
     static QString customBreakAlarmName;
 
     const QString DefaultSessionAlarmPath = "/data/sounds/defaultButtonSound.wav";
-    const QString CustomSessionAlarmPath = "/data/sounds/customButtonSound";
+    const QString CustomSessionAlarmPath = "/data/sounds/customButtonSound.wav";
 
-    const QString DefaultBreakAlarmPath = "/data/sounds/defaultEndNotification";
-    const QString CustomBreakAlarmPath = "/data/sounds/customBreakNotification";
+    const QString DefaultBreakAlarmPath = "/data/sounds/defaultEndNotification.wav";
+    const QString CustomBreakAlarmPath = "/data/sounds/customBreakNotification.wav";
 
     QString SessionAlarm;
     QString BreakAlarm;
 
     QVariantMap ToVariantMap(QString userID);
+
 };
 
 #endif // SETTINGS_H

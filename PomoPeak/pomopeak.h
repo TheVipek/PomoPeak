@@ -14,7 +14,9 @@
 #include "sqliteHandler.h"
 #include "taskQT.h"
 #include "settings.h"
-
+#include <QMediaPlayer>
+#include <QAudioOutput>
+#include <memory>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -33,20 +35,26 @@ protected slots:
     void OnChangeState();
     void OnTimerTimeout();
     void OnTryAddTask();
-    void OnCurrentActiveTaskChanged(taskQT* task);
-    void OnViewModeTaskChanged(taskQT* task);
+    void OnCurrentActiveTaskChanged(taskQT* taskUI);
+    void OnViewModeTaskChanged(taskQT* taskUI);
     void OnOpenSettings();
 private:
     Ui::PomoPeak* ui;
     pomopeaksettings* pomopeakSettings;
     Settings* settings;
     SqliteHandler* sqliteHandler;
+
     std::vector<Ui::taskQT*> avaliableTasks;
-    taskQT* currentActiveTask = nullptr;
-    taskQT* currentInViewModeTask = nullptr;
+    taskQT* currentActiveTaskUI = nullptr;
+    taskQT* currentInViewModeTaskUI = nullptr;
+
+    QMediaPlayer* startButtonClickEffect;
+    QMediaPlayer* endBreakEffect;
+    QAudioOutput* startButtonOutput;
+    QAudioOutput* endBreakOutput;
+    FlowHandler* flowHandler;
 
     QTimer timer;
-    FlowHandler* flowHandler;
     TaskManager taskManager;
 
     int globalCounter;
@@ -55,9 +63,8 @@ private:
     bool isRunning;
     bool isTaskBeingCreated = false;
     bool settingsOpen = false;
-    //Sounds
-    QSoundEffect* startButtonClickEffect;
-    QSoundEffect* endBreakEffect;
+
+
     void UpdateCounter();
     void Skip();
     void UpdateTimerLabel(QString value);
