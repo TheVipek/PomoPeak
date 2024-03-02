@@ -7,7 +7,7 @@ QString Settings::customBreakAlarmName =  "customBreakNotification";
 Settings::Settings()
 {
     SessionDuration = 25 * 60;
-    ShortBreakDuration = 5 * 60;
+        ShortBreakDuration = 5 * 60;
     LongBreakDuration = 10 * 60;
     SessionAlarm = DefaultSessionAlarmPath;
     SessionAlarmVolume = 100;

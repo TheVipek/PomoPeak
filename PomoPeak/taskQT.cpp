@@ -1,6 +1,5 @@
 #include "taskQT.h"
 #include "./ui_taskQT.h"
-#include "settings.h"
 taskQT::taskQT(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::taskQT)
@@ -254,7 +253,8 @@ void taskQT::ElapsedIncrease()
 
 void taskQT::UpdateTimeSpent()
 {
-    task->spentTime = task->pomodorosDone * PomoSettings::SessionDuration;
+    //Change it
+    //task->spentTime = task->pomodorosDone * PomoSettings::SessionDuration;
     ui->timeSpentOnTask->setText(QString::number(task->spentTime/60));
 }
 void taskQT::UpdateModeLabel(QString val)

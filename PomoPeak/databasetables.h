@@ -1,12 +1,12 @@
 #ifndef DATABASETABLES_H
 #define DATABASETABLES_H
-#include <string>
+#include <QString>
 class DatabaseTables
 {
 public:
-    static std::string SETTINGS;
-    static std::string TASKS;
-    static std::string ACTIVITY;
+    static QString SETTINGS;
+    static QString TASKS;
+    static QString ACTIVITY;
 };
 
 #endif // DATABASETABLES_H

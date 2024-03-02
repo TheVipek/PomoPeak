@@ -1,11 +1,9 @@
 #include "flowhandler.h"
 
-FlowHandler::FlowHandler(int shortBreakEvery, int longBreakEvery)
-                                                                : toShortBreak(shortBreakEvery)
-                                                                , toLongBreak(longBreakEvery)
+FlowHandler::FlowHandler(const Settings& _settings) : settings(_settings)
 {
-    currentToShortBreak = toShortBreak;
-    currentToLongBreak = toLongBreak;
+    currentToShortBreak = settings.ShortBreakAfterSessions;
+    currentToLongBreak = settings.LongBreakAfterShortBreaks;
 }
 
 FlowSequence FlowHandler::GetCurrentSequence()
@@ -28,10 +26,10 @@ void FlowHandler::Next()
     else
     {
         if (GetCurrentSequence() == FlowSequence::LongBreak) {
-            currentToLongBreak = toLongBreak;
-            currentToShortBreak = toShortBreak;
+            currentToLongBreak = settings.ShortBreakAfterSessions;
+            currentToShortBreak = settings.LongBreakAfterShortBreaks;
         } else if (GetCurrentSequence() == FlowSequence::ShortBreak) {
-            currentToShortBreak = toShortBreak;
+            currentToShortBreak = settings.ShortBreakAfterSessions;
             currentToLongBreak--;
         }
     }

@@ -1,19 +1,32 @@
 #include "settingsdto.h"
 SettingsDTO SettingsDTO::FromSqlRecord(const QSqlRecord& record)
 {
+    QString userID = record.value("UserID").isNull() ? QString("DefaultUserID") : record.value("UserID").toString();
+    qint16 sessionDuration = record.value("SessionDuration").isNull() ? 0 : static_cast<qint16>(record.value("SessionDuration").toInt());
+    qint16 shortBreakDuration = record.value("ShortBreakDuration").isNull() ? 0 : static_cast<qint16>(record.value("ShortBreakDuration").toInt());
+    qint16 longBreakDuration = record.value("LongBreakDuration").isNull() ? 0 : static_cast<qint16>(record.value("LongBreakDuration").toInt());
+    qint16 sessionAlarmVolume = record.value("SessionAlarmVolume").isNull() ? 0 : static_cast<qint16>(record.value("SessionAlarmVolume").toInt());
+    qint16 breakAlarmVolume = record.value("BreakAlarmVolume").isNull() ? 0 : static_cast<qint16>(record.value("BreakAlarmVolume").toInt());
+    qint16 breakAlarmRepetitions = record.value("BreakAlarmRepetitions").isNull() ? 0 : static_cast<qint16>(record.value("BreakAlarmRepetitions").toInt());
+    qint16 shortBreakAfterSessions = record.value("ShortBreakAfterSessions").isNull() ? 0 : static_cast<qint16>(record.value("ShortBreakAfterSessions").toInt());
+    qint16 longBreakAfterShortBreaks = record.value("LongBreakAfterShortBreaks").isNull() ? 0 : static_cast<qint16>(record.value("LongBreakAfterShortBreaks").toInt());
+    QKeySequence quickActionShortcut = record.value("QuickActionShortcut").isNull() ? QKeySequence() : static_cast<QKeySequence>(record.value("QuickActionShortcut").toString());
+    QByteArray sessionAlarm = record.value("SessionAlarm").isNull() ? QByteArray() : record.value("SessionAlarm").toByteArray();
+    QByteArray breakAlarm = record.value("BreakAlarm").isNull() ? QByteArray() : record.value("BreakAlarm").toByteArray();
+
     return SettingsDTO(
-        record.value("UserID").toString(),
-        static_cast<qint16>(record.value("SessionDuration").toInt()),
-        static_cast<qint16>(record.value("ShortBreakDuration").toInt()),
-        static_cast<qint16>(record.value("LongBreakDuration").toInt()),
-        static_cast<qint16>(record.value("SessionAlarmVolume").toInt()),
-        static_cast<qint16>(record.value("BreakAlarmVolume").toInt()),
-        static_cast<qint16>(record.value("BreakAlarmRepetitions").toInt()),
-        static_cast<qint16>(record.value("ShortBreakAfterSessions").toInt()),
-        static_cast<qint16>(record.value("LongBreakAfterShortBreaks").toInt()),
-        static_cast<QKeySequence>(record.value("QuickActionShortcut").toString()),
-        record.value("SessionAlarm").toByteArray(),
-        record.value("BreakAlarm").toByteArray()
+        userID,
+        sessionDuration,
+        shortBreakDuration,
+        longBreakDuration ,
+        sessionAlarmVolume ,
+        breakAlarmVolume ,
+        breakAlarmRepetitions ,
+        shortBreakAfterSessions ,
+        longBreakAfterShortBreaks ,
+        quickActionShortcut ,
+        sessionAlarm ,
+        breakAlarm
     );
 };
 

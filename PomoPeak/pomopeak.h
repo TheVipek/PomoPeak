@@ -3,14 +3,19 @@
 
 #include <QMainWindow>
 #include <QTimer>
-#include "settings.h"
+#include <QVBoxLayout>
+#include <QSoundEffect>
+#include <vector>
+
+#include <QSqlDriver>
 #include "pomopeaksettings.h"
 #include "flowhandler.h"
 #include "taskmanager.h"
-#include <vector>
+#include "sqliteHandler.h"
 #include "taskQT.h"
-#include <QVBoxLayout>
-#include <QSoundEffect>
+#include "settings.h"
+
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class PomoPeak;
@@ -34,11 +39,14 @@ protected slots:
 private:
     Ui::PomoPeak* ui;
     pomopeaksettings* pomopeakSettings;
+    Settings* settings;
+    SqliteHandler* sqliteHandler;
     std::vector<Ui::taskQT*> avaliableTasks;
     taskQT* currentActiveTask = nullptr;
     taskQT* currentInViewModeTask = nullptr;
+
     QTimer timer;
-    FlowHandler flowHandler;
+    FlowHandler* flowHandler;
     TaskManager taskManager;
 
     int globalCounter;

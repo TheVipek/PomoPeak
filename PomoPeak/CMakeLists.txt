@@ -90,10 +90,6 @@ if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(PomoPeak)
 endif()
 
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(PomoPeak)
-endif()
-
 set(DATABASE_FILE "${CMAKE_SOURCE_DIR}/database/applicationData.sqlite")
 set(BUILD_DATABASE_FILE "${CMAKE_BINARY_DIR}/database/applicationData.sqlite")
 
@@ -106,4 +102,3 @@ add_custom_target(CopySQLite ALL
                   DEPENDS ${BUILD_DATABASE_FILE})
 
 add_dependencies(CopySQLite PomoPeak)
-

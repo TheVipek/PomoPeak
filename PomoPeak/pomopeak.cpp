@@ -1,15 +1,36 @@
 #include "pomopeak.h"
 #include "./ui_pomopeak.h"
 
+#include <sstream>
+#include "settingsdto.h"
+#include "databasetables.h"
+
 PomoPeak::PomoPeak(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::PomoPeak)
     , timer(new QTimer)
-    , flowHandler(PomoSettings::ShortBreakAfterSessions, PomoSettings::LongBreakAfterShortBreaks)
     , taskManager()
     , startButtonClickEffect(new QSoundEffect(this))
     , endBreakEffect(new QSoundEffect(this))
 {
+    sqliteHandler = new SqliteHandler("applicationData.db");
+
+    std::ostringstream ss;
+    QString query = QString("SELECT * FROM settings WHERE %1 UserID = 'Default' LIMIT 1").arg(DatabaseTables::SETTINGS);
+    auto DTO = sqliteHandler->GetData<SettingsDTO>(query);
+    if(!DTO.empty())
+    {
+        qDebug() << "Creating settings from DTO";
+        settings = new Settings(DTO.front());
+    }
+    else
+    {
+        qDebug() << "Creatin default settings";
+        settings = new Settings();
+    }
+
+    flowHandler = new FlowHandler(*settings);
+
     ui->setupUi(this);
     ui->widgetsLayout->setAlignment(Qt::AlignCenter);
     pomopeakSettings = new pomopeaksettings();
@@ -17,7 +38,7 @@ PomoPeak::PomoPeak(QWidget *parent)
     ui->widgetsLayout->addWidget(pomopeakSettings);
 
     isRunning = false;
-    durationLeft = PomoSettings::SessionDuration;
+    durationLeft = settings->SessionDuration;
     globalCounter = 0;
 \
 
@@ -44,6 +65,9 @@ PomoPeak::PomoPeak(QWidget *parent)
 PomoPeak::~PomoPeak()
 {
     delete ui;
+    delete settings;
+    delete flowHandler;
+
 }
 
 void PomoPeak::OnChangeState()
@@ -74,7 +98,7 @@ void PomoPeak::OnTimerTimeout()
         OnChangeState();
 
 
-        if(flowHandler.GetCurrentSequence() == FlowSequence::Session)
+        if(flowHandler->GetCurrentSequence() == FlowSequence::Session)
         {
             //Call to current task update
             if(currentActiveTask != nullptr)
@@ -84,13 +108,13 @@ void PomoPeak::OnTimerTimeout()
             globalCounter++;
 
         }
-        if(flowHandler.GetCurrentSequence() == FlowSequence::LongBreak || flowHandler.GetCurrentSequence() == FlowSequence::ShortBreak)
+        if(flowHandler->GetCurrentSequence() == FlowSequence::LongBreak || flowHandler->GetCurrentSequence() == FlowSequence::ShortBreak)
         {
             endBreakEffect->play();
         }
 
-        flowHandler.Next();
-        UpdateTimerDuration(flowHandler.GetCurrentSequence());
+        flowHandler->Next();
+        UpdateTimerDuration(flowHandler->GetCurrentSequence());
     }
 
     UpdateTimerLabel(QString("%1:%2").arg(durationLeft / 60,2,10,QChar('0')).arg((durationLeft % 60),2,10,QChar('0')));
@@ -148,13 +172,13 @@ void PomoPeak::UpdateTimerDuration(FlowSequence sequence)
     switch(sequence)
     {
         case FlowSequence::Session:
-        durationLeft = PomoSettings::SessionDuration;
+        durationLeft = settings->SessionDuration;
             break;
         case FlowSequence::ShortBreak:
-            durationLeft = PomoSettings::ShortBreakDuration;
+            durationLeft = settings->ShortBreakDuration;
             break;
         case FlowSequence::LongBreak:
-            durationLeft = PomoSettings::LongBreakDuration;
+            durationLeft = settings->LongBreakDuration;
             break;
         default:
             qDebug() << "something wrong with updatingTimerDuration";
