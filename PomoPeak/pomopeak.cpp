@@ -47,12 +47,12 @@ PomoPeak::PomoPeak(QWidget *parent)
     endBreakOutput = new QAudioOutput();
     endBreakOutput->setVolume(0.5f);
 
-    QFile file(settings->SessionAlarm);
     startButtonClickEffect = new QMediaPlayer();
     startButtonClickEffect->setAudioOutput(startButtonOutput);
     startButtonClickEffect->setSource(settings->SessionAlarm);
+
     endBreakEffect = new QMediaPlayer();
-    endBreakEffect->setSource(QUrl::fromLocalFile(settings->SessionAlarm));
+    endBreakEffect->setSource(QUrl::fromLocalFile(settings->BreakAlarm));
     endBreakEffect->setAudioOutput(endBreakOutput);
     endBreakEffect->setLoops(10);
 
@@ -72,6 +72,7 @@ PomoPeak::PomoPeak(QWidget *parent)
 
 PomoPeak::~PomoPeak()
 {
+    delete ui;
 
     delete flowHandler;
 
@@ -81,18 +82,8 @@ PomoPeak::~PomoPeak()
     delete endBreakEffect;
     delete endBreakOutput;
 
-    delete sqliteHandler;
-
-
     delete settings;
-
-
-
-    avaliableTasks.clear(); // Clear the vector
-
-
-    delete ui;
-
+    delete sqliteHandler;
     //https://doc.qt.io/qt-6/objecttrees.html
 
     //no need to do it?
@@ -100,6 +91,8 @@ PomoPeak::~PomoPeak()
     // for (auto taskPtr : avaliableTasks) {
     //     delete taskPtr;
     // }
+    //avaliableTasks.clear();
+
 }
 
 void PomoPeak::OnChangeState()

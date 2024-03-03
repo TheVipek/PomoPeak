@@ -26,6 +26,8 @@ pomopeaksettings::pomopeaksettings(Settings& _settings, QWidget *parent)
     connect(ui->alarmEndBreakVolumeSlider,&QSlider::valueChanged, this, &pomopeaksettings::OnEndBreakSliderMoved);
     connect(ui->exitBtn, &QPushButton::clicked, this , &pomopeaksettings::OnExitClicked);
 
+    //1. If its hiding update settings
+    //2. If its not hidden but destructor is called
 }
 
 pomopeaksettings::~pomopeaksettings()
