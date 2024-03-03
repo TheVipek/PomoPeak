@@ -31,7 +31,9 @@ PomoPeak::PomoPeak(QWidget *parent)
     ui->setupUi(this);
     ui->widgetsLayout->setAlignment(Qt::AlignCenter);
     pomopeakSettings = new pomopeaksettings(*settings, this);
+    connect(pomopeakSettings, &pomopeaksettings::OnClose, this, &PomoPeak::OnHideSettings);
     pomopeakSettings->hide();
+
     ui->widgetsLayout->addWidget(pomopeakSettings);
 
     isRunning = false;
@@ -229,9 +231,17 @@ void PomoPeak::AdjustButtonsVisibilityDependingOnCurrentState()
 }
 void PomoPeak::OnOpenSettings()
 {
-    if(!settingsOpen)
+    if(!pomopeakSettings->IsOpened)
     {
         ui->widget->hide();
         pomopeakSettings->show();
+    }
+}
+void PomoPeak::OnHideSettings()
+{
+    if(pomopeakSettings->IsOpened)
+    {
+        ui->widget->show();
+        pomopeakSettings->hide();
     }
 }

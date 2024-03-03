@@ -1,6 +1,5 @@
 #include "pomopeaksettings.h"
 #include "ui_pomopeaksettings.h"
-#include <math.h>
 pomopeaksettings::pomopeaksettings(Settings& _settings, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::pomopeaksettings)
@@ -25,6 +24,8 @@ pomopeaksettings::pomopeaksettings(Settings& _settings, QWidget *parent)
 
     connect(ui->alarmStartSlider,&QSlider::valueChanged, this, &pomopeaksettings::OnStartSliderMoved);
     connect(ui->alarmEndBreakVolumeSlider,&QSlider::valueChanged, this, &pomopeaksettings::OnEndBreakSliderMoved);
+    connect(ui->exitBtn, &QPushButton::clicked, this , &pomopeaksettings::OnExitClicked);
+
 }
 
 pomopeaksettings::~pomopeaksettings()
@@ -40,4 +41,8 @@ void pomopeaksettings::OnStartSliderMoved(int value)
 void pomopeaksettings::OnEndBreakSliderMoved(int value)
 {
     ui->alarmEndSliderValue->setText(QString::number(value));
+}
+void pomopeaksettings::OnExitClicked()
+{
+    emit OnClose();
 }

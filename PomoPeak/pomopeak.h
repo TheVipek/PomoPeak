@@ -38,6 +38,7 @@ protected slots:
     void OnCurrentActiveTaskChanged(taskQT* taskUI);
     void OnViewModeTaskChanged(taskQT* taskUI);
     void OnOpenSettings();
+    void OnHideSettings();
 private:
     Ui::PomoPeak* ui;
     pomopeaksettings* pomopeakSettings;
