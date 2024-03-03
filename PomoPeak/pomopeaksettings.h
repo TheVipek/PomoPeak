@@ -14,7 +14,9 @@ class pomopeaksettings : public QWidget
 public:
     explicit pomopeaksettings(Settings& _settings, QWidget *parent = nullptr);
     ~pomopeaksettings();
-
+private slots:
+    void OnStartSliderMoved(int value);
+    void OnEndBreakSliderMoved(int value);
 private:
     Ui::pomopeaksettings *ui;
     Settings& settings;
