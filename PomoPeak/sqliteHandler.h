@@ -6,6 +6,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QSqlRecord>
+#include <QString>
 class SqliteHandler
 {
 public:
@@ -13,6 +14,7 @@ public:
     template<typename T>
     std::vector<T> GetData(const QString queryStr)
     {
+        db.open();
         QSqlQuery query(db);
         query.prepare(queryStr);
 
@@ -29,11 +31,13 @@ public:
             QSqlRecord record = query.record();
             data.push_back(T::FromSqlRecord(record));
         }
-
+        db.close();
         return data;
     }
 private:
     QSqlDatabase db;
+
+    void CheckIfDatabaseIsInCorrectState();
 };
 
 #endif // SQLITEHANDLER_H

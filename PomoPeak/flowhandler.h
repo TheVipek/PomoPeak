@@ -16,5 +16,7 @@ private:
     const Settings& settings;
     int currentToShortBreak;
     int currentToLongBreak;
+
+
 };
 #endif // FLOWHANDLER_H

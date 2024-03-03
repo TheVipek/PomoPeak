@@ -4,13 +4,14 @@
 #include <sstream>
 #include "settingsdto.h"
 #include "databasetables.h"
+#include <QDir>
 PomoPeak::PomoPeak(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::PomoPeak)
     , timer(new QTimer)
     , taskManager()
 {
-    sqliteHandler = new SqliteHandler("applicationData.db");
+    sqliteHandler = new SqliteHandler(QDir::currentPath() + "/data/database/applicationData.sqlite");
 
     std::ostringstream ss;
     QString query = QString("SELECT * FROM settings WHERE %1 UserID = 'Default' LIMIT 1").arg(DatabaseTables::SETTINGS);
