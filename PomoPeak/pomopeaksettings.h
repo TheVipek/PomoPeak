@@ -23,9 +23,12 @@ public:
 signals:
     void OnClose();
 private slots:
-    void OnStartSliderMoved(int value);
-    void OnEndBreakSliderMoved(int value);
+    void OnSliderValueChanged(int value);
+    void OnDoubleSpinBoxValueChanged(double value);
+    void OnSpinBoxValueChanged(int value);
     void OnExitClicked();
+    void OnSelectAudioClicked();
+    void OnQuickActionSequenceFinished();
 private:
     Ui::pomopeaksettings *ui;
     Settings& settings;
