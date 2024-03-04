@@ -2,6 +2,11 @@
 #include "ui_pomopeaksettings.h"
 #include <QObject>
 #include <QDebug>
+#include <QFileDialog>
+#include "audiocodeshelper.h"
+#include <algorithm>
+#include <unordered_set>
+#include <QFile>
 pomopeaksettings::pomopeaksettings(Settings& _settings, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::pomopeaksettings)
@@ -46,7 +51,6 @@ pomopeaksettings::pomopeaksettings(Settings& _settings, QWidget *parent)
     //1. If its hiding update settings
     //2. If its not hidden but destructor is called
 }
-
 pomopeaksettings::~pomopeaksettings()
 {
     delete ui;
@@ -65,19 +69,48 @@ void pomopeaksettings::OnSelectAudioClicked()
 {
     QObject* obj = sender();
     qDebug() << "Updating " << obj;
-    if(obj == ui->alarmStartSelectBtn)
-    {
 
-    }
-    else if(obj == ui->alarmEndBreakSelectBtn)
-    {
+    QString selectedFilePath = QFileDialog::getOpenFileName(this, tr("Select File"), QDir::homePath());
 
+    if(!selectedFilePath.isEmpty())
+    {
+        QString ext = QFileInfo(selectedFilePath).suffix();
+        qDebug() << ext;
+
+        std::unordered_set<QString> formats = audioCodesHelper::getSupportedAudioFormats();
+        bool isValid = std::any_of(formats.begin(), formats.end(), [ext](QString x) { return x == ext; });
+
+        if(isValid)
+        {
+            if(obj == ui->alarmStartSelectBtn)
+            {
+                QFile file(settings.CustomSessionAlarmPath);
+                if(file.exists())
+                {
+                    file.remove();
+                }
+
+                QFile newFile(selectedFilePath);
+                newFile.copy(settings.CustomSessionAlarmPath)
+
+                settings.SessionAlarm = selectedFilePath;
+
+            }
+            else if(obj == ui->alarmEndBreakSelectBtn)
+            {
+                QFile file(settings.CustomBreakAlarmPath);
+                if(file.exists())
+                {
+                    file.remove();
+                }
+                settings.BreakAlarm = selectedFilePath;
+            }
+        }
     }
 }
 void pomopeaksettings::OnSpinBoxValueChanged(int value)
 {
     QObject* obj = sender();
-    qDebug() << "Updating " << obj;
     if(obj == ui->alarmEndBreakRepSpinBox)
     {
         settings.BreakAlarmRepetitions = value;
@@ -87,7 +120,6 @@ void pomopeaksettings::OnSpinBoxValueChanged(int value)
 void pomopeaksettings::OnDoubleSpinBoxValueChanged(double value)
 {
     QObject* obj = sender();
-    qDebug() << "Updating " << obj;
     if(obj == ui->sessionDoubleSpinBox)
     {
         settings.SessionDuration = value;

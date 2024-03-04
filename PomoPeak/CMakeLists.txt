@@ -39,6 +39,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         sqliteHandler.h sqliteHandler.cpp
         databasetables.h databasetables.cpp
         settingsdto.h settingsdto.cpp
+        audiocodeshelper.h audiocodeshelper.cpp
 
 
 

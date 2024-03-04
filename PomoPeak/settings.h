@@ -36,7 +36,7 @@ public:
     const QString CustomSessionAlarmPath = "/data/sounds/customButtonSound.wav";
 
     const QString DefaultBreakAlarmPath = "/data/sounds/defaultEndNotification.wav";
-    const QString CustomBreakAlarmPath = "/data/sounds/customBreakNotification.wav";
+    const QString CustomBreakAlarmPath = "/data/sounds/customEndNotification.wav";
 
     QString SessionAlarm;
     QString SessionAlarmName;
