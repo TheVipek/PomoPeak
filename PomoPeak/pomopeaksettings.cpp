@@ -74,26 +74,30 @@ void pomopeaksettings::OnSelectAudioClicked()
 
     if(!selectedFilePath.isEmpty())
     {
-        QString ext = QFileInfo(selectedFilePath).suffix();
-        qDebug() << ext;
+        QFileInfo fileInfo(selectedFilePath);
+        QString ext = fileInfo.suffix();
 
         std::unordered_set<QString> formats = audioCodesHelper::getSupportedAudioFormats();
         bool isValid = std::any_of(formats.begin(), formats.end(), [ext](QString x) { return x == ext; });
 
         if(isValid)
         {
+            qDebug() << "valid";
             if(obj == ui->alarmStartSelectBtn)
             {
                 QFile file(settings.CustomSessionAlarmPath);
+                qDebug() << file.fileName();
+                qDebug() << file.exists();
                 if(file.exists())
                 {
+                    qDebug() << "removing existing";
                     file.remove();
                 }
 
                 QFile newFile(selectedFilePath);
-                newFile.copy(settings.CustomSessionAlarmPath)
-
+                newFile.rename(QCoreApplication::applicationDirPath() + settings.CustomSessionAlarmPath + "." + ext);
                 settings.SessionAlarm = selectedFilePath;
+                ui->alarmStartCurrentLabel->setText(fileInfo.fileName());
 
             }
             else if(obj == ui->alarmEndBreakSelectBtn)
@@ -103,7 +107,11 @@ void pomopeaksettings::OnSelectAudioClicked()
                 {
                     file.remove();
                 }
+
+                QFile newFile(selectedFilePath);
+                newFile.copy(settings.CustomBreakAlarmPath);
                 settings.BreakAlarm = selectedFilePath;
+                ui->alarmEndBreakCurrentLabel->setText(fileInfo.fileName());
             }
         }
     }
