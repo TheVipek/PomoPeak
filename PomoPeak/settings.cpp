@@ -9,18 +9,18 @@ Settings::Settings()
     SessionDuration = 25 * 60;
     ShortBreakDuration = 5 * 60;
     LongBreakDuration = 10 * 60;
-    SessionAlarm = QCoreApplication::applicationDirPath() + DefaultSessionAlarmPath;
-    SessionAlarmName = SessionAlarm.section('/', -1);
     SessionAlarmVolume = 100;
-    BreakAlarm = QCoreApplication::applicationDirPath() + DefaultBreakAlarmPath;
-    BreakAlarmName = BreakAlarm.section('/', -1);
     BreakAlarmVolume = 100;
     BreakAlarmRepetitions = 5;
-
     ShortBreakAfterSessions = 1;
     LongBreakAfterShortBreaks = 2;
 
     QuickActionShortcut = QKeySequence(Qt::Key_Space);
+    SessionAlarm = QCoreApplication::applicationDirPath() + DefaultSessionAlarmPath;
+    SessionAlarmName = SessionAlarm.section('/', -1);
+
+    BreakAlarm = QCoreApplication::applicationDirPath() + DefaultBreakAlarmPath;
+    BreakAlarmName = BreakAlarm.section('/', -1);
 }
 
 Settings::Settings(const SettingsDTO& dto)
@@ -37,12 +37,18 @@ Settings::Settings(const SettingsDTO& dto)
 
     QuickActionShortcut = QKeySequence(dto.QuickActionShortcut);
 
+
+
+    //Load file from custom session alarm path
     QFile currentSession = QFile(QCoreApplication::applicationDirPath() + CustomSessionAlarmPath);
     if(currentSession.exists())
     {
         QByteArray currentSessionData = currentSession.readAll();
+
+        //compare it with file from dto
         if(!dto.SessionAlarm.isNull() && dto.SessionAlarm.data() != nullptr && currentSessionData != dto.SessionAlarm)
         {
+            //if its different, update
             currentSession.remove();
             QFile newSessionAlarm = QFile(QCoreApplication::applicationDirPath() + CustomSessionAlarmPath);
             newSessionAlarm.write(dto.SessionAlarm);
@@ -51,19 +57,26 @@ Settings::Settings(const SettingsDTO& dto)
                 newSessionAlarm.rename(customSessionAlarmName);
             }
         }
+        //set session alarm to custom path
         SessionAlarm = CustomSessionAlarmPath;
     }
     else
     {
+        //set session alarm to default path
         SessionAlarm = DefaultSessionAlarmPath;
     }
 
+
+    //Load file from custom break alarm path
     QFile currentBreak = QFile(QCoreApplication::applicationDirPath() + CustomBreakAlarmPath);
     if(currentBreak.exists())
     {
         QByteArray currentBreakData = currentBreak.readAll();
+
+        //compare it with file from dto
         if(!dto.BreakAlarm.isNull() && dto.BreakAlarm.data() != nullptr && currentBreakData != dto.BreakAlarm)
         {
+            //if its different, update
             currentBreak.remove();
             QFile newBreakAlarm = QFile(QCoreApplication::applicationDirPath() + CustomBreakAlarmPath);
             newBreakAlarm.write(dto.BreakAlarm);
@@ -73,11 +86,13 @@ Settings::Settings(const SettingsDTO& dto)
             }
 
         }
+        //set break alarm to custom path
         BreakAlarm = CustomBreakAlarmPath;
     }
     else
     {
-        BreakAlarm = DefaultSessionAlarmPath;
+        //set reak alarm to defaul break path
+        BreakAlarm = DefaultBreakAlarmPath;
     }
 
     SessionAlarmName = SessionAlarm.section('/', -1);

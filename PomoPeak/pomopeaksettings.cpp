@@ -58,17 +58,16 @@ pomopeaksettings::~pomopeaksettings()
 void pomopeaksettings::OnQuickActionSequenceFinished()
 {
     QObject* obj = sender();
-    qDebug() << "Updating " << obj;
 
     if(obj == ui->quickActionSequenceEdit)
     {
         settings.QuickActionShortcut = ui->quickActionSequenceEdit->keySequence();
     }
 }
+
 void pomopeaksettings::OnSelectAudioClicked()
 {
     QObject* obj = sender();
-    qDebug() << "Updating " << obj;
 
     QString selectedFilePath = QFileDialog::getOpenFileName(this, tr("Select File"), QDir::homePath());
 
@@ -76,22 +75,20 @@ void pomopeaksettings::OnSelectAudioClicked()
     {
         QFileInfo fileInfo(selectedFilePath);
         QString ext = fileInfo.suffix();
-
         std::unordered_set<QString> formats = audioCodesHelper::getSupportedAudioFormats();
-        bool isValid = std::any_of(formats.begin(), formats.end(), [ext](QString x) { return x == ext; });
+        bool isValid = std::any_of(formats.begin(), formats.end(), [ext](QString x){ return x.startsWith(ext); });
 
         if(isValid)
         {
-            qDebug() << "valid";
             if(obj == ui->alarmStartSelectBtn)
             {
-                QFile file(settings.CustomSessionAlarmPath);
-                qDebug() << file.fileName();
-                qDebug() << file.exists();
-                if(file.exists())
+                for(auto& format : formats)
                 {
-                    qDebug() << "removing existing";
-                    file.remove();
+                    QFile file(QCoreApplication::applicationDirPath() + settings.CustomSessionAlarmPath + "." + format);
+                    if(file.exists())
+                    {
+                        file.remove();
+                    }
                 }
 
                 QFile newFile(selectedFilePath);
@@ -102,14 +99,17 @@ void pomopeaksettings::OnSelectAudioClicked()
             }
             else if(obj == ui->alarmEndBreakSelectBtn)
             {
-                QFile file(settings.CustomBreakAlarmPath);
-                if(file.exists())
+                for(auto& format : formats)
                 {
-                    file.remove();
+                    QFile file(QCoreApplication::applicationDirPath() + settings.CustomBreakAlarmPath + "." + format);
+                    if(file.exists())
+                    {
+                        file.remove();
+                    }
                 }
 
                 QFile newFile(selectedFilePath);
-                newFile.copy(settings.CustomBreakAlarmPath);
+                newFile.copy(QCoreApplication::applicationDirPath() + settings.CustomBreakAlarmPath + "." + ext);
                 settings.BreakAlarm = selectedFilePath;
                 ui->alarmEndBreakCurrentLabel->setText(fileInfo.fileName());
             }
@@ -145,7 +145,6 @@ void pomopeaksettings::OnDoubleSpinBoxValueChanged(double value)
 void pomopeaksettings::OnSliderValueChanged(int value)
 {
     QObject* obj = sender();
-    qDebug() << "Updating " << obj;
     if(obj == ui->alarmStartSlider)
     {
         ui->alarmStartSliderValueLabel->setText(QString::number(value));
