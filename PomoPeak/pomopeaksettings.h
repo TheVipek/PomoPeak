@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "settings.h"
+#include <QMediaPlayer>
 namespace Ui {
 class pomopeaksettings;
 }
@@ -32,7 +33,6 @@ private slots:
 private:
     Ui::pomopeaksettings *ui;
     Settings& settings;
-
 };
 
 #endif // POMOPEAKSETTINGS_H

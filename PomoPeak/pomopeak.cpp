@@ -31,6 +31,7 @@ PomoPeak::PomoPeak(QWidget *parent)
 
     ui->setupUi(this);
     ui->widgetsLayout->setAlignment(Qt::AlignCenter);
+
     pomopeakSettings = new pomopeaksettings(*settings, this);
     connect(pomopeakSettings, &pomopeaksettings::OnClose, this, &PomoPeak::OnHideSettings);
     pomopeakSettings->hide();
@@ -41,20 +42,14 @@ PomoPeak::PomoPeak(QWidget *parent)
     durationLeft = settings->SessionDuration;
     globalCounter = 0;
 
-    startButtonOutput = new QAudioOutput();
-    startButtonOutput->setVolume(0.5f);
 
-    endBreakOutput = new QAudioOutput();
-    endBreakOutput->setVolume(0.5f);
+    startButtonClickEffect = new QSoundEffect(this);
+    startButtonClickEffect->setSource(QUrl::fromLocalFile(settings->SessionAlarm + settings->CurrentSessionAlarmExt));
+    startButtonClickEffect->setVolume(settings->SessionAlarmVolume);
 
-    startButtonClickEffect = new QMediaPlayer();
-    startButtonClickEffect->setAudioOutput(startButtonOutput);
-    startButtonClickEffect->setSource(settings->SessionAlarm);
-
-    endBreakEffect = new QMediaPlayer();
-    endBreakEffect->setSource(QUrl::fromLocalFile(settings->BreakAlarm));
-    endBreakEffect->setAudioOutput(endBreakOutput);
-    endBreakEffect->setLoops(10);
+    endBreakEffect = new QSoundEffect();
+    endBreakEffect->setSource(QUrl::fromLocalFile(settings->BreakAlarm + settings->CurrentBreakAlarmExt));
+    endBreakEffect->setLoopCount(settings->BreakAlarmRepetitions);
 
     UpdateTimerLabel(QString("%1:%2").arg(durationLeft / 60,2,10,QChar('0')).arg((durationLeft % 60),2,10,QChar('0')));
     AdjustButtonsVisibilityDependingOnCurrentState();
@@ -77,10 +72,8 @@ PomoPeak::~PomoPeak()
     delete flowHandler;
 
     delete startButtonClickEffect;
-    delete startButtonOutput;
 
     delete endBreakEffect;
-    delete endBreakOutput;
 
     delete settings;
     delete sqliteHandler;
@@ -103,6 +96,10 @@ void PomoPeak::OnChangeState()
         if(endBreakEffect->isPlaying())
         {
             endBreakEffect->stop();
+        }
+        if(startButtonClickEffect->isPlaying())
+        {
+            startButtonClickEffect->stop();
         }
         startButtonClickEffect->play();
         timer.start();
@@ -237,5 +234,33 @@ void PomoPeak::OnHideSettings()
     {
         ui->widget->show();
         pomopeakSettings->hide();
+    }
+
+    QString alarmPath = settings->SessionAlarm + settings->CurrentSessionAlarmExt;
+    if(alarmPath != startButtonClickEffect->source().path())
+    {
+        startButtonClickEffect->setSource(QUrl::fromLocalFile(alarmPath));
+    }
+
+    if(settings->GetSessionVolumeForAudio() != startButtonClickEffect->volume())
+    {
+        qDebug() << settings->GetSessionVolumeForAudio();
+        startButtonClickEffect->setVolume(settings->GetSessionVolumeForAudio());
+    }
+
+    QString breakPath = settings->BreakAlarm + settings->CurrentBreakAlarmExt;
+    if(breakPath != endBreakEffect->source().path())
+    {
+        endBreakEffect->setSource(QUrl::fromLocalFile(breakPath));
+    }
+
+    if(settings->GetBreakVolumeForAudio() != endBreakEffect->volume())
+    {
+        endBreakEffect->setVolume(settings->GetBreakVolumeForAudio());
+    }
+
+    if(settings->BreakAlarmRepetitions != endBreakEffect->loopCount())
+    {
+        endBreakEffect->setLoopCount(settings->BreakAlarmRepetitions);
     }
 }

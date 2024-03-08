@@ -49,10 +49,8 @@ private:
     taskQT* currentActiveTaskUI = nullptr;
     taskQT* currentInViewModeTaskUI = nullptr;
 
-    QMediaPlayer* startButtonClickEffect;
-    QMediaPlayer* endBreakEffect;
-    QAudioOutput* startButtonOutput;
-    QAudioOutput* endBreakOutput;
+    QSoundEffect* startButtonClickEffect;
+    QSoundEffect* endBreakEffect;
     FlowHandler* flowHandler;
 
     QTimer timer;

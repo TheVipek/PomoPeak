@@ -38,8 +38,8 @@ public:
     const QString DefaultBreakAlarmPath = "/data/sounds/defaultEndNotification";
     const QString CustomBreakAlarmPath = "/data/sounds/customEndNotification";
 
-    QString currentSessionAlarmExt = ".wav";
-    QString currentBreakAlarmExt = ".wav";
+    QString CurrentSessionAlarmExt;
+    QString CurrentBreakAlarmExt;
 
     QString SessionAlarm;
     QString SessionAlarmName;
@@ -47,7 +47,9 @@ public:
     QString BreakAlarmName;
 
     QVariantMap ToVariantMap(QString userID);
-
+    float GetSessionVolumeForAudio();
+    float GetBreakVolumeForAudio();
 };
+
 
 #endif // SETTINGS_H

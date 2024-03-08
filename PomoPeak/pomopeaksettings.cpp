@@ -48,8 +48,6 @@ pomopeaksettings::pomopeaksettings(Settings& _settings, QWidget *parent)
     connect(ui->alarmEndBreakSelectBtn, &QPushButton::clicked, this, &pomopeaksettings::OnSelectAudioClicked);
 
     connect(ui->quickActionSequenceEdit, &QKeySequenceEdit::editingFinished, this, &pomopeaksettings::OnQuickActionSequenceFinished);
-    //1. If its hiding update settings
-    //2. If its not hidden but destructor is called
 }
 pomopeaksettings::~pomopeaksettings()
 {
@@ -92,9 +90,12 @@ void pomopeaksettings::OnSelectAudioClicked()
                 }
 
                 QFile newFile(selectedFilePath);
-                newFile.rename(QCoreApplication::applicationDirPath() + settings.CustomSessionAlarmPath + "." + ext);
-                settings.SessionAlarm = selectedFilePath;
+                newFile.copy(QCoreApplication::applicationDirPath() + settings.CustomSessionAlarmPath + "." + ext);
+                settings.SessionAlarm = QCoreApplication::applicationDirPath() + settings.CustomSessionAlarmPath;
+                settings.CurrentSessionAlarmExt = "." + ext;
+
                 ui->alarmStartCurrentLabel->setText(fileInfo.fileName());
+
 
             }
             else if(obj == ui->alarmEndBreakSelectBtn)
@@ -109,9 +110,13 @@ void pomopeaksettings::OnSelectAudioClicked()
                 }
 
                 QFile newFile(selectedFilePath);
+
                 newFile.copy(QCoreApplication::applicationDirPath() + settings.CustomBreakAlarmPath + "." + ext);
-                settings.BreakAlarm = selectedFilePath;
+                settings.BreakAlarm = QCoreApplication::applicationDirPath() + settings.CustomBreakAlarmPath;
+                settings.CurrentBreakAlarmExt = "." + ext;
+
                 ui->alarmEndBreakCurrentLabel->setText(fileInfo.fileName());
+
             }
         }
     }

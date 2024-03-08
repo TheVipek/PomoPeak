@@ -16,6 +16,10 @@ Settings::Settings()
     LongBreakAfterShortBreaks = 2;
 
     QuickActionShortcut = QKeySequence(Qt::Key_Space);
+
+    CurrentSessionAlarmExt = ".wav";
+    CurrentBreakAlarmExt = ".wav";
+
     SessionAlarm = QCoreApplication::applicationDirPath() + DefaultSessionAlarmPath;
     SessionAlarmName = SessionAlarm.section('/', -1);
 
@@ -59,11 +63,13 @@ Settings::Settings(const SettingsDTO& dto)
         }
         //set session alarm to custom path
         SessionAlarm = CustomSessionAlarmPath;
+        CurrentSessionAlarmExt = dto.SessionAlarmExt;
     }
     else
     {
         //set session alarm to default path
         SessionAlarm = DefaultSessionAlarmPath;
+        CurrentSessionAlarmExt = ".wav";
     }
 
 
@@ -88,11 +94,13 @@ Settings::Settings(const SettingsDTO& dto)
         }
         //set break alarm to custom path
         BreakAlarm = CustomBreakAlarmPath;
+        CurrentBreakAlarmExt = dto.BreakAlarmExt;
     }
     else
     {
         //set reak alarm to defaul break path
         BreakAlarm = DefaultBreakAlarmPath;
+        CurrentBreakAlarmExt = ".wav";
     }
 
     SessionAlarmName = SessionAlarm.section('/', -1);
@@ -128,3 +136,12 @@ QVariantMap Settings::ToVariantMap(QString userID)
         {"BreakAlarm", breakArray}
     };
 };
+
+float Settings::GetSessionVolumeForAudio()
+{
+    return (float)SessionAlarmVolume / 100;
+}
+float Settings::GetBreakVolumeForAudio()
+{
+    return (float)BreakAlarmVolume / 100;
+}
