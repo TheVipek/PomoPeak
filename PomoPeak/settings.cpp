@@ -107,20 +107,51 @@ Settings::Settings(const SettingsDTO& dto)
     BreakAlarmName = BreakAlarm.section('/', -1);
 }
 
-QVariantMap Settings::ToVariantMap(QString userID)
+QList<QPair<QString,QVariant>> Settings::ToData()
 {
     QByteArray sessionArray;
     QByteArray breakArray;
 
-    if(SessionAlarm == CustomBreakAlarmPath)
+    if(SessionAlarm == CustomSessionAlarmPath)
     {
         QFile sessionAlarm = QFile(SessionAlarm);
-        QFile breakAlarm = QFile(BreakAlarm);
-
         sessionArray = sessionAlarm.readAll();
+    }
+    if(BreakAlarm == CustomBreakAlarmPath)
+    {
+        QFile breakAlarm = QFile(BreakAlarm);
         breakArray = breakAlarm.readAll();
     }
+    return {
+        {"SessionDuration", SessionDuration},
+        {"ShortBreakDuration", ShortBreakDuration},
+        {"LongBreakDuration", LongBreakAfterShortBreaks},
+        {"SessionAlarmVolume", SessionAlarmVolume},
+        {"BreakAlarmVolume", BreakAlarmVolume},
+        {"BreakAlarmRepetitions", BreakAlarmRepetitions},
+        {"ShortBreakAfterSessions", ShortBreakAfterSessions},
+        {"LongBreakAfterShortBreaks", LongBreakAfterShortBreaks},
+        {"QuickActionShortcut", QuickActionShortcut.toString()},
+        {"SessionAlarm",sessionArray},
+        {"BreakAlarm", breakArray}
+    };
+}
 
+QList<QPair<QString,QVariant>> Settings::ToData(const int userID)
+{
+    QByteArray sessionArray;
+    QByteArray breakArray;
+
+    if(SessionAlarm == CustomSessionAlarmPath)
+    {
+        QFile sessionAlarm = QFile(SessionAlarm);
+        sessionArray = sessionAlarm.readAll();
+    }
+    if(BreakAlarm == CustomBreakAlarmPath)
+    {
+         QFile breakAlarm = QFile(BreakAlarm);
+        breakArray = breakAlarm.readAll();
+    }
     return {
         {"UserID", userID},
         {"SessionDuration", SessionDuration},

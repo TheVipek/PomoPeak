@@ -32,7 +32,7 @@ PomoPeak::PomoPeak(QWidget *parent)
     ui->setupUi(this);
     ui->widgetsLayout->setAlignment(Qt::AlignCenter);
 
-    pomopeakSettings = new pomopeaksettings(*settings, this);
+    pomopeakSettings = new pomopeaksettings(*settings, *sqliteHandler , this);
     connect(pomopeakSettings, &pomopeaksettings::OnClose, this, &PomoPeak::OnHideSettings);
     pomopeakSettings->hide();
 

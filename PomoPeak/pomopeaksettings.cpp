@@ -7,10 +7,13 @@
 #include <algorithm>
 #include <unordered_set>
 #include <QFile>
-pomopeaksettings::pomopeaksettings(Settings& _settings, QWidget *parent)
+#include "databasetables.h"
+
+pomopeaksettings::pomopeaksettings(Settings& _settings, SqliteHandler& _handler, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::pomopeaksettings)
     , settings(_settings)
+    , handler(_handler)
 {
     ui->setupUi(this);
 
@@ -60,6 +63,7 @@ void pomopeaksettings::OnQuickActionSequenceFinished()
     if(obj == ui->quickActionSequenceEdit)
     {
         settings.QuickActionShortcut = ui->quickActionSequenceEdit->keySequence();
+        isDirty = true;
     }
 }
 
@@ -95,8 +99,7 @@ void pomopeaksettings::OnSelectAudioClicked()
                 settings.CurrentSessionAlarmExt = "." + ext;
 
                 ui->alarmStartCurrentLabel->setText(fileInfo.fileName());
-
-
+                isDirty = true;
             }
             else if(obj == ui->alarmEndBreakSelectBtn)
             {
@@ -116,17 +119,19 @@ void pomopeaksettings::OnSelectAudioClicked()
                 settings.CurrentBreakAlarmExt = "." + ext;
 
                 ui->alarmEndBreakCurrentLabel->setText(fileInfo.fileName());
-
+                isDirty = true;
             }
         }
     }
 }
+
 void pomopeaksettings::OnSpinBoxValueChanged(int value)
 {
     QObject* obj = sender();
     if(obj == ui->alarmEndBreakRepSpinBox)
     {
         settings.BreakAlarmRepetitions = value;
+        isDirty = true;
     }
 }
 
@@ -136,14 +141,17 @@ void pomopeaksettings::OnDoubleSpinBoxValueChanged(double value)
     if(obj == ui->sessionDoubleSpinBox)
     {
         settings.SessionDuration = value * 60;
+        isDirty = true;
     }
     else if(obj == ui->longBreakDoubleSpinBox)
     {
         settings.LongBreakDuration = value * 60;
+        isDirty = true;
     }
     else if(obj == ui->shortBreakDoubleSpinBox)
     {
         settings.ShortBreakDuration = value * 60;
+        isDirty = true;
     }
 }
 
@@ -154,15 +162,33 @@ void pomopeaksettings::OnSliderValueChanged(int value)
     {
         ui->alarmStartSliderValueLabel->setText(QString::number(value));
         settings.SessionAlarmVolume = value;
+        isDirty = true;
     }
     else if(obj == ui->alarmEndBreakVolumeSlider)
     {
         ui->alarmEndSliderValue->setText(QString::number(value));
         settings.BreakAlarmVolume = value;
+        isDirty = true;
     }
 }
 
 void pomopeaksettings::OnExitClicked()
 {
+    if(isDirty)
+    {
+        QList<QPair<QString,QVariant>> conditions = { {"UserID", settings.DefaultID} };
+        if(!handler.Exist(DatabaseTables::SETTINGS, conditions))
+        {
+            qDebug() << "doesnt exist";
+            handler.SetData(DatabaseTables::SETTINGS, settings.ToData(settings.DefaultID));
+        }
+        else
+        {
+            handler.Update(DatabaseTables::SETTINGS, settings.ToData(),conditions);
+        }
+
+        isDirty = false;
+    }
+
     emit OnClose();
 }

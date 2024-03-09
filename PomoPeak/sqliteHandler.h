@@ -7,6 +7,8 @@
 #include <QSqlError>
 #include <QSqlRecord>
 #include <QString>
+#include <QList>
+#include <QPair>
 class SqliteHandler
 {
 public:
@@ -34,6 +36,9 @@ public:
         db.close();
         return data;
     }
+    bool Exist(QString tableName, QList<QPair<QString,QVariant>> map);
+    bool SetData(QString tableName, QList<QPair<QString,QVariant>> map);
+    bool Update(QString tableName, QList<QPair<QString,QVariant>> updates, QList<QPair<QString,QVariant>> conditions);
 private:
     QSqlDatabase db;
 

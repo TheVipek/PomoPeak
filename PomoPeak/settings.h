@@ -12,6 +12,8 @@
 #include <QCoreApplication>
 #include <QVariantMap>
 #include "settingsdto.h"
+#include <QList>
+#include <QPair>
 class Settings
 {
 public:
@@ -37,7 +39,7 @@ public:
 
     const QString DefaultBreakAlarmPath = "/data/sounds/defaultEndNotification";
     const QString CustomBreakAlarmPath = "/data/sounds/customEndNotification";
-
+    const int DefaultID = 0;
     QString CurrentSessionAlarmExt;
     QString CurrentBreakAlarmExt;
 
@@ -46,9 +48,11 @@ public:
     QString BreakAlarm;
     QString BreakAlarmName;
 
-    QVariantMap ToVariantMap(QString userID);
+    QList<QPair<QString,QVariant>> ToData();
+    QList<QPair<QString,QVariant>> ToData(const int userID);
     float GetSessionVolumeForAudio();
     float GetBreakVolumeForAudio();
+
 };
 
 

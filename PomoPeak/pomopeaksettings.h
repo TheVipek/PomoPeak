@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "settings.h"
+#include "sqliteHandler.h"
 #include <QMediaPlayer>
 namespace Ui {
 class pomopeaksettings;
@@ -13,7 +14,7 @@ class pomopeaksettings : public QWidget
     Q_OBJECT
 
 public:
-    explicit pomopeaksettings(Settings& _settings, QWidget *parent = nullptr);
+    explicit pomopeaksettings(Settings& _settings, SqliteHandler& _handler, QWidget *parent = nullptr);
     ~pomopeaksettings();
     void setVisible(bool visible) override
     {
@@ -33,6 +34,8 @@ private slots:
 private:
     Ui::pomopeaksettings *ui;
     Settings& settings;
+    SqliteHandler& handler;
+    bool isDirty = false;
 };
 
 #endif // POMOPEAKSETTINGS_H
