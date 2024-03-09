@@ -17,7 +17,8 @@
 #include <QMediaPlayer>
 #include <QAudioOutput>
 #include <memory>
-
+#include <QKeySequence>
+#include <QShortcut>
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class PomoPeak;
@@ -57,12 +58,16 @@ private:
     TaskManager taskManager;
 
     int globalCounter;
+
     int durationLeft;
     int baseDuration;
+
     bool isRunning;
+
     bool isTaskBeingCreated = false;
     bool settingsOpen = false;
 
+    QShortcut* quickActionShortcut;
 
     void UpdateCounter();
     void Skip();
@@ -72,5 +77,6 @@ private:
     void AddTask(std::shared_ptr<Task> task);
     void RemoveTask(std::shared_ptr<Task> task);
     void ForceTimerUpdate(int& durationLeft, int& baseDuration, const int targetDuration);
+    void TriggerQuickAction();
 };
 #endif // POMOPEAK_H

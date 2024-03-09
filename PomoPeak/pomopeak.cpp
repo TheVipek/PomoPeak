@@ -43,6 +43,8 @@ PomoPeak::PomoPeak(QWidget *parent)
     baseDuration = settings->SessionDuration;
     globalCounter = 0;
 
+    quickActionShortcut = new QShortcut(settings->QuickActionShortcut, this);
+    connect(quickActionShortcut, &QShortcut::activated, this, &PomoPeak::TriggerQuickAction);
 
     startButtonClickEffect = new QSoundEffect(this);
     startButtonClickEffect->setSource(QUrl::fromLocalFile(settings->SessionAlarm + settings->CurrentSessionAlarmExt));
@@ -88,6 +90,7 @@ PomoPeak::~PomoPeak()
     //avaliableTasks.clear();
 
 }
+
 
 void PomoPeak::OnChangeState()
 {
@@ -248,7 +251,10 @@ void PomoPeak::ForceTimerUpdate(int& durationLeft, int& baseDuration, const int 
         UpdateTimerLabel(QString("%1:%2").arg(durationLeft / 60, 2, 10, QChar('0')).arg((durationLeft % 60), 2, 10, QChar('0')));
     }
 }
-
+void PomoPeak::TriggerQuickAction()
+{
+    OnChangeState();
+}
 void PomoPeak::OnHideSettings()
 {
     if(pomopeakSettings->IsOpened)
@@ -301,7 +307,9 @@ void PomoPeak::OnHideSettings()
         endBreakEffect->setLoopCount(settings->BreakAlarmRepetitions);
     }
 
-    //Quick action
-
+    if(quickActionShortcut->key() != settings->QuickActionShortcut)
+    {
+        quickActionShortcut->setKey(settings->QuickActionShortcut);
+    }
 
 }
