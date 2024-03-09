@@ -58,7 +58,7 @@ private:
 
     int globalCounter;
     int durationLeft;
-
+    int baseDuration;
     bool isRunning;
     bool isTaskBeingCreated = false;
     bool settingsOpen = false;
@@ -71,5 +71,6 @@ private:
     void AdjustButtonsVisibilityDependingOnCurrentState();
     void AddTask(std::shared_ptr<Task> task);
     void RemoveTask(std::shared_ptr<Task> task);
+    void ForceTimerUpdate(int& durationLeft, int& baseDuration, const int targetDuration);
 };
 #endif // POMOPEAK_H

@@ -135,15 +135,15 @@ void pomopeaksettings::OnDoubleSpinBoxValueChanged(double value)
     QObject* obj = sender();
     if(obj == ui->sessionDoubleSpinBox)
     {
-        settings.SessionDuration = value;
+        settings.SessionDuration = value * 60;
     }
     else if(obj == ui->longBreakDoubleSpinBox)
     {
-        settings.LongBreakDuration = value;
+        settings.LongBreakDuration = value * 60;
     }
     else if(obj == ui->shortBreakDoubleSpinBox)
     {
-        settings.ShortBreakDuration = value;
+        settings.ShortBreakDuration = value * 60;
     }
 }
 

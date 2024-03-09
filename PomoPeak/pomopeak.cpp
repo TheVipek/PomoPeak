@@ -40,6 +40,7 @@ PomoPeak::PomoPeak(QWidget *parent)
 
     isRunning = false;
     durationLeft = settings->SessionDuration;
+    baseDuration = settings->SessionDuration;
     globalCounter = 0;
 
 
@@ -194,18 +195,20 @@ void PomoPeak::UpdateTimerDuration(FlowSequence sequence)
     switch(sequence)
     {
         case FlowSequence::Session:
-        durationLeft = settings->SessionDuration;
+            baseDuration = settings->SessionDuration;
             break;
         case FlowSequence::ShortBreak:
-            durationLeft = settings->ShortBreakDuration;
+            baseDuration = settings->ShortBreakDuration;
             break;
         case FlowSequence::LongBreak:
-            durationLeft = settings->LongBreakDuration;
+            baseDuration = settings->LongBreakDuration;
             break;
         default:
             qDebug() << "something wrong with updatingTimerDuration";
             break;
     }
+
+    durationLeft = baseDuration;
 }
 void PomoPeak::AdjustButtonsVisibilityDependingOnCurrentState()
 {
@@ -228,12 +231,47 @@ void PomoPeak::OnOpenSettings()
         pomopeakSettings->show();
     }
 }
+
+void PomoPeak::ForceTimerUpdate(int& durationLeft, int& baseDuration, const int targetDuration)
+{
+    if(baseDuration != targetDuration)
+    {
+        if(durationLeft > targetDuration)
+        {
+            durationLeft = targetDuration;
+        }
+        else if(baseDuration < targetDuration)
+        {
+            durationLeft = targetDuration - (baseDuration - durationLeft);
+        }
+        baseDuration = targetDuration;
+        UpdateTimerLabel(QString("%1:%2").arg(durationLeft / 60, 2, 10, QChar('0')).arg((durationLeft % 60), 2, 10, QChar('0')));
+    }
+}
+
 void PomoPeak::OnHideSettings()
 {
     if(pomopeakSettings->IsOpened)
     {
         ui->widget->show();
         pomopeakSettings->hide();
+    }
+
+
+    switch(flowHandler->GetCurrentSequence())
+    {
+        case FlowSequence::Session:
+            ForceTimerUpdate(durationLeft, baseDuration, settings->SessionDuration);
+            break;
+        case FlowSequence::ShortBreak:
+            ForceTimerUpdate(durationLeft, baseDuration, settings->ShortBreakDuration);
+            break;
+        case FlowSequence::LongBreak:
+            ForceTimerUpdate(durationLeft, baseDuration, settings->LongBreakDuration);
+            break;
+        default:
+            qDebug() << "something wrong with updatingTimerDuration";
+            break;
     }
 
     QString alarmPath = settings->SessionAlarm + settings->CurrentSessionAlarmExt;
@@ -244,7 +282,6 @@ void PomoPeak::OnHideSettings()
 
     if(settings->GetSessionVolumeForAudio() != startButtonClickEffect->volume())
     {
-        qDebug() << settings->GetSessionVolumeForAudio();
         startButtonClickEffect->setVolume(settings->GetSessionVolumeForAudio());
     }
 
@@ -263,4 +300,8 @@ void PomoPeak::OnHideSettings()
     {
         endBreakEffect->setLoopCount(settings->BreakAlarmRepetitions);
     }
+
+    //Quick action
+
+
 }
