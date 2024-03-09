@@ -65,7 +65,6 @@ private:
     bool isRunning;
 
     bool isTaskBeingCreated = false;
-    bool settingsOpen = false;
 
     QShortcut* quickActionShortcut;
 

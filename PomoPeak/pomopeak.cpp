@@ -167,8 +167,6 @@ void PomoPeak::RemoveTask(std::shared_ptr<Task> task)
 }
 void PomoPeak::OnViewModeTaskChanged(taskQT* taskUI)
 {
-    qDebug() << "requested task:" << taskUI;
-    qDebug() << currentInViewModeTaskUI;
     if(currentInViewModeTaskUI != nullptr && currentInViewModeTaskUI != taskUI)
     {
         currentInViewModeTaskUI->DisableViewMode();
@@ -253,7 +251,10 @@ void PomoPeak::ForceTimerUpdate(int& durationLeft, int& baseDuration, const int 
 }
 void PomoPeak::TriggerQuickAction()
 {
-    OnChangeState();
+    if(!pomopeakSettings->IsOpened)
+    {
+        OnChangeState();
+    }
 }
 void PomoPeak::OnHideSettings()
 {
@@ -262,7 +263,6 @@ void PomoPeak::OnHideSettings()
         ui->widget->show();
         pomopeakSettings->hide();
     }
-
 
     switch(flowHandler->GetCurrentSequence())
     {
