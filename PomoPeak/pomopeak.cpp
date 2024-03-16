@@ -11,11 +11,12 @@ PomoPeak::PomoPeak(QWidget *parent)
     , timer(new QTimer)
     , taskManager()
 {
-    sqliteHandler = new SqliteHandler(QDir::currentPath() + "/data/database/applicationData.sqlite");
+    sqliteHandler = new SqliteHandler(QCoreApplication::applicationDirPath() + "/data/database/applicationData.sqlite");
 
     std::ostringstream ss;
-    QString query = QString("SELECT * FROM settings WHERE %1 UserID = 'Default' LIMIT 1").arg(DatabaseTables::SETTINGS);
+    QString query = QString("SELECT * FROM %1 WHERE UserID = 0 LIMIT 1").arg(DatabaseTables::SETTINGS);
     auto DTO = sqliteHandler->GetData<SettingsDTO>(query);
+    qDebug() << DTO.data();
     if(!DTO.empty())
     {
         qDebug() << "Creating settings from DTO";
@@ -25,6 +26,7 @@ PomoPeak::PomoPeak(QWidget *parent)
     {
         qDebug() << "Creatin default settings";
         settings = new Settings();
+        sqliteHandler->SetData(DatabaseTables::SETTINGS, settings->ToData(settings->DefaultID));
     }
 
     flowHandler = new FlowHandler(*settings);

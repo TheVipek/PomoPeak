@@ -23,7 +23,7 @@ Settings::Settings(const SettingsDTO& dto)
     ShortBreakDuration = dto.ShortBreakDuration;
     LongBreakDuration = dto.LongBreakDuration;
     SessionAlarmVolume = dto.SessionAlarmVolume;
-    BreakAlarmVolume = dto.SessionAlarmVolume;
+    BreakAlarmVolume = dto.BreakAlarmVolume;
     BreakAlarmRepetitions = dto.BreakAlarmRepetitions;
 
     ShortBreakAfterSessions = dto.ShortBreakAfterSessions;
@@ -35,10 +35,17 @@ Settings::Settings(const SettingsDTO& dto)
     //Load file from custom session alarm path
 
 
-
-    QFile fileFromDB = QFile(dto.SessionAlarm);
+    qDebug() << "loading file";
+    //dto.SessionAlarm
+    QFile fileFromDB = QFile(QCoreApplication::applicationDirPath() + TempFilesPath);
+    if(fileFromDB.open(QIODevice::WriteOnly))
+    {
+        fileFromDB.write(dto.SessionAlarm);
+        fileFromDB.close();
+    }
     if(fileFromDB.exists() && fileFromDB.size() > 0 && fileFromDB.size() != DefaultSessionAlarm.size())
     {
+        qDebug() << "exists";
         QDir dir(QCoreApplication::applicationDirPath() + SessionAlarmsPath);
         dir.setFilter(QDir::Files);
         QStringList files = dir.entryList();
@@ -50,6 +57,7 @@ Settings::Settings(const SettingsDTO& dto)
             if(file.size() == fileFromDB.size())
             {
                 CurrentSessionAlarm.setFileName(file.fileName());
+                qDebug() << "setting existing";
                 found = true;
                 break;
             }
@@ -57,6 +65,7 @@ Settings::Settings(const SettingsDTO& dto)
 
         if(!found)
         {
+            qDebug() << "creating new one";
             QString from = fileFromDB.fileName();
             QString filename = QFileInfo(fileFromDB).fileName();
             QString to = QDir(QCoreApplication::applicationDirPath() + SessionAlarmsPath).filePath(filename);
@@ -103,6 +112,16 @@ Settings::Settings(const SettingsDTO& dto)
 
 QList<QPair<QString,QVariant>> Settings::ToData()
 {
+    QByteArray currentSessArr;
+    if(CurrentSessionAlarm.open(QIODevice::ReadOnly))
+    {
+        currentSessArr = CurrentSessionAlarm.readAll();
+    }
+    QByteArray currentBreakArr;
+    if(CurrentBreakAlarm.open(QIODevice::ReadOnly))
+    {
+        currentBreakArr = CurrentBreakAlarm.readAll();
+    }
     return {
         {"SessionDuration", SessionDuration},
         {"ShortBreakDuration", ShortBreakDuration},
@@ -113,13 +132,24 @@ QList<QPair<QString,QVariant>> Settings::ToData()
         {"ShortBreakAfterSessions", ShortBreakAfterSessions},
         {"LongBreakAfterShortBreaks", LongBreakAfterShortBreaks},
         {"QuickActionShortcut", QuickActionShortcut.toString()},
-        {"SessionAlarm",CurrentSessionAlarm.readAll()},
-        {"BreakAlarm", CurrentBreakAlarm.readAll()}
+        {"SessionAlarm",currentSessArr},
+        {"BreakAlarm", currentBreakArr}
     };
 }
 
 QList<QPair<QString,QVariant>> Settings::ToData(const int userID)
 {
+    QByteArray currentSessArr;
+    if(CurrentSessionAlarm.open(QIODevice::ReadOnly))
+    {
+        currentSessArr = CurrentSessionAlarm.readAll();
+    }
+    QByteArray currentBreakArr;
+    if(CurrentBreakAlarm.open(QIODevice::ReadOnly))
+    {
+        currentBreakArr = CurrentBreakAlarm.readAll();
+    }
+
     return {
         {"UserID", userID},
         {"SessionDuration", SessionDuration},
@@ -131,8 +161,8 @@ QList<QPair<QString,QVariant>> Settings::ToData(const int userID)
         {"ShortBreakAfterSessions", ShortBreakAfterSessions},
         {"LongBreakAfterShortBreaks", LongBreakAfterShortBreaks},
         {"QuickActionShortcut", QuickActionShortcut.toString()},
-        {"SessionAlarm",CurrentSessionAlarm.readAll()},
-        {"BreakAlarm", CurrentBreakAlarm.readAll()}
+        {"SessionAlarm", currentSessArr},
+        {"BreakAlarm", currentBreakArr}
     };
 };
 

@@ -34,7 +34,7 @@ public:
     const QFile DefaultSessionAlarm = QFile(QCoreApplication::applicationDirPath() + "/data/sounds/sessionAlarms/defaultButtonSound.wav");
     const QString BreakAlarmsPath = "/data/sounds/breakAlarms/";
     const QFile DefaultBreakAlarm = QFile(QCoreApplication::applicationDirPath() + "/data/sounds/breakAlarms/defaultEndNotification.wav");
-
+    const QString TempFilesPath = "/data/temp/";
     const int DefaultID = 0;
     QFile CurrentSessionAlarm;
     QFile CurrentBreakAlarm;

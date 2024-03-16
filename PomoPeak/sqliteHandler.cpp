@@ -165,7 +165,6 @@ bool SqliteHandler::SetData(QString tableName, QList<QPair<QString,QVariant>> ma
     int idx = 0;
     for(const auto& value : valueData)
     {
-        qDebug() << "binding " << value << " at index: " << idx;
         query.bindValue(idx, value);
         idx++;
     }
