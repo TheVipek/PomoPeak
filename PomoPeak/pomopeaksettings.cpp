@@ -3,12 +3,13 @@
 #include <QObject>
 #include <QDebug>
 #include <QFileDialog>
-#include "audiocodeshelper.h"
-#include <algorithm>
+#include "audiomimetypeshelper.h"
 #include <unordered_set>
 #include <QFile>
 #include "databasetables.h"
-
+#include <QMimeDatabase>
+#include <QMimeData>
+#include <QFileInfo>
 pomopeaksettings::pomopeaksettings(Settings& _settings, SqliteHandler& _handler, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::pomopeaksettings)
@@ -23,8 +24,8 @@ pomopeaksettings::pomopeaksettings(Settings& _settings, SqliteHandler& _handler,
 
     ui->alarmEndBreakRepSpinBox->setValue(_settings.BreakAlarmRepetitions);
 
-    ui->alarmStartCurrentLabel->setText(_settings.SessionAlarmName);
-    ui->alarmEndBreakCurrentLabel->setText(_settings.BreakAlarmName);
+    ui->alarmStartCurrentLabel->setText(QFileInfo(_settings.CurrentSessionAlarm.fileName()).fileName());
+    ui->alarmEndBreakCurrentLabel->setText(QFileInfo(_settings.CurrentBreakAlarm.fileName()).fileName());
 
     ui->alarmStartSlider->setValue(_settings.SessionAlarmVolume);
     ui->alarmStartSliderValueLabel->setText(QString::number(_settings.SessionAlarmVolume));
@@ -70,56 +71,68 @@ void pomopeaksettings::OnQuickActionSequenceFinished()
 void pomopeaksettings::OnSelectAudioClicked()
 {
     QObject* obj = sender();
-
-    QString selectedFilePath = QFileDialog::getOpenFileName(this, tr("Select File"), QDir::homePath());
+    QString selectedFilePath = QFileDialog::getOpenFileName(this, tr("Select File"), QDir::homePath(), audioMimeTypesHelper::GetAllMimeTypeForFileDialog());
 
     if(!selectedFilePath.isEmpty())
     {
-        QFileInfo fileInfo(selectedFilePath);
+        QFile file(selectedFilePath);
+        QFileInfo fileInfo(file);
         QString ext = fileInfo.suffix();
-        std::unordered_set<QString> formats = audioCodesHelper::getSupportedAudioFormats();
-        bool isValid = std::any_of(formats.begin(), formats.end(), [ext](QString x){ return x.startsWith(ext); });
-
+        bool isValid = audioMimeTypesHelper::IsMimeTypeValid(ext);
         if(isValid)
         {
+            qDebug() << "valid!";
+
             if(obj == ui->alarmStartSelectBtn)
             {
-                for(auto& format : formats)
+                QString newPath = QDir(QCoreApplication::applicationDirPath() + settings.SessionAlarmsPath).filePath(fileInfo.fileName());
+
+                if(settings.CurrentSessionAlarm.size() == file.size())
                 {
-                    QFile file(QCoreApplication::applicationDirPath() + settings.CustomSessionAlarmPath + "." + format);
-                    if(file.exists())
-                    {
-                        file.remove();
-                    }
+                    qDebug() << "you selected the same file? (its size is equal)";
+                    return;
                 }
 
-                QFile newFile(selectedFilePath);
-                newFile.copy(QCoreApplication::applicationDirPath() + settings.CustomSessionAlarmPath + "." + ext);
-                settings.SessionAlarm = QCoreApplication::applicationDirPath() + settings.CustomSessionAlarmPath;
-                settings.CurrentSessionAlarmExt = "." + ext;
+                if(settings.CurrentSessionAlarm.size() != settings.DefaultSessionAlarm.size())
+                {
+                    QFile::remove(settings.CurrentSessionAlarm.fileName());
+                    file.copy(newPath);
+                }
+                else if(settings.CurrentSessionAlarm.size() == settings.DefaultSessionAlarm.size())
+                {
+                    file.copy(newPath);
+                }
 
+                settings.CurrentSessionAlarm.setFileName(newPath);
                 ui->alarmStartCurrentLabel->setText(fileInfo.fileName());
                 isDirty = true;
+                startAlarmChanged = true;
             }
             else if(obj == ui->alarmEndBreakSelectBtn)
             {
-                for(auto& format : formats)
+                QString newPath = QDir(QCoreApplication::applicationDirPath() + settings.BreakAlarmsPath).filePath(fileInfo.fileName());
+
+                if(settings.CurrentBreakAlarm.size() == file.size())
                 {
-                    QFile file(QCoreApplication::applicationDirPath() + settings.CustomBreakAlarmPath + "." + format);
-                    if(file.exists())
-                    {
-                        file.remove();
-                    }
+                    qDebug() << "you selected the same file? (its size is equal)";
+                    return;
                 }
 
-                QFile newFile(selectedFilePath);
 
-                newFile.copy(QCoreApplication::applicationDirPath() + settings.CustomBreakAlarmPath + "." + ext);
-                settings.BreakAlarm = QCoreApplication::applicationDirPath() + settings.CustomBreakAlarmPath;
-                settings.CurrentBreakAlarmExt = "." + ext;
+                if(settings.CurrentBreakAlarm.size() != settings.DefaultBreakAlarm.size())
+                {
+                    QFile::remove(settings.CurrentSessionAlarm.fileName());
+                    file.copy(newPath);
+                }
+                else if(settings.CurrentBreakAlarm.size() == settings.DefaultBreakAlarm.size())
+                {
+                    file.copy(newPath);
+                }
 
-                ui->alarmEndBreakCurrentLabel->setText(fileInfo.fileName());
+                settings.CurrentBreakAlarm.setFileName(newPath);
+                ui->alarmStartCurrentLabel->setText(fileInfo.fileName());
                 isDirty = true;
+                breakAlarmChanged = true;
             }
         }
     }
@@ -190,5 +203,7 @@ void pomopeaksettings::OnExitClicked()
         isDirty = false;
     }
 
-    emit OnClose();
+    emit OnClose(startAlarmChanged, breakAlarmChanged);
+    startAlarmChanged = false;
+    breakAlarmChanged = false;
 }

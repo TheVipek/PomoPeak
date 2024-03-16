@@ -47,11 +47,11 @@ PomoPeak::PomoPeak(QWidget *parent)
     connect(quickActionShortcut, &QShortcut::activated, this, &PomoPeak::TriggerQuickAction);
 
     startButtonClickEffect = new QSoundEffect(this);
-    startButtonClickEffect->setSource(QUrl::fromLocalFile(settings->SessionAlarm + settings->CurrentSessionAlarmExt));
+    startButtonClickEffect->setSource(QUrl::fromLocalFile(settings->CurrentSessionAlarm.fileName()));
     startButtonClickEffect->setVolume(settings->SessionAlarmVolume);
 
-    endBreakEffect = new QSoundEffect();
-    endBreakEffect->setSource(QUrl::fromLocalFile(settings->BreakAlarm + settings->CurrentBreakAlarmExt));
+    endBreakEffect = new QSoundEffect(this);
+    endBreakEffect->setSource(QUrl::fromLocalFile(settings->CurrentBreakAlarm.fileName()));
     endBreakEffect->setLoopCount(settings->BreakAlarmRepetitions);
 
     UpdateTimerLabel(QString("%1:%2").arg(durationLeft / 60,2,10,QChar('0')).arg((durationLeft % 60),2,10,QChar('0')));
@@ -118,6 +118,7 @@ void PomoPeak::OnChangeState()
 }
 void PomoPeak::OnTimerTimeout()
 {
+    qDebug() << "timeout?";
     durationLeft -= 1;
     if(durationLeft <= 0)
     {
@@ -256,7 +257,7 @@ void PomoPeak::TriggerQuickAction()
         OnChangeState();
     }
 }
-void PomoPeak::OnHideSettings()
+void PomoPeak::OnHideSettings(const bool alarmStartChanged,const bool alarmBreakChanged)
 {
     if(pomopeakSettings->IsOpened)
     {
@@ -280,10 +281,11 @@ void PomoPeak::OnHideSettings()
             break;
     }
 
-    QString alarmPath = settings->SessionAlarm + settings->CurrentSessionAlarmExt;
-    if(alarmPath != startButtonClickEffect->source().path())
+    if(alarmStartChanged)
     {
-        startButtonClickEffect->setSource(QUrl::fromLocalFile(alarmPath));
+        qDebug() << "alarm start changed";
+        startButtonClickEffect->setSource(QUrl::fromLocalFile(settings->CurrentSessionAlarm.fileName()));
+        startButtonClickEffect->play();
     }
 
     if(settings->GetSessionVolumeForAudio() != startButtonClickEffect->volume())
@@ -291,10 +293,10 @@ void PomoPeak::OnHideSettings()
         startButtonClickEffect->setVolume(settings->GetSessionVolumeForAudio());
     }
 
-    QString breakPath = settings->BreakAlarm + settings->CurrentBreakAlarmExt;
-    if(breakPath != endBreakEffect->source().path())
+    if(alarmBreakChanged)
     {
-        endBreakEffect->setSource(QUrl::fromLocalFile(breakPath));
+        qDebug() << "break path setting";
+        endBreakEffect->setSource(QUrl::fromLocalFile(settings->CurrentSessionAlarm.fileName()));
     }
 
     if(settings->GetBreakVolumeForAudio() != endBreakEffect->volume())

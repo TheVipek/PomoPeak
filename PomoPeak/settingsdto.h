@@ -12,12 +12,11 @@ struct SettingsDTO
 public:
     SettingsDTO(const QString id, const qint16 sessionDur, const qint16 shortBreakDur, const qint16 longBreakDur, const qint16 sessionAlarmVol, const qint16 breakAlarmVol
                 , const qint16 breakAlarmRep, const qint16 shortBreakAfterSession, const qint16 longBreakAfterShortBreaks, const QKeySequence shortcut
-                , const QByteArray sessionAlarm, const QString sessionAlarmExt, const QByteArray breakAlarm, const QString breakAlarmExt)
+                , const QByteArray sessionAlarm, const QByteArray breakAlarm)
         : UserID(id), SessionDuration(sessionDur), ShortBreakDuration(shortBreakDur), LongBreakDuration(longBreakDur)
         , SessionAlarmVolume(sessionAlarmVol), BreakAlarmVolume(breakAlarmVol), BreakAlarmRepetitions(breakAlarmRep)
         , ShortBreakAfterSessions(shortBreakAfterSession), LongBreakAfterShortBreaks(longBreakAfterShortBreaks)
-        , QuickActionShortcut(shortcut), SessionAlarm(sessionAlarm), SessionAlarmExt(sessionAlarmExt)
-        , BreakAlarm(breakAlarm), BreakAlarmExt(breakAlarmExt)
+        , QuickActionShortcut(shortcut), SessionAlarm(sessionAlarm), BreakAlarm(breakAlarm)
         {};
 
     const QString UserID;
@@ -34,10 +33,8 @@ public:
     const QKeySequence QuickActionShortcut;
 
     const QByteArray SessionAlarm;
-    const QString SessionAlarmExt;
 
     const QByteArray BreakAlarm;
-    const QString BreakAlarmExt;
 
     static SettingsDTO FromSqlRecord(const QSqlRecord& record);
 };

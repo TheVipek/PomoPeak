@@ -39,11 +39,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         sqliteHandler.h sqliteHandler.cpp
         databasetables.h databasetables.cpp
         settingsdto.h settingsdto.cpp
-        audiocodeshelper.h audiocodeshelper.cpp
-
-
-
-
+        audiomimetypeshelper.h audiomimetypeshelper.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET PomoPeak APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -102,14 +98,21 @@ add_custom_target(CopyDatabase ALL
 
 add_dependencies(CopyDatabase PomoPeak)
 
-set(SOUNDS_DIRECTORY "${CMAKE_SOURCE_DIR}/data/sounds")
-set(BUILD_SOUNDS_DIRECTORY "${CMAKE_BINARY_DIR}/data/sounds")
+set(START_ALARM_SOUNDS_DIRECTORY "${CMAKE_SOURCE_DIR}/data/sounds/sessionAlarms")
+set(BUILD_START_ALARM_SOUNDS_DIRECTORY "${CMAKE_BINARY_DIR}/data/sounds/sessionAlarms")
+
+set(BREAK_ALARM_SOUNDS_DIRECTORY "${CMAKE_SOURCE_DIR}/data/sounds/breakAlarms")
+set(BUILD_BREAK_ALARM_SOUNDS_DIRECTORY "${CMAKE_BINARY_DIR}/data/sounds/breakAlarms")
 
 # Create a custom target that always runs
-add_custom_target(CopySounds ALL
-    COMMAND ${CMAKE_COMMAND} -E make_directory "${BUILD_SOUNDS_DIRECTORY}"
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${SOUNDS_DIRECTORY}" "${BUILD_SOUNDS_DIRECTORY}"
+add_custom_target(CopyAlarmSounds ALL
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${BUILD_START_ALARM_SOUNDS_DIRECTORY}"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${START_ALARM_SOUNDS_DIRECTORY}" "${BUILD_START_ALARM_SOUNDS_DIRECTORY}"
     COMMENT "Copying sound files to build directory")
-
+add_custom_target(CopyBreakSounds ALL
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${BUILD_BREAK_ALARM_SOUNDS_DIRECTORY}"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${BREAK_ALARM_SOUNDS_DIRECTORY}" "${BUILD_BREAK_ALARM_SOUNDS_DIRECTORY}"
+    COMMENT "Copying sound files to build directory")
 # Ensure your main target depends on this custom target
-add_dependencies(PomoPeak CopySounds)
+add_dependencies(PomoPeak CopyAlarmSounds)
+add_dependencies(PomoPeak CopyBreakSounds)

@@ -1,9 +1,5 @@
 #include "settings.h"
-
-QString Settings::customSessionAlarmName =  "customButtonSound";
-QString Settings::customBreakAlarmName =  "customBreakNotification";
-
-
+#include <QDir>
 Settings::Settings()
 {
     SessionDuration = 25 * 60;
@@ -17,14 +13,8 @@ Settings::Settings()
 
     QuickActionShortcut = QKeySequence(Qt::Key_Space);
 
-    CurrentSessionAlarmExt = ".wav";
-    CurrentBreakAlarmExt = ".wav";
-
-    SessionAlarm = QCoreApplication::applicationDirPath() + DefaultSessionAlarmPath;
-    SessionAlarmName = SessionAlarm.section('/', -1);
-
-    BreakAlarm = QCoreApplication::applicationDirPath() + DefaultBreakAlarmPath;
-    BreakAlarmName = BreakAlarm.section('/', -1);
+    CurrentSessionAlarm.setFileName(DefaultSessionAlarm.fileName());
+    CurrentBreakAlarm.setFileName(DefaultBreakAlarm.fileName());
 }
 
 Settings::Settings(const SettingsDTO& dto)
@@ -42,86 +32,77 @@ Settings::Settings(const SettingsDTO& dto)
     QuickActionShortcut = QKeySequence(dto.QuickActionShortcut);
 
 
-
     //Load file from custom session alarm path
-    QFile currentSession = QFile(QCoreApplication::applicationDirPath() + CustomSessionAlarmPath);
-    if(currentSession.exists())
-    {
-        QByteArray currentSessionData = currentSession.readAll();
 
-        //compare it with file from dto
-        if(!dto.SessionAlarm.isNull() && dto.SessionAlarm.data() != nullptr && currentSessionData != dto.SessionAlarm)
+
+
+    QFile fileFromDB = QFile(dto.SessionAlarm);
+    if(fileFromDB.exists() && fileFromDB.size() > 0 && fileFromDB.size() != DefaultSessionAlarm.size())
+    {
+        QDir dir(QCoreApplication::applicationDirPath() + SessionAlarmsPath);
+        dir.setFilter(QDir::Files);
+        QStringList files = dir.entryList();
+
+        bool found = false;
+        for(const QString& fileInDir : files)
         {
-            //if its different, update
-            currentSession.remove();
-            QFile newSessionAlarm = QFile(QCoreApplication::applicationDirPath() + CustomSessionAlarmPath);
-            newSessionAlarm.write(dto.SessionAlarm);
-            if(newSessionAlarm.fileName() != customSessionAlarmName)
+            QFile file(dir.filePath(fileInDir));
+            if(file.size() == fileFromDB.size())
             {
-                newSessionAlarm.rename(customSessionAlarmName);
+                CurrentSessionAlarm.setFileName(file.fileName());
+                found = true;
+                break;
             }
         }
-        //set session alarm to custom path
-        SessionAlarm = CustomSessionAlarmPath;
-        CurrentSessionAlarmExt = dto.SessionAlarmExt;
+
+        if(!found)
+        {
+            QString from = fileFromDB.fileName();
+            QString filename = QFileInfo(fileFromDB).fileName();
+            QString to = QDir(QCoreApplication::applicationDirPath() + SessionAlarmsPath).filePath(filename);
+            QFile::rename(from, to);
+        }
     }
     else
     {
-        //set session alarm to default path
-        SessionAlarm = DefaultSessionAlarmPath;
-        CurrentSessionAlarmExt = ".wav";
+        CurrentSessionAlarm.setFileName(DefaultSessionAlarm.fileName());
     }
 
-
-    //Load file from custom break alarm path
-    QFile currentBreak = QFile(QCoreApplication::applicationDirPath() + CustomBreakAlarmPath);
-    if(currentBreak.exists())
+    QFile breakFromDB = QFile(dto.BreakAlarm);
+    if(breakFromDB.exists() && breakFromDB.size() > 0 && breakFromDB.size() != DefaultBreakAlarm.size())
     {
-        QByteArray currentBreakData = currentBreak.readAll();
+        QDir dir(QCoreApplication::applicationDirPath() + BreakAlarmsPath);
+        dir.setFilter(QDir::Files);
+        QStringList files = dir.entryList();
 
-        //compare it with file from dto
-        if(!dto.BreakAlarm.isNull() && dto.BreakAlarm.data() != nullptr && currentBreakData != dto.BreakAlarm)
+        bool found = false;
+        for(const QString& fileInDir : files)
         {
-            //if its different, update
-            currentBreak.remove();
-            QFile newBreakAlarm = QFile(QCoreApplication::applicationDirPath() + CustomBreakAlarmPath);
-            newBreakAlarm.write(dto.BreakAlarm);
-            if(newBreakAlarm.fileName() != customBreakAlarmName)
+            QFile file(dir.filePath(fileInDir));
+            if(file.size() == fileFromDB.size())
             {
-                newBreakAlarm.rename(customBreakAlarmName);
+                CurrentBreakAlarm.setFileName(file.fileName());
+                found = true;
+                break;
             }
-
         }
-        //set break alarm to custom path
-        BreakAlarm = CustomBreakAlarmPath;
-        CurrentBreakAlarmExt = dto.BreakAlarmExt;
+
+        if(!found)
+        {
+            QString from = breakFromDB.fileName();
+            QString filename = QFileInfo(breakFromDB).fileName();
+            QString to = QDir(QCoreApplication::applicationDirPath() + BreakAlarmsPath).filePath(filename);
+            QFile::rename(from, to);
+        }
     }
     else
     {
-        //set reak alarm to defaul break path
-        BreakAlarm = DefaultBreakAlarmPath;
-        CurrentBreakAlarmExt = ".wav";
+        CurrentBreakAlarm.setFileName(DefaultBreakAlarm.fileName());
     }
-
-    SessionAlarmName = SessionAlarm.section('/', -1);
-    BreakAlarmName = BreakAlarm.section('/', -1);
 }
 
 QList<QPair<QString,QVariant>> Settings::ToData()
 {
-    QByteArray sessionArray;
-    QByteArray breakArray;
-
-    if(SessionAlarm == CustomSessionAlarmPath)
-    {
-        QFile sessionAlarm = QFile(SessionAlarm);
-        sessionArray = sessionAlarm.readAll();
-    }
-    if(BreakAlarm == CustomBreakAlarmPath)
-    {
-        QFile breakAlarm = QFile(BreakAlarm);
-        breakArray = breakAlarm.readAll();
-    }
     return {
         {"SessionDuration", SessionDuration},
         {"ShortBreakDuration", ShortBreakDuration},
@@ -132,26 +113,13 @@ QList<QPair<QString,QVariant>> Settings::ToData()
         {"ShortBreakAfterSessions", ShortBreakAfterSessions},
         {"LongBreakAfterShortBreaks", LongBreakAfterShortBreaks},
         {"QuickActionShortcut", QuickActionShortcut.toString()},
-        {"SessionAlarm",sessionArray},
-        {"BreakAlarm", breakArray}
+        {"SessionAlarm",CurrentSessionAlarm.readAll()},
+        {"BreakAlarm", CurrentBreakAlarm.readAll()}
     };
 }
 
 QList<QPair<QString,QVariant>> Settings::ToData(const int userID)
 {
-    QByteArray sessionArray;
-    QByteArray breakArray;
-
-    if(SessionAlarm == CustomSessionAlarmPath)
-    {
-        QFile sessionAlarm = QFile(SessionAlarm);
-        sessionArray = sessionAlarm.readAll();
-    }
-    if(BreakAlarm == CustomBreakAlarmPath)
-    {
-         QFile breakAlarm = QFile(BreakAlarm);
-        breakArray = breakAlarm.readAll();
-    }
     return {
         {"UserID", userID},
         {"SessionDuration", SessionDuration},
@@ -163,8 +131,8 @@ QList<QPair<QString,QVariant>> Settings::ToData(const int userID)
         {"ShortBreakAfterSessions", ShortBreakAfterSessions},
         {"LongBreakAfterShortBreaks", LongBreakAfterShortBreaks},
         {"QuickActionShortcut", QuickActionShortcut.toString()},
-        {"SessionAlarm",sessionArray},
-        {"BreakAlarm", breakArray}
+        {"SessionAlarm",CurrentSessionAlarm.readAll()},
+        {"BreakAlarm", CurrentBreakAlarm.readAll()}
     };
 };
 

@@ -23,7 +23,7 @@ public:
     }
     bool IsOpened = false;
 signals:
-    void OnClose();
+    void OnClose(const bool alarmStartChanged,const bool alarmBreakChanged);
 private slots:
     void OnSliderValueChanged(int value);
     void OnDoubleSpinBoxValueChanged(double value);
@@ -36,6 +36,8 @@ private:
     Settings& settings;
     SqliteHandler& handler;
     bool isDirty = false;
+    bool startAlarmChanged = false;
+    bool breakAlarmChanged = false;
 };
 
 #endif // POMOPEAKSETTINGS_H

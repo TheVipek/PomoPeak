@@ -39,7 +39,7 @@ protected slots:
     void OnCurrentActiveTaskChanged(taskQT* taskUI);
     void OnViewModeTaskChanged(taskQT* taskUI);
     void OnOpenSettings();
-    void OnHideSettings();
+    void OnHideSettings(const bool alarmStartChanged,const bool alarmBreakChanged);
 private:
     Ui::PomoPeak* ui;
     pomopeaksettings* pomopeakSettings;

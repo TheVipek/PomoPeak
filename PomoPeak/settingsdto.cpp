@@ -12,9 +12,7 @@ SettingsDTO SettingsDTO::FromSqlRecord(const QSqlRecord& record)
     qint16 longBreakAfterShortBreaks = record.value("LongBreakAfterShortBreaks").isNull() ? 0 : static_cast<qint16>(record.value("LongBreakAfterShortBreaks").toInt());
     QKeySequence quickActionShortcut = record.value("QuickActionShortcut").isNull() ? QKeySequence() : static_cast<QKeySequence>(record.value("QuickActionShortcut").toString());
     QByteArray sessionAlarm = record.value("SessionAlarm").isNull() ? QByteArray() : record.value("SessionAlarm").toByteArray();
-    QString sessionAlarmExt = record.value("SessionAlarmExt").isNull() ? QString("") : record.value("SessionAlarmExt").toString();
     QByteArray breakAlarm = record.value("BreakAlarm").isNull() ? QByteArray() : record.value("BreakAlarm").toByteArray();
-    QString breakAlarmExt = record.value("BreakAlarmExt").isNull() ? QString("") : record.value("BreakAlarmExt").toString();
 
     return SettingsDTO(
         userID,
@@ -28,9 +26,7 @@ SettingsDTO SettingsDTO::FromSqlRecord(const QSqlRecord& record)
         longBreakAfterShortBreaks ,
         quickActionShortcut ,
         sessionAlarm ,
-        sessionAlarmExt ,
-        breakAlarm ,
-        breakAlarmExt
+        breakAlarm
     );
 };
 

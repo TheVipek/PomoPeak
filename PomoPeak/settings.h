@@ -30,23 +30,14 @@ public:
     qint16 LongBreakAfterShortBreaks;
 
     QKeySequence QuickActionShortcut;
+    const QString SessionAlarmsPath = "/data/sounds/sessionAlarms/";
+    const QFile DefaultSessionAlarm = QFile(QCoreApplication::applicationDirPath() + "/data/sounds/sessionAlarms/defaultButtonSound.wav");
+    const QString BreakAlarmsPath = "/data/sounds/breakAlarms/";
+    const QFile DefaultBreakAlarm = QFile(QCoreApplication::applicationDirPath() + "/data/sounds/breakAlarms/defaultEndNotification.wav");
 
-    static QString customSessionAlarmName;
-    static QString customBreakAlarmName;
-
-    const QString DefaultSessionAlarmPath = "/data/sounds/defaultButtonSound";
-    const QString CustomSessionAlarmPath = "/data/sounds/customButtonSound";
-
-    const QString DefaultBreakAlarmPath = "/data/sounds/defaultEndNotification";
-    const QString CustomBreakAlarmPath = "/data/sounds/customEndNotification";
     const int DefaultID = 0;
-    QString CurrentSessionAlarmExt;
-    QString CurrentBreakAlarmExt;
-
-    QString SessionAlarm;
-    QString SessionAlarmName;
-    QString BreakAlarm;
-    QString BreakAlarmName;
+    QFile CurrentSessionAlarm;
+    QFile CurrentBreakAlarm;
 
     QList<QPair<QString,QVariant>> ToData();
     QList<QPair<QString,QVariant>> ToData(const int userID);
