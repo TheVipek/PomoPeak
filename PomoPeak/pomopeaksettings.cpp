@@ -4,7 +4,6 @@
 #include <QDebug>
 #include <QFileDialog>
 #include "audiomimetypeshelper.h"
-#include <unordered_set>
 #include <QFile>
 #include "databasetables.h"
 #include <QMimeDatabase>
@@ -121,7 +120,7 @@ void pomopeaksettings::OnSelectAudioClicked()
 
                 if(settings.CurrentBreakAlarm.size() != settings.DefaultBreakAlarm.size())
                 {
-                    QFile::remove(settings.CurrentSessionAlarm.fileName());
+                    QFile::remove(settings.CurrentBreakAlarm.fileName());
                     file.copy(newPath);
                 }
                 else if(settings.CurrentBreakAlarm.size() == settings.DefaultBreakAlarm.size())
@@ -197,6 +196,7 @@ void pomopeaksettings::OnExitClicked()
         }
         else
         {
+            qDebug() << "updating";
             handler.Update(DatabaseTables::SETTINGS, settings.ToData(),conditions);
         }
 

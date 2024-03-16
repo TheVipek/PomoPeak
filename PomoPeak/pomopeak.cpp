@@ -283,9 +283,7 @@ void PomoPeak::OnHideSettings(const bool alarmStartChanged,const bool alarmBreak
 
     if(alarmStartChanged)
     {
-        qDebug() << "alarm start changed";
         startButtonClickEffect->setSource(QUrl::fromLocalFile(settings->CurrentSessionAlarm.fileName()));
-        startButtonClickEffect->play();
     }
 
     if(settings->GetSessionVolumeForAudio() != startButtonClickEffect->volume())
@@ -295,7 +293,6 @@ void PomoPeak::OnHideSettings(const bool alarmStartChanged,const bool alarmBreak
 
     if(alarmBreakChanged)
     {
-        qDebug() << "break path setting";
         endBreakEffect->setSource(QUrl::fromLocalFile(settings->CurrentSessionAlarm.fileName()));
     }
 

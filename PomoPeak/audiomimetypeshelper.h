@@ -2,7 +2,6 @@
 #define AUDIOMIMETYPESHELPER_H
 #include<QMediaFormat>
 #include <QMetaEnum>
-#include <unordered_set>
 #include <QMimeDatabase>
 #include <QMimeType>
 class audioMimeTypesHelper
