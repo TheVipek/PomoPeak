@@ -12,8 +12,11 @@ SettingsDTO SettingsDTO::FromSqlRecord(const QSqlRecord& record)
     qint16 longBreakAfterShortBreaks = record.value("LongBreakAfterShortBreaks").isNull() ? 0 : static_cast<qint16>(record.value("LongBreakAfterShortBreaks").toInt());
     QKeySequence quickActionShortcut = record.value("QuickActionShortcut").isNull() ? QKeySequence() : static_cast<QKeySequence>(record.value("QuickActionShortcut").toString());
     QByteArray sessionAlarm = record.value("SessionAlarm").isNull() ? QByteArray() : record.value("SessionAlarm").toByteArray();
+    QString sessionAlarmName = record.value("SessionAlarmName").isNull() ? QString("SessionAlarmName") : record.value("SessionAlarmName").toString();
+    QString sessionAlarmExt = record.value("SessionAlarmExt").isNull() ? QString(".") : record.value("SessionAlarmExt").toString();
     QByteArray breakAlarm = record.value("BreakAlarm").isNull() ? QByteArray() : record.value("BreakAlarm").toByteArray();
-
+    QString breakAlarmName = record.value("BreakAlarmName").isNull() ? QString("BreakAlarmName") : record.value("BreakAlarmName").toString();
+    QString breakAlarmExt = record.value("BreakAlarmExt").isNull() ? QString(".") : record.value("BreakAlarmExt").toString();
     return SettingsDTO(
         userID,
         sessionDuration,
@@ -26,7 +29,11 @@ SettingsDTO SettingsDTO::FromSqlRecord(const QSqlRecord& record)
         longBreakAfterShortBreaks ,
         quickActionShortcut ,
         sessionAlarm ,
-        breakAlarm
+        sessionAlarmName,
+        sessionAlarmExt,
+        breakAlarm,
+        breakAlarmName,
+        breakAlarmExt
     );
 };
 

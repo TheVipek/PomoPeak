@@ -36,16 +36,15 @@ Settings::Settings(const SettingsDTO& dto)
 
 
     qDebug() << "loading file";
-    //dto.SessionAlarm
-    QFile fileFromDB = QFile(QCoreApplication::applicationDirPath() + TempFilesPath);
+    QFile fileFromDB = QFile(QCoreApplication::applicationDirPath() + TempFilesPath + dto.SessionAlarmName + dto.SessionAlarmExt);
     if(fileFromDB.open(QIODevice::WriteOnly))
     {
         fileFromDB.write(dto.SessionAlarm);
         fileFromDB.close();
     }
-    if(fileFromDB.exists() && fileFromDB.size() > 0 && fileFromDB.size() != DefaultSessionAlarm.size())
+    qDebug() << fileFromDB.fileName();
+    if(fileFromDB.size() > 0 && fileFromDB.size() != DefaultSessionAlarm.size())
     {
-        qDebug() << "exists";
         QDir dir(QCoreApplication::applicationDirPath() + SessionAlarmsPath);
         dir.setFilter(QDir::Files);
         QStringList files = dir.entryList();
@@ -57,6 +56,7 @@ Settings::Settings(const SettingsDTO& dto)
             if(file.size() == fileFromDB.size())
             {
                 CurrentSessionAlarm.setFileName(file.fileName());
+                QFile::remove(fileFromDB.fileName());
                 qDebug() << "setting existing";
                 found = true;
                 break;
@@ -65,20 +65,32 @@ Settings::Settings(const SettingsDTO& dto)
 
         if(!found)
         {
-            qDebug() << "creating new one";
             QString from = fileFromDB.fileName();
             QString filename = QFileInfo(fileFromDB).fileName();
             QString to = QDir(QCoreApplication::applicationDirPath() + SessionAlarmsPath).filePath(filename);
-            QFile::rename(from, to);
+            if(!QFile::rename(from, to))
+            {
+                qDebug() << "deleting to";
+                QFile::remove(to);
+                QFile::rename(from,to);
+            }
+            CurrentSessionAlarm.setFileName((to));
         }
     }
     else
     {
         CurrentSessionAlarm.setFileName(DefaultSessionAlarm.fileName());
+        QFile::remove(fileFromDB.fileName());
     }
 
-    QFile breakFromDB = QFile(dto.BreakAlarm);
-    if(breakFromDB.exists() && breakFromDB.size() > 0 && breakFromDB.size() != DefaultBreakAlarm.size())
+    QFile breakFromDB = QFile(QCoreApplication::applicationDirPath() + TempFilesPath + dto.BreakAlarmName + dto.BreakAlarmExt);
+    if(breakFromDB.open(QIODevice::WriteOnly))
+    {
+        breakFromDB.write(dto.SessionAlarm);
+        breakFromDB.close();
+    }
+    qDebug() << breakFromDB.fileName();
+    if(breakFromDB.size() > 0 && breakFromDB.size() != DefaultBreakAlarm.size())
     {
         QDir dir(QCoreApplication::applicationDirPath() + BreakAlarmsPath);
         dir.setFilter(QDir::Files);
@@ -91,6 +103,8 @@ Settings::Settings(const SettingsDTO& dto)
             if(file.size() == fileFromDB.size())
             {
                 CurrentBreakAlarm.setFileName(file.fileName());
+                QFile::remove(breakFromDB.fileName());
+                qDebug() << "setting existing";
                 found = true;
                 break;
             }
@@ -101,18 +115,27 @@ Settings::Settings(const SettingsDTO& dto)
             QString from = breakFromDB.fileName();
             QString filename = QFileInfo(breakFromDB).fileName();
             QString to = QDir(QCoreApplication::applicationDirPath() + BreakAlarmsPath).filePath(filename);
-            QFile::rename(from, to);
+            if(!QFile::rename(from, to))
+            {
+                qDebug() << "deleting to";
+                QFile::remove(to);
+                QFile::rename(from,to);
+            }
+            CurrentBreakAlarm.setFileName(to);
         }
     }
     else
     {
         CurrentBreakAlarm.setFileName(DefaultBreakAlarm.fileName());
+        QFile::remove(breakFromDB.fileName());
     }
 }
 
 QList<QPair<QString,QVariant>> Settings::ToData()
 {
     QByteArray currentSessArr;
+    QFileInfo sessionAlarmInfo(CurrentSessionAlarm);
+    QFileInfo breakAlarmInfo(CurrentBreakAlarm);
     if(CurrentSessionAlarm.open(QIODevice::ReadOnly))
     {
         currentSessArr = CurrentSessionAlarm.readAll();
@@ -133,13 +156,19 @@ QList<QPair<QString,QVariant>> Settings::ToData()
         {"LongBreakAfterShortBreaks", LongBreakAfterShortBreaks},
         {"QuickActionShortcut", QuickActionShortcut.toString()},
         {"SessionAlarm",currentSessArr},
-        {"BreakAlarm", currentBreakArr}
+        {"SessionAlarmName", sessionAlarmInfo.baseName()},
+        {"SessionAlarmExt", "." +sessionAlarmInfo.suffix()},
+        {"BreakAlarm", currentBreakArr},
+        {"BreakAlarmName", breakAlarmInfo.baseName()},
+        {"BreakAlarmExt", "." + breakAlarmInfo.suffix()}
     };
 }
 
 QList<QPair<QString,QVariant>> Settings::ToData(const int userID)
 {
     QByteArray currentSessArr;
+    QFileInfo sessionAlarmInfo(CurrentSessionAlarm);
+    QFileInfo breakAlarmInfo(CurrentBreakAlarm);
     if(CurrentSessionAlarm.open(QIODevice::ReadOnly))
     {
         currentSessArr = CurrentSessionAlarm.readAll();
@@ -162,7 +191,11 @@ QList<QPair<QString,QVariant>> Settings::ToData(const int userID)
         {"LongBreakAfterShortBreaks", LongBreakAfterShortBreaks},
         {"QuickActionShortcut", QuickActionShortcut.toString()},
         {"SessionAlarm", currentSessArr},
-        {"BreakAlarm", currentBreakArr}
+        {"SessionAlarmName", sessionAlarmInfo.baseName()},
+        {"SessionAlarmExt", "." + sessionAlarmInfo.suffix()},
+        {"BreakAlarm", currentBreakArr},
+        {"BreakAlarmName", breakAlarmInfo.baseName()},
+        {"BreakAlarmExt", "." + breakAlarmInfo.suffix()}
     };
 };
 

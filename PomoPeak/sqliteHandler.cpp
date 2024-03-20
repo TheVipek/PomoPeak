@@ -25,7 +25,11 @@ void SqliteHandler::CheckIfDatabaseIsInCorrectState()
                                            "LongBreakAfterShortBreaks INTEGER,"
                                            "QuickActionShortcut TEXT,"
                                            "SessionAlarm BLOB,"
-                                           "BreakAlarm BLOB);").arg(DatabaseTables::SETTINGS);
+                                           "SessionAlarmName TEXT,"
+                                           "SessionAlarmExt TEXT,"
+                                           "BreakAlarm BLOB,"
+                                           "BreakAlarmName TEXT,"
+                                           "BreakAlarmExt TEXT);").arg(DatabaseTables::SETTINGS);
     query.prepare(createSettingsTableQ);
 
     if(!query.exec())

@@ -129,7 +129,7 @@ void pomopeaksettings::OnSelectAudioClicked()
                 }
 
                 settings.CurrentBreakAlarm.setFileName(newPath);
-                ui->alarmStartCurrentLabel->setText(fileInfo.fileName());
+                ui->alarmEndBreakLabel->setText(fileInfo.fileName());
                 isDirty = true;
                 breakAlarmChanged = true;
             }
