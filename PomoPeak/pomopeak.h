@@ -19,6 +19,7 @@
 #include <memory>
 #include <QKeySequence>
 #include <QShortcut>
+#include "trayiconhandler.h"
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class PomoPeak;
@@ -45,7 +46,6 @@ private:
     pomopeaksettings* pomopeakSettings;
     Settings* settings;
     SqliteHandler* sqliteHandler;
-
     std::vector<Ui::taskQT*> avaliableTasks;
     taskQT* currentActiveTaskUI = nullptr;
     taskQT* currentInViewModeTaskUI = nullptr;
@@ -56,7 +56,7 @@ private:
 
     QTimer timer;
     TaskManager taskManager;
-
+    TrayIconHandler trayIconHandler;
     int globalCounter;
 
     int durationLeft;

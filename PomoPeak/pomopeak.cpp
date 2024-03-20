@@ -1,15 +1,16 @@
 #include "pomopeak.h"
 #include "./ui_pomopeak.h"
-
 #include <sstream>
 #include "settingsdto.h"
 #include "databasetables.h"
 #include <QDir>
+
 PomoPeak::PomoPeak(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::PomoPeak)
     , timer(new QTimer)
     , taskManager()
+    , trayIconHandler()
 {
     sqliteHandler = new SqliteHandler(QCoreApplication::applicationDirPath() + "/data/database/applicationData.sqlite");
 
@@ -68,6 +69,8 @@ PomoPeak::PomoPeak(QWidget *parent)
     connect(ui->AddTaskBtn, &QPushButton::clicked, this, &PomoPeak::OnTryAddTask);
 
     ui->tasksContentV2->setAlignment(Qt::AlignTop);
+
+    trayIconHandler.Show();
 }
 
 PomoPeak::~PomoPeak()
@@ -82,6 +85,7 @@ PomoPeak::~PomoPeak()
 
     delete settings;
     delete sqliteHandler;
+
     //https://doc.qt.io/qt-6/objecttrees.html
 
     //no need to do it?
@@ -135,11 +139,13 @@ void PomoPeak::OnTimerTimeout()
                 currentActiveTaskUI->ElapsedIncrease();
             }
             globalCounter++;
+            trayIconHandler.SendMessage("Session", "", QSystemTrayIcon::MessageIcon::NoIcon, 5000);
 
         }
         if(flowHandler->GetCurrentSequence() == FlowSequence::LongBreak || flowHandler->GetCurrentSequence() == FlowSequence::ShortBreak)
         {
             endBreakEffect->play();
+            trayIconHandler.SendMessage("Break", "", QSystemTrayIcon::MessageIcon::NoIcon, 5000);
         }
 
         flowHandler->Next();

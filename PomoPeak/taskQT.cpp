@@ -29,8 +29,6 @@ taskQT::taskQT(QWidget *parent)
     connect(ui->taskName, &QTextEdit::textChanged, this, &taskQT::OnTaskTitleChanged);
     connect(ui->activeBtn, &QPushButton::clicked, this, &taskQT::SwitchSelectState);
     connect(ui->taskStatusBtn, &QPushButton::clicked, this, &taskQT::OnChangeStatus);
-    //ui->taskEstimate->installEventFilter(filter);
-    //ui->taskCurrent->installEventFilter(filter);
 }
 
 taskQT::~taskQT()

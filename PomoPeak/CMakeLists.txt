@@ -40,6 +40,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         databasetables.h databasetables.cpp
         settingsdto.h settingsdto.cpp
         audiomimetypeshelper.h audiomimetypeshelper.cpp
+        Resources.qrc
+        trayiconhandler.h trayiconhandler.cpp
+
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET PomoPeak APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
