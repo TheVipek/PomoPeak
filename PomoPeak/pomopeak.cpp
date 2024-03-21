@@ -51,10 +51,11 @@ PomoPeak::PomoPeak(QWidget *parent)
 
     startButtonClickEffect = new QSoundEffect(this);
     startButtonClickEffect->setSource(QUrl::fromLocalFile(settings->CurrentSessionAlarm.fileName()));
-    startButtonClickEffect->setVolume(settings->SessionAlarmVolume);
+    startButtonClickEffect->setVolume(settings->GetSessionVolumeForAudio());
 
     endBreakEffect = new QSoundEffect(this);
     endBreakEffect->setSource(QUrl::fromLocalFile(settings->CurrentBreakAlarm.fileName()));
+    endBreakEffect->setVolume(settings->GetBreakVolumeForAudio());
     endBreakEffect->setLoopCount(settings->BreakAlarmRepetitions);
 
     UpdateTimerLabel(QString("%1:%2").arg(durationLeft / 60,2,10,QChar('0')).arg((durationLeft % 60),2,10,QChar('0')));
