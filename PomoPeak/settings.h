@@ -43,7 +43,9 @@ public:
     QList<QPair<QString,QVariant>> ToData(const int userID);
     float GetSessionVolumeForAudio();
     float GetBreakVolumeForAudio();
-
+    void SetSessionDuration(double value);
+    void SetShortBreakDuration(double value);
+    void SetLongBreakDuration(double value);
 };
 
 

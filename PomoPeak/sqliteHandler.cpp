@@ -121,14 +121,12 @@ bool SqliteHandler::Update(QString tableName, QList<QPair<QString,QVariant>> upd
     {
         query.bindValue(":condition_" + conditions[i].first, conditions[i].second);
     }
-
     if(!query.exec())
     {
         qDebug() << "Failed to check data in table:" << tableName << "Error:" << query.lastError().text();
         db.close();
         return false;
     }
-
     db.close();
     return query.next();
 }

@@ -17,9 +17,10 @@ pomopeaksettings::pomopeaksettings(Settings& _settings, SqliteHandler& _handler,
 {
     ui->setupUi(this);
 
-    ui->sessionDoubleSpinBox->setValue(_settings.SessionDuration / 60);
-    ui->longBreakDoubleSpinBox->setValue(_settings.LongBreakDuration / 60);
-    ui->shortBreakDoubleSpinBox->setValue(_settings.ShortBreakDuration / 60);
+
+    ui->sessionDoubleSpinBox->setValue((double)_settings.SessionDuration / 60);
+    ui->longBreakDoubleSpinBox->setValue((double)_settings.LongBreakDuration / 60);
+    ui->shortBreakDoubleSpinBox->setValue((double)_settings.ShortBreakDuration / 60);
 
     ui->alarmEndBreakRepSpinBox->setValue(_settings.BreakAlarmRepetitions);
 
@@ -152,17 +153,17 @@ void pomopeaksettings::OnDoubleSpinBoxValueChanged(double value)
     QObject* obj = sender();
     if(obj == ui->sessionDoubleSpinBox)
     {
-        settings.SessionDuration = value * 60;
+        settings.SetSessionDuration(value);
         isDirty = true;
     }
     else if(obj == ui->longBreakDoubleSpinBox)
     {
-        settings.LongBreakDuration = value * 60;
+        settings.SetLongBreakDuration(value);
         isDirty = true;
     }
     else if(obj == ui->shortBreakDoubleSpinBox)
     {
-        settings.ShortBreakDuration = value * 60;
+        settings.SetShortBreakDuration(value);
         isDirty = true;
     }
 }
@@ -202,7 +203,6 @@ void pomopeaksettings::OnExitClicked()
 
         isDirty = false;
     }
-
     emit OnClose(startAlarmChanged, breakAlarmChanged);
     startAlarmChanged = false;
     breakAlarmChanged = false;

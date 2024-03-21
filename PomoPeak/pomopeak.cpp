@@ -312,6 +312,7 @@ void PomoPeak::OnHideSettings(const bool alarmStartChanged,const bool alarmBreak
 
     if(settings->GetBreakVolumeForAudio() != endBreakEffect->volume())
     {
+        qDebug() << "vol";
         endBreakEffect->setVolume(settings->GetBreakVolumeForAudio());
     }
 

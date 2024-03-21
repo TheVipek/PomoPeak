@@ -2,9 +2,9 @@
 #include <QDir>
 Settings::Settings()
 {
-    SessionDuration = 25 * 60;
-    ShortBreakDuration = 5 * 60;
-    LongBreakDuration = 10 * 60;
+    SetSessionDuration(25);
+    SetShortBreakDuration(5);
+    SetLongBreakDuration(10);
     SessionAlarmVolume = 100;
     BreakAlarmVolume = 100;
     BreakAlarmRepetitions = 5;
@@ -148,7 +148,7 @@ QList<QPair<QString,QVariant>> Settings::ToData()
     return {
         {"SessionDuration", SessionDuration},
         {"ShortBreakDuration", ShortBreakDuration},
-        {"LongBreakDuration", LongBreakAfterShortBreaks},
+        {"LongBreakDuration", LongBreakDuration},
         {"SessionAlarmVolume", SessionAlarmVolume},
         {"BreakAlarmVolume", BreakAlarmVolume},
         {"BreakAlarmRepetitions", BreakAlarmRepetitions},
@@ -183,7 +183,7 @@ QList<QPair<QString,QVariant>> Settings::ToData(const int userID)
         {"UserID", userID},
         {"SessionDuration", SessionDuration},
         {"ShortBreakDuration", ShortBreakDuration},
-        {"LongBreakDuration", LongBreakAfterShortBreaks},
+        {"LongBreakDuration", LongBreakDuration},
         {"SessionAlarmVolume", SessionAlarmVolume},
         {"BreakAlarmVolume", BreakAlarmVolume},
         {"BreakAlarmRepetitions", BreakAlarmRepetitions},
@@ -206,4 +206,16 @@ float Settings::GetSessionVolumeForAudio()
 float Settings::GetBreakVolumeForAudio()
 {
     return (float)BreakAlarmVolume / 100;
+}
+void Settings::SetSessionDuration(double value)
+{
+    SessionDuration = value * 60;
+}
+void Settings::SetShortBreakDuration(double value)
+{
+    ShortBreakDuration = value * 60;
+}
+void Settings::SetLongBreakDuration(double value)
+{
+    LongBreakDuration = value * 60;
 }
