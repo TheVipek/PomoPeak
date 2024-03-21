@@ -67,7 +67,8 @@ PomoPeak::PomoPeak(QWidget *parent)
     connect(ui->ChangeFlowBtn, &QPushButton::clicked, this, &PomoPeak::OnChangeState);
     connect(ui->SkipBtn, &QPushButton::clicked, this, &PomoPeak::Skip);
     connect(ui->AddTaskBtn, &QPushButton::clicked, this, &PomoPeak::OnTryAddTask);
-
+    // connect(&trayIconHandler, &TrayIconHandler::Open, this, &PomoPeak::show);
+    // connect(&trayIconHandler, &TrayIconHandler::Exit, this, &QApplication::quit);
     ui->tasksContentV2->setAlignment(Qt::AlignTop);
 
     trayIconHandler.Show();
@@ -139,13 +140,18 @@ void PomoPeak::OnTimerTimeout()
                 currentActiveTaskUI->ElapsedIncrease();
             }
             globalCounter++;
-            trayIconHandler.SendMessage("Session", "", QSystemTrayIcon::MessageIcon::NoIcon, 5000);
-
+            if(!this->isActiveWindow())
+            {
+                trayIconHandler.SendMessage("Session", "", QSystemTrayIcon::MessageIcon::NoIcon, 5000);
+            }
         }
         if(flowHandler->GetCurrentSequence() == FlowSequence::LongBreak || flowHandler->GetCurrentSequence() == FlowSequence::ShortBreak)
         {
             endBreakEffect->play();
-            trayIconHandler.SendMessage("Break", "", QSystemTrayIcon::MessageIcon::NoIcon, 5000);
+            if(!this->isActiveWindow())
+            {
+                trayIconHandler.SendMessage("Break", "", QSystemTrayIcon::MessageIcon::NoIcon, 5000);
+            }
         }
 
         flowHandler->Next();
