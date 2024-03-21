@@ -5,21 +5,21 @@
 #include <QMenu>
 class TrayIconHandler : public QObject
 {
-
+    Q_OBJECT
 public:
     TrayIconHandler();
     void Show();
     void Hide();
     void SendMessage(const QString title, const QString message, const QSystemTrayIcon::MessageIcon priority, const int msDuration);
-private:
-    QSystemTrayIcon trayIcon;
-    QMenu menu;
 signals:
     void Open();
     void Exit();
-private slots:
-    void OnOpen();
-    void OnExit();
+private:
+    QSystemTrayIcon trayIcon;
+    QMenu menu;
+public slots:
+    void OnOpenTrigger();
+    void OnExitTrigger();
 };
 
 #endif // TRAYICONHANDLER_H

@@ -67,8 +67,8 @@ PomoPeak::PomoPeak(QWidget *parent)
     connect(ui->ChangeFlowBtn, &QPushButton::clicked, this, &PomoPeak::OnChangeState);
     connect(ui->SkipBtn, &QPushButton::clicked, this, &PomoPeak::Skip);
     connect(ui->AddTaskBtn, &QPushButton::clicked, this, &PomoPeak::OnTryAddTask);
-    // connect(&trayIconHandler, &TrayIconHandler::Open, this, &PomoPeak::show);
-    // connect(&trayIconHandler, &TrayIconHandler::Exit, this, &QApplication::quit);
+    connect(&trayIconHandler, &TrayIconHandler::Open, this, &PomoPeak::show);
+    connect(&trayIconHandler, &TrayIconHandler::Exit, this, &PomoPeak::OnAppQuit);
     ui->tasksContentV2->setAlignment(Qt::AlignTop);
 
     trayIconHandler.Show();
@@ -125,7 +125,6 @@ void PomoPeak::OnChangeState()
 }
 void PomoPeak::OnTimerTimeout()
 {
-    qDebug() << "timeout?";
     durationLeft -= 1;
     if(durationLeft <= 0)
     {
@@ -142,7 +141,7 @@ void PomoPeak::OnTimerTimeout()
             globalCounter++;
             if(!this->isActiveWindow())
             {
-                trayIconHandler.SendMessage("Session", "", QSystemTrayIcon::MessageIcon::NoIcon, 5000);
+                trayIconHandler.SendMessage("Break", "", QSystemTrayIcon::MessageIcon::NoIcon, 5000);
             }
         }
         if(flowHandler->GetCurrentSequence() == FlowSequence::LongBreak || flowHandler->GetCurrentSequence() == FlowSequence::ShortBreak)
@@ -150,7 +149,7 @@ void PomoPeak::OnTimerTimeout()
             endBreakEffect->play();
             if(!this->isActiveWindow())
             {
-                trayIconHandler.SendMessage("Break", "", QSystemTrayIcon::MessageIcon::NoIcon, 5000);
+                trayIconHandler.SendMessage("Session", "", QSystemTrayIcon::MessageIcon::NoIcon, 5000);
             }
         }
 
@@ -325,4 +324,10 @@ void PomoPeak::OnHideSettings(const bool alarmStartChanged,const bool alarmBreak
         quickActionShortcut->setKey(settings->QuickActionShortcut);
     }
 
+}
+
+void PomoPeak::OnAppQuit()
+{
+    QApplication::quit();
+    trayIconHandler.SendMessage("Application has been minimized to tray","", QSystemTrayIcon::MessageIcon::NoIcon, 5000);
 }

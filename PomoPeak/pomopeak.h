@@ -77,5 +77,6 @@ private:
     void RemoveTask(std::shared_ptr<Task> task);
     void ForceTimerUpdate(int& durationLeft, int& baseDuration, const int targetDuration);
     void TriggerQuickAction();
+    void OnAppQuit();
 };
 #endif // POMOPEAK_H

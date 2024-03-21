@@ -3,14 +3,11 @@
 TrayIconHandler::TrayIconHandler() : trayIcon(nullptr), menu(nullptr)
 {
     trayIcon.setIcon(QIcon(":/icon/data/images/icon.jpg"));
-
-
     QAction* openAction = menu.addAction("Open");
     QAction* exitAction = menu.addAction("Exit");
-
     trayIcon.setContextMenu(&menu);
-    connect(openAction, &QAction::triggered, this, &TrayIconHandler::OnOpen);
-    connect(exitAction, &QAction::triggered, this, &TrayIconHandler::OnExit);
+    connect(openAction, &QAction::triggered, this, &TrayIconHandler::OnOpenTrigger);
+    connect(exitAction, &QAction::triggered, this, &TrayIconHandler::OnExitTrigger);
 }
 
 void TrayIconHandler::Show()
@@ -25,11 +22,11 @@ void TrayIconHandler::SendMessage(const QString title, const QString message, co
 {
     trayIcon.showMessage(title, message, priority, msDuration);
 }
-void TrayIconHandler::OnOpen()
+void TrayIconHandler::OnOpenTrigger()
 {
-    //emit Open();
+    emit Open();
 }
-void TrayIconHandler::OnExit()
+void TrayIconHandler::OnExitTrigger()
 {
-    //emit Exit();
+    emit Exit();
 }
