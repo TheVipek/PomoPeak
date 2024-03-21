@@ -86,7 +86,7 @@ Settings::Settings(const SettingsDTO& dto)
     QFile breakFromDB = QFile(QCoreApplication::applicationDirPath() + TempFilesPath + dto.BreakAlarmName + dto.BreakAlarmExt);
     if(breakFromDB.open(QIODevice::WriteOnly))
     {
-        breakFromDB.write(dto.SessionAlarm);
+        breakFromDB.write(dto.BreakAlarm);
         breakFromDB.close();
     }
     qDebug() << breakFromDB.fileName();
