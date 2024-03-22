@@ -29,7 +29,10 @@ void SqliteHandler::CheckIfDatabaseIsInCorrectState()
                                            "SessionAlarmExt TEXT,"
                                            "BreakAlarm BLOB,"
                                            "BreakAlarmName TEXT,"
-                                           "BreakAlarmExt TEXT);").arg(DatabaseTables::SETTINGS);
+                                           "BreakAlarmExt TEXT,"
+                                           "Notifications INT,"
+                                           "AlarmSound INT,"
+                                           "Skin INT);").arg(DatabaseTables::SETTINGS);
     query.prepare(createSettingsTableQ);
 
     if(!query.exec())

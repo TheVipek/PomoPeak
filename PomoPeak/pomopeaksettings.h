@@ -30,6 +30,8 @@ private slots:
     void OnSpinBoxValueChanged(int value);
     void OnExitClicked();
     void OnSelectAudioClicked();
+    void OnCheckBoxValueChanged(bool value);
+    void OnIndexInComboBoxChanged(int index);
     void OnQuickActionSequenceFinished();
 private:
     Ui::pomopeaksettings *ui;

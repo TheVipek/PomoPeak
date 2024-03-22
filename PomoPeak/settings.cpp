@@ -174,8 +174,8 @@ QList<QPair<QString,QVariant>> Settings::ToData()
         {"BreakAlarm", currentBreakArr},
         {"BreakAlarmName", breakAlarmInfo.baseName()},
         {"BreakAlarmExt", "." + breakAlarmInfo.suffix()},
-        {"Notifications", Notifications},
-        {"AlarmSound", AlarmSound},
+        {"Notifications", Notifications != 0},
+        {"AlarmSound", AlarmSound != 0},
         {"Skin", skinVariant}
     };
 }
@@ -214,8 +214,8 @@ QList<QPair<QString,QVariant>> Settings::ToData(const int userID)
         {"BreakAlarm", currentBreakArr},
         {"BreakAlarmName", breakAlarmInfo.baseName()},
         {"BreakAlarmExt", "." + breakAlarmInfo.suffix()},
-        {"Notifications", Notifications},
-        {"AlarmSound", AlarmSound},
+        {"Notifications", Notifications != 0},
+        {"AlarmSound", AlarmSound != 0},
         {"Skin", skinVariant}
     };
 };

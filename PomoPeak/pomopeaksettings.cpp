@@ -38,12 +38,11 @@ pomopeaksettings::pomopeaksettings(Settings& _settings, SqliteHandler& _handler,
     ui->notificationsCheckbox->setChecked(_settings.Notifications);
     ui->alarmSoundCheckBox->setChecked(_settings.AlarmSound);
 
-    //ui->SkinSelectionComboBox->addItems(Skin::SkinTypesEnumerable.keys());
     for(auto item : Skin::SkinTypesEnumerable)
     {
         ui->SkinSelectionComboBox->addItem(item.first,QVariant::fromValue(item.second));
     }
-
+    ui->SkinSelectionComboBox->setCurrentIndex(static_cast<int>(_settings.Skin));
 
     connect(ui->sessionDoubleSpinBox, &QDoubleSpinBox::valueChanged, this, &pomopeaksettings::OnDoubleSpinBoxValueChanged);
     connect(ui->longBreakDoubleSpinBox, &QDoubleSpinBox::valueChanged, this, &pomopeaksettings::OnDoubleSpinBoxValueChanged);
@@ -61,6 +60,11 @@ pomopeaksettings::pomopeaksettings(Settings& _settings, SqliteHandler& _handler,
     connect(ui->alarmEndBreakSelectBtn, &QPushButton::clicked, this, &pomopeaksettings::OnSelectAudioClicked);
 
     connect(ui->quickActionSequenceEdit, &QKeySequenceEdit::editingFinished, this, &pomopeaksettings::OnQuickActionSequenceFinished);
+
+    connect(ui->notificationsCheckbox, &QCheckBox::clicked, this, &pomopeaksettings::OnCheckBoxValueChanged);
+    connect(ui->alarmSoundCheckBox, &QCheckBox::clicked, this, &pomopeaksettings::OnCheckBoxValueChanged);
+
+    connect(ui->SkinSelectionComboBox, &QComboBox::currentIndexChanged, this, &pomopeaksettings::OnIndexInComboBoxChanged);
 }
 pomopeaksettings::~pomopeaksettings()
 {
@@ -190,6 +194,29 @@ void pomopeaksettings::OnSliderValueChanged(int value)
     {
         ui->alarmEndSliderValue->setText(QString::number(value));
         settings.BreakAlarmVolume = value;
+        isDirty = true;
+    }
+}
+void pomopeaksettings::OnIndexInComboBoxChanged(int index)
+{
+    QObject* obj = sender();
+    if(obj == ui->SkinSelectionComboBox)
+    {
+        settings.Skin = static_cast<Skin::SkinTypes>(index);
+        isDirty = true;
+    }
+}
+void pomopeaksettings::OnCheckBoxValueChanged(bool value)
+{
+    QObject* obj = sender();
+    if(obj == ui->notificationsCheckbox)
+    {
+        settings.Notifications = value;
+        isDirty = true;
+    }
+    else if(obj == ui->alarmSoundCheckBox)
+    {
+        settings.AlarmSound = value;
         isDirty = true;
     }
 }
