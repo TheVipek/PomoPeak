@@ -14,8 +14,10 @@
 #include "settingsdto.h"
 #include <QList>
 #include <QPair>
+#include "Skin.h"
 class Settings
 {
+
 public:
     Settings();
     Settings(const SettingsDTO& dto);
@@ -38,6 +40,10 @@ public:
     const int DefaultID = 0;
     QFile CurrentSessionAlarm;
     QFile CurrentBreakAlarm;
+
+    bool Notifications;
+    bool AlarmSound;
+    Skin::SkinTypes Skin;
 
     QList<QPair<QString,QVariant>> ToData();
     QList<QPair<QString,QVariant>> ToData(const int userID);

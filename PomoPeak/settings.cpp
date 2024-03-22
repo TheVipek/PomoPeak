@@ -15,6 +15,11 @@ Settings::Settings()
 
     CurrentSessionAlarm.setFileName(DefaultSessionAlarm.fileName());
     CurrentBreakAlarm.setFileName(DefaultBreakAlarm.fileName());
+
+    Notifications = true;
+    AlarmSound = true;
+
+    Skin = Skin::SkinTypes::White;
 }
 
 Settings::Settings(const SettingsDTO& dto)
@@ -31,7 +36,10 @@ Settings::Settings(const SettingsDTO& dto)
 
     QuickActionShortcut = QKeySequence(dto.QuickActionShortcut);
 
+    Notifications = dto.Notifications;
+    AlarmSound = dto.AlarmSound;
 
+    Skin = dto.Skin;
     //Load file from custom session alarm path
 
 
@@ -129,6 +137,8 @@ Settings::Settings(const SettingsDTO& dto)
         CurrentBreakAlarm.setFileName(DefaultBreakAlarm.fileName());
         QFile::remove(breakFromDB.fileName());
     }
+
+
 }
 
 QList<QPair<QString,QVariant>> Settings::ToData()
@@ -145,6 +155,9 @@ QList<QPair<QString,QVariant>> Settings::ToData()
     {
         currentBreakArr = CurrentBreakAlarm.readAll();
     }
+
+    QVariant skinVariant = QVariant::fromValue(static_cast<int>(Skin));
+
     return {
         {"SessionDuration", SessionDuration},
         {"ShortBreakDuration", ShortBreakDuration},
@@ -160,7 +173,10 @@ QList<QPair<QString,QVariant>> Settings::ToData()
         {"SessionAlarmExt", "." +sessionAlarmInfo.suffix()},
         {"BreakAlarm", currentBreakArr},
         {"BreakAlarmName", breakAlarmInfo.baseName()},
-        {"BreakAlarmExt", "." + breakAlarmInfo.suffix()}
+        {"BreakAlarmExt", "." + breakAlarmInfo.suffix()},
+        {"Notifications", Notifications},
+        {"AlarmSound", AlarmSound},
+        {"Skin", skinVariant}
     };
 }
 
@@ -179,6 +195,8 @@ QList<QPair<QString,QVariant>> Settings::ToData(const int userID)
         currentBreakArr = CurrentBreakAlarm.readAll();
     }
 
+    QVariant skinVariant = QVariant::fromValue(static_cast<int>(Skin));
+
     return {
         {"UserID", userID},
         {"SessionDuration", SessionDuration},
@@ -195,7 +213,10 @@ QList<QPair<QString,QVariant>> Settings::ToData(const int userID)
         {"SessionAlarmExt", "." + sessionAlarmInfo.suffix()},
         {"BreakAlarm", currentBreakArr},
         {"BreakAlarmName", breakAlarmInfo.baseName()},
-        {"BreakAlarmExt", "." + breakAlarmInfo.suffix()}
+        {"BreakAlarmExt", "." + breakAlarmInfo.suffix()},
+        {"Notifications", Notifications},
+        {"AlarmSound", AlarmSound},
+        {"Skin", skinVariant}
     };
 };
 

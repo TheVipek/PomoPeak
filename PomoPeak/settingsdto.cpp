@@ -17,6 +17,10 @@ SettingsDTO SettingsDTO::FromSqlRecord(const QSqlRecord& record)
     QByteArray breakAlarm = record.value("BreakAlarm").isNull() ? QByteArray() : record.value("BreakAlarm").toByteArray();
     QString breakAlarmName = record.value("BreakAlarmName").isNull() ? QString("BreakAlarmName") : record.value("BreakAlarmName").toString();
     QString breakAlarmExt = record.value("BreakAlarmExt").isNull() ? QString(".") : record.value("BreakAlarmExt").toString();
+    bool notifications = record.value("Notifications").isNull() ? true : record.value("Notifications").toBool();
+    bool alarmSound = record.value("AlarmSound").isNull() ? true : record.value("AlarmSound").toBool();
+    Skin::SkinTypes skin = record.value("Skin").isNull() ? Skin::SkinTypes::White : static_cast<Skin::SkinTypes>(record.value("Skin").toInt());
+
     return SettingsDTO(
         userID,
         sessionDuration,
@@ -33,7 +37,10 @@ SettingsDTO SettingsDTO::FromSqlRecord(const QSqlRecord& record)
         sessionAlarmExt,
         breakAlarm,
         breakAlarmName,
-        breakAlarmExt
+        breakAlarmExt,
+        notifications,
+        alarmSound,
+        skin
     );
 };
 
