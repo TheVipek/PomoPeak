@@ -35,6 +35,15 @@ pomopeaksettings::pomopeaksettings(Settings& _settings, SqliteHandler& _handler,
 
     ui->quickActionSequenceEdit->setKeySequence(_settings.QuickActionShortcut);
 
+    ui->notificationsCheckbox->setChecked(_settings.Notifications);
+    ui->alarmSoundCheckBox->setChecked(_settings.AlarmSound);
+
+    //ui->SkinSelectionComboBox->addItems(Skin::SkinTypesEnumerable.keys());
+    for(auto item : Skin::SkinTypesEnumerable)
+    {
+        ui->SkinSelectionComboBox->addItem(item.first,QVariant::fromValue(item.second));
+    }
+
 
     connect(ui->sessionDoubleSpinBox, &QDoubleSpinBox::valueChanged, this, &pomopeaksettings::OnDoubleSpinBoxValueChanged);
     connect(ui->longBreakDoubleSpinBox, &QDoubleSpinBox::valueChanged, this, &pomopeaksettings::OnDoubleSpinBoxValueChanged);
