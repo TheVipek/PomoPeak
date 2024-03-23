@@ -33,6 +33,12 @@ class PomoPeak : public QMainWindow
 public:
     PomoPeak(QWidget *parent = nullptr);
     ~PomoPeak();
+protected:
+    void closeEvent(QCloseEvent* event)
+    {
+        PlayNotification("Application has been minimized to tray","", 1000);
+        QMainWindow::closeEvent(event);
+    }
 protected slots:
     void OnChangeState();
     void OnTimerTimeout();
@@ -77,6 +83,8 @@ private:
     void RemoveTask(std::shared_ptr<Task> task);
     void ForceTimerUpdate(int& durationLeft, int& baseDuration, const int targetDuration);
     void TriggerQuickAction();
+    void PlaySoundEffect(QSoundEffect* effect, bool play);
+    void PlayNotification(const QString title, const QString message, const int msDuration);
     void OnAppQuit();
 };
 #endif // POMOPEAK_H

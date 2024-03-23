@@ -10,11 +10,12 @@ public:
     TrayIconHandler();
     void Show();
     void Hide();
-    void SendMessage(const QString title, const QString message, const QSystemTrayIcon::MessageIcon priority, const int msDuration);
+    void SendMessage(const QString title, const QString message, const int msDuration);
 signals:
     void Open();
     void Exit();
 private:
+    QIcon icon;
     QSystemTrayIcon trayIcon;
     QMenu menu;
 public slots:

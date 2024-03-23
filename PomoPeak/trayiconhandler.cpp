@@ -1,8 +1,8 @@
 #include "trayiconhandler.h"
 #include <QAction>
-TrayIconHandler::TrayIconHandler() : trayIcon(nullptr), menu(nullptr)
+TrayIconHandler::TrayIconHandler() : trayIcon(), menu(), icon(":/icon/data/images/icon.jpg")
 {
-    trayIcon.setIcon(QIcon(":/icon/data/images/icon.jpg"));
+    trayIcon.setIcon(icon);
     QAction* openAction = menu.addAction("Open");
     QAction* exitAction = menu.addAction("Exit");
     trayIcon.setContextMenu(&menu);
@@ -18,9 +18,9 @@ void TrayIconHandler::Hide()
 {
     trayIcon.hide();
 }
-void TrayIconHandler::SendMessage(const QString title, const QString message, const QSystemTrayIcon::MessageIcon priority, const int msDuration)
+void TrayIconHandler::SendMessage(const QString title, const QString message, const int msDuration)
 {
-    trayIcon.showMessage(title, message, priority, msDuration);
+    trayIcon.showMessage(title, message, icon, msDuration);
 }
 void TrayIconHandler::OnOpenTrigger()
 {

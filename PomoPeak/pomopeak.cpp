@@ -100,6 +100,7 @@ PomoPeak::~PomoPeak()
 }
 
 
+
 void PomoPeak::OnChangeState()
 {
     isRunning = !isRunning;
@@ -107,13 +108,13 @@ void PomoPeak::OnChangeState()
     {
         if(endBreakEffect->isPlaying())
         {
-            endBreakEffect->stop();
+            PlaySoundEffect(endBreakEffect, false);
         }
         if(startButtonClickEffect->isPlaying())
         {
-            startButtonClickEffect->stop();
+            PlaySoundEffect(startButtonClickEffect, false);
         }
-        startButtonClickEffect->play();
+        PlaySoundEffect(startButtonClickEffect, true);
         timer.start();
 
     }
@@ -140,18 +141,14 @@ void PomoPeak::OnTimerTimeout()
                 currentActiveTaskUI->ElapsedIncrease();
             }
             globalCounter++;
-            if(!this->isActiveWindow())
-            {
-                trayIconHandler.SendMessage("Break", "", QSystemTrayIcon::MessageIcon::NoIcon, 5000);
-            }
+            PlayNotification("Break", "", 5000);
+
         }
         if(flowHandler->GetCurrentSequence() == FlowSequence::LongBreak || flowHandler->GetCurrentSequence() == FlowSequence::ShortBreak)
         {
-            endBreakEffect->play();
-            if(!this->isActiveWindow())
-            {
-                trayIconHandler.SendMessage("Session", "", QSystemTrayIcon::MessageIcon::NoIcon, 5000);
-            }
+            PlaySoundEffect(endBreakEffect, true);
+            PlayNotification("Session", "", 5000);
+
         }
 
         flowHandler->Next();
@@ -327,8 +324,36 @@ void PomoPeak::OnHideSettings(const bool alarmStartChanged,const bool alarmBreak
 
 }
 
+void PomoPeak::PlaySoundEffect(QSoundEffect* effect, bool play)
+{
+    if(settings->AlarmSound)
+    {
+        if(play)
+        {
+            effect->play();
+        }
+        else
+        {
+            effect->stop();
+        }
+    }
+}
+void PomoPeak::PlayNotification(const QString title, const QString message, const int msDuration)
+{
+    if(!settings->AlarmSound)
+    {
+        if(settings->Notifications)
+        {
+            trayIconHandler.SendMessage(title, message, msDuration);
+        }
+    }
+    else if(settings->Notifications && !this->isActiveWindow())
+    {
+        trayIconHandler.SendMessage(title, message, msDuration);
+    }
+}
+
 void PomoPeak::OnAppQuit()
 {
     QApplication::quit();
-    trayIconHandler.SendMessage("Application has been minimized to tray","", QSystemTrayIcon::MessageIcon::NoIcon, 5000);
 }
