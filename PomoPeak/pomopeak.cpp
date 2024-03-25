@@ -39,8 +39,8 @@ PomoPeak::PomoPeak(QWidget *parent)
     connect(pomopeakSettings, &pomopeaksettings::OnClose, this, &PomoPeak::OnHideSettings);
     pomopeakSettings->hide();
 
-    pomopeakStats = new Stats(this);
-    connect(pomopeakStats, &Stats::OnClose, this, &PomoPeak::OnHideStats);
+    pomopeakStats = new PomopeakStats(this);
+    connect(pomopeakStats, &PomopeakStats::OnClose, this, &PomoPeak::OnHideStats);
     pomopeakStats->hide();
 
 

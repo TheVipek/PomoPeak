@@ -20,7 +20,7 @@
 #include <QKeySequence>
 #include <QShortcut>
 #include "trayiconhandler.h"
-#include "stats.h"
+#include "pomopeakstats.h"
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class PomoPeak;
@@ -53,7 +53,7 @@ protected slots:
 private:
     Ui::PomoPeak* ui;
     pomopeaksettings* pomopeakSettings;
-    Stats* pomopeakStats;
+    PomopeakStats* pomopeakStats;
     Settings* settings;
     SqliteHandler* sqliteHandler;
     std::vector<Ui::taskQT*> avaliableTasks;
