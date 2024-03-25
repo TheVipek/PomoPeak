@@ -37,7 +37,10 @@ public:
 protected:
     void closeEvent(QCloseEvent* event)
     {
-        PlayNotification("Application has been minimized to tray","", 1000);
+        if(!isQuitting)
+        {
+            PlayNotification("Application has been minimized to tray","", 1000);
+        }
         QMainWindow::closeEvent(event);
     }
 protected slots:
@@ -75,7 +78,7 @@ private:
     bool isRunning;
 
     bool isTaskBeingCreated = false;
-
+    bool isQuitting = false;
     QShortcut* quickActionShortcut;
 
     void UpdateCounter();

@@ -378,5 +378,6 @@ void PomoPeak::PlayNotification(const QString title, const QString message, cons
 
 void PomoPeak::OnAppQuit()
 {
+    isQuitting = true;
     QApplication::quit();
 }

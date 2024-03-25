@@ -21,6 +21,9 @@ private slots:
     void OnExitClicked();
 private:
     Ui::PomopeakStats *ui;
+    void OnViewButtonsClick();
+    void SwitchViewToMonthly();
+    void SwitchViewToWeekly();
 };
 
 #endif // POMOPEAKSTATS_H
