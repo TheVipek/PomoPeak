@@ -111,6 +111,13 @@
             </spacer>
            </item>
            <item>
+            <widget class="QPushButton" name="statsBtn">
+             <property name="text">
+              <string>Stats</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="settingsBtn">
              <property name="minimumSize">
               <size>
