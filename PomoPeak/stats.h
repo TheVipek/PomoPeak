@@ -15,6 +15,10 @@ public:
     explicit Stats(QWidget *parent = nullptr);
     ~Stats();
 
+signals:
+    void OnClose();
+private slots:
+    void OnExitClicked();
 private:
     Ui::Stats *ui;
 };

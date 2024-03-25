@@ -39,7 +39,14 @@ PomoPeak::PomoPeak(QWidget *parent)
     connect(pomopeakSettings, &pomopeaksettings::OnClose, this, &PomoPeak::OnHideSettings);
     pomopeakSettings->hide();
 
+    pomopeakStats = new Stats(this);
+    connect(pomopeakStats, &Stats::OnClose, this, &PomoPeak::OnHideStats);
+    pomopeakStats->hide();
+
+
     ui->widgetsLayout->addWidget(pomopeakSettings);
+    ui->widgetsLayout->addWidget(pomopeakStats);
+
 
     isRunning = false;
     durationLeft = settings->SessionDuration;
@@ -64,6 +71,8 @@ PomoPeak::PomoPeak(QWidget *parent)
     timer.setInterval(1000);
 
     connect(ui->settingsBtn, &QPushButton::clicked, this, &PomoPeak::OnOpenSettings);
+    connect(ui->statsBtn, &QPushButton::clicked, this, &PomoPeak::OnOpenStats);
+
     connect(&timer, &QTimer::timeout, this, &PomoPeak::OnTimerTimeout);
     connect(ui->ChangeFlowBtn, &QPushButton::clicked, this, &PomoPeak::OnChangeState);
     connect(ui->SkipBtn, &QPushButton::clicked, this, &PomoPeak::Skip);
@@ -236,14 +245,7 @@ void PomoPeak::AdjustButtonsVisibilityDependingOnCurrentState()
         ui->SkipBtn->setVisible(false);
     }
 }
-void PomoPeak::OnOpenSettings()
-{
-    if(!pomopeakSettings->IsOpened)
-    {
-        ui->widget->hide();
-        pomopeakSettings->show();
-    }
-}
+
 
 void PomoPeak::ForceTimerUpdate(int& durationLeft, int& baseDuration, const int targetDuration)
 {
@@ -268,6 +270,16 @@ void PomoPeak::TriggerQuickAction()
         OnChangeState();
     }
 }
+
+void PomoPeak::OnOpenSettings()
+{
+    if(!pomopeakSettings->IsOpened)
+    {
+        ui->widget->hide();
+        pomopeakSettings->show();
+    }
+}
+
 void PomoPeak::OnHideSettings(const bool alarmStartChanged,const bool alarmBreakChanged)
 {
     if(pomopeakSettings->IsOpened)
@@ -324,6 +336,17 @@ void PomoPeak::OnHideSettings(const bool alarmStartChanged,const bool alarmBreak
 
 }
 
+void PomoPeak::OnOpenStats()
+{
+    ui->widget->hide();
+    pomopeakStats->show();
+}
+
+void PomoPeak::OnHideStats()
+{
+    pomopeakStats->hide();
+    ui->widget->show();
+}
 void PomoPeak::PlaySoundEffect(QSoundEffect* effect, bool play)
 {
     if(settings->AlarmSound)
