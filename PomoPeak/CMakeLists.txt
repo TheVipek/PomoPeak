@@ -45,6 +45,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         Skin.h
         Skin.cpp
         pomopeakstats.h pomopeakstats.cpp pomopeakstats.ui
+        userstats.h userstats.cpp
+        daytaskstats.h daytaskstats.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET PomoPeak APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
