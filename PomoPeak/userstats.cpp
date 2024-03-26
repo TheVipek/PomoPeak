@@ -28,3 +28,4 @@ void UserStats::AddTimeSpend(int time)
         TaskStats.insert(QDate::currentDate(), DayTaskStats(0,time));
     }
 }
+
