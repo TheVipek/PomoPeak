@@ -29,6 +29,7 @@ private:
 
     UserStats& stats;
     QChart* chart;
+    QBarSeries* allSets;
     QBarSet* completedTasksSet;
     QBarSet* taskTimeSet;
     void OnViewButtonsClick();
@@ -36,6 +37,7 @@ private:
     void SwitchViewToWeekly();
     void InitializeChart();
     void ShowBarText(bool status, int index);
+    void UpdateChart(int days);
 };
 
 #endif // POMOPEAKSTATS_H
