@@ -39,7 +39,11 @@ PomoPeak::PomoPeak(QWidget *parent)
     connect(pomopeakSettings, &pomopeaksettings::OnClose, this, &PomoPeak::OnHideSettings);
     pomopeakSettings->hide();
 
-    pomopeakStats = new PomopeakStats(this);
+
+    userStats = new UserStats();
+    userStats->AddTaskCompletion();
+    userStats->AddTimeSpend(25);
+    pomopeakStats = new PomopeakStats(*userStats,this);
     connect(pomopeakStats, &PomopeakStats::OnClose, this, &PomoPeak::OnHideStats);
     pomopeakStats->hide();
 

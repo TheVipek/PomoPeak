@@ -7,6 +7,7 @@
 #include <QtCharts/QBarSet>
 #include <QtCharts/QLegend>
 #include <QtCharts/QBarCategoryAxis>
+#include "userstats.h"
 namespace Ui {
 class PomopeakStats;
 }
@@ -16,7 +17,7 @@ class PomopeakStats : public QWidget
     Q_OBJECT
 
 public:
-    explicit PomopeakStats(QWidget *parent = nullptr);
+    explicit PomopeakStats( UserStats& stats, QWidget *parent = nullptr);
     ~PomopeakStats();
 
 signals:
@@ -25,11 +26,16 @@ private slots:
     void OnExitClicked();
 private:
     Ui::PomopeakStats *ui;
+
+    UserStats& stats;
     QChart* chart;
+    QBarSet* completedTasksSet;
+    QBarSet* taskTimeSet;
     void OnViewButtonsClick();
     void SwitchViewToMonthly();
     void SwitchViewToWeekly();
     void InitializeChart();
+    void ShowBarText(bool status, int index);
 };
 
 #endif // POMOPEAKSTATS_H

@@ -6,6 +6,11 @@ UserStats::UserStats()
 }
 
 
+QMap<QDate,DayTaskStats> UserStats::GetUserStats() const
+{
+    return TaskStats;
+}
+
 void UserStats::AddTaskCompletion()
 {
     if(TaskStats.contains(QDate::currentDate()))
@@ -17,15 +22,15 @@ void UserStats::AddTaskCompletion()
         TaskStats.insert(QDate::currentDate(), DayTaskStats(1,0));
     }
 }
-void UserStats::AddTimeSpend(int time)
+void UserStats::AddTimeSpend(float minutes)
 {
     if(TaskStats.contains(QDate::currentDate()))
     {
-        TaskStats[QDate::currentDate()].TimeSpend += time;
+        TaskStats[QDate::currentDate()].TimeSpendInHours += minutes/60;
     }
     else
     {
-        TaskStats.insert(QDate::currentDate(), DayTaskStats(0,time));
+        TaskStats.insert(QDate::currentDate(), DayTaskStats(0, minutes/60));
     }
 }
 

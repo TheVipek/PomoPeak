@@ -58,6 +58,7 @@ private:
     pomopeaksettings* pomopeakSettings;
     PomopeakStats* pomopeakStats;
     Settings* settings;
+    UserStats* userStats;
     SqliteHandler* sqliteHandler;
     std::vector<Ui::taskQT*> avaliableTasks;
     taskQT* currentActiveTaskUI = nullptr;

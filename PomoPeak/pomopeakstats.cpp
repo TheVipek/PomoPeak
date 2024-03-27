@@ -1,9 +1,12 @@
 #include "pomopeakstats.h"
 #include "ui_pomopeakstats.h"
 #include <QToolTip>
-PomopeakStats::PomopeakStats(QWidget *parent)
+#include "daytaskstats.h"
+#include <QDate>
+PomopeakStats::PomopeakStats(UserStats& stats,QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::PomopeakStats)
+    , stats(stats)
 {
     ui->setupUi(this);
 
@@ -13,6 +16,9 @@ PomopeakStats::PomopeakStats(QWidget *parent)
     SwitchViewToWeekly();
     InitializeChart();
 
+
+    connect(completedTasksSet, &QBarSet::hovered,this, &PomopeakStats::ShowBarText);
+    connect(taskTimeSet, &QBarSet::hovered,this, &PomopeakStats::ShowBarText);
 }
 
 
@@ -48,33 +54,48 @@ void PomopeakStats::SwitchViewToMonthly()
     ui->monthlyBtn->setEnabled(false);
     ui->weeklyBtn->setEnabled(true);
 }
+
 void PomopeakStats::SwitchViewToWeekly()
 {
     ui->weeklyBtn->setEnabled(false);
     ui->monthlyBtn->setEnabled(true);
 }
+
 void PomopeakStats::InitializeChart()
 {
     chart = new QChart();
     chart->setTitle("Title");
-    QBarSet* tasksCount = new QBarSet("Task Count");
-    *tasksCount  << 1 << 2 << 3 << 4 << 5;
 
-    QBarSet* timeSpent = new QBarSet("Time Spent");
-    *timeSpent << 1 << 2 << 3 << 4 << 5;
+    completedTasksSet = new QBarSet("Task Count");
+    taskTimeSet = new QBarSet("Time Spend (in hours)");
+
+    QMap<QDate,DayTaskStats> userStats = stats.GetUserStats();
+
+    for(auto it = userStats.constBegin(); it != userStats.constEnd(); ++it)
+    {
+        const auto& val = it.value();
+
+        completedTasksSet->insert(completedTasksSet->count(), val.TaskCompletedCount);
+        taskTimeSet->insert(taskTimeSet->count(), val.TimeSpendInHours);
+    }
+
+
+
+
     QBarSeries* series = new QBarSeries();
-
-    series->append(tasksCount );
-    series->append(timeSpent);
-    QObject::connect(series, &QBarSeries::hovered, [=](bool status, int index, QBarSet *set) {
-        if (status) {
-            // Assuming you want to show the set name and value in the tooltip
-            QToolTip::showText(QCursor::pos(), QString("%1: %2").arg(set->label()).arg(set->at(index)));
-        }
-    });
+    series->append(completedTasksSet);
+    series ->append(taskTimeSet);
     chart->addSeries(series);
+
     QChartView* view = new QChartView(chart);
     ui->chartLayout->addWidget(view);
+}
 
-
+void PomopeakStats::ShowBarText(bool status, int index)
+{
+    QBarSet* set = qobject_cast<QBarSet*>(sender());
+    if(status)
+    {
+        QToolTip::showText(QCursor::pos(), QString("%1: %2").arg(set->label()).arg(set->at(index)));
+    }
 }

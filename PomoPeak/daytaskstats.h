@@ -5,15 +5,15 @@ struct DayTaskStats
 {
 public:
     DayTaskStats();
-    DayTaskStats(int taskCompletedCount, int timeSpend);
+    DayTaskStats(int taskCompletedCount, float timeSpendInHours);
     int TaskCompletedCount = 0;
-    int TimeSpend = 0;
+    float TimeSpendInHours = 0;
 
     QJsonObject ToJson() const
     {
         QJsonObject obj;
         obj["TaskCompletedCount"] = TaskCompletedCount;
-        obj["TimeSpend"] = TimeSpend;
+        obj["TimeSpendInHours"] = TimeSpendInHours;
         return obj;
     }
 };
