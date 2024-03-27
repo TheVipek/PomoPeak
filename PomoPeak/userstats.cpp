@@ -11,26 +11,26 @@ QMap<QDate,DayTaskStats> UserStats::GetUserStats() const
     return TaskStats;
 }
 
-void UserStats::AddTaskCompletion()
+void UserStats::AddTaskCompletion(const QDate date)
 {
-    if(TaskStats.contains(QDate::currentDate()))
+    if(TaskStats.contains(date))
     {
-        TaskStats[QDate::currentDate()].TaskCompletedCount += 1;
+        TaskStats[date].TaskCompletedCount += 1;
     }
     else
     {
-        TaskStats.insert(QDate::currentDate(), DayTaskStats(1,0));
+        TaskStats.insert(date, DayTaskStats(1,0));
     }
 }
-void UserStats::AddTimeSpend(float minutes)
+void UserStats::AddTimeSpend(const float minutes, const QDate date)
 {
-    if(TaskStats.contains(QDate::currentDate()))
+    if(TaskStats.contains(date))
     {
-        TaskStats[QDate::currentDate()].TimeSpendInHours += minutes/60;
+        TaskStats[date].TimeSpendInHours += minutes/60;
     }
     else
     {
-        TaskStats.insert(QDate::currentDate(), DayTaskStats(0, minutes/60));
+        TaskStats.insert(date, DayTaskStats(0, minutes/60));
     }
 }
 

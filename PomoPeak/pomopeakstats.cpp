@@ -14,12 +14,11 @@ PomopeakStats::PomopeakStats(UserStats& stats,QWidget *parent)
     connect(ui->monthlyBtn, &QPushButton::clicked, this, &PomopeakStats::OnViewButtonsClick);
     connect(ui->weeklyBtn, &QPushButton::clicked, this, &PomopeakStats::OnViewButtonsClick);
 
+    showTooltipTimer = new QTimer(this);
+    showTooltipTimer->setSingleShot(true);
+    connect(showTooltipTimer, &QTimer::timeout, this, &PomopeakStats::ShowBarText);
     InitializeChart();
     SwitchViewToWeekly();
-
-
-    connect(completedTasksSet, &QBarSet::hovered,this, &PomopeakStats::ShowBarText);
-    connect(taskTimeSet, &QBarSet::hovered,this, &PomopeakStats::ShowBarText);
 }
 
 
@@ -47,6 +46,8 @@ void PomopeakStats::OnViewButtonsClick()
         qDebug() << "Clicked at; " << obj->objectName();
         SwitchViewToMonthly();
     }
+
+
 }
 
 
@@ -69,20 +70,24 @@ void PomopeakStats::InitializeChart()
     chart = new QChart();
     chart->setTitle("Title");
 
-    allSets = new QBarSeries();
-    chart->addSeries(allSets);
-
     QChartView* view = new QChartView(chart);
     ui->chartLayout->addWidget(view);
 }
 void PomopeakStats::UpdateChart(int days)
 {
-    chart->removeAllSeries();
+    if(allSets != nullptr)
+        chart->removeAllSeries();
+
+    if(daysAxis != nullptr)
+        chart->removeAxis(daysAxis);
 
     allSets = new QBarSeries();
 
     completedTasksSet = new QBarSet("Task Count");
     taskTimeSet = new QBarSet("Time Spend (in hours)");
+
+    connect(completedTasksSet, &QBarSet::hovered,this, &PomopeakStats::OnHoverBar);
+    connect(taskTimeSet, &QBarSet::hovered,this, &PomopeakStats::OnHoverBar);
 
     QMap<QDate,DayTaskStats> userStats = stats.GetUserStats();
     QDate startDate = QDateTime::currentDateTime().date().addDays(-days);
@@ -100,15 +105,39 @@ void PomopeakStats::UpdateChart(int days)
     allSets->append(completedTasksSet);
     allSets->append(taskTimeSet);
 
+    QStringList dates = QStringList();
+
+    for(int i = 0;i <= days; i++)
+    {
+        dates.append(startDate.toString("MM-dd"));
+        startDate = startDate.addDays(1);
+    }
+
+    daysAxis = new QBarCategoryAxis();
+    daysAxis->append(dates);
+
+
     chart->addSeries(allSets);
+    chart->addAxis(daysAxis, Qt::AlignBottom);
+    allSets->attachAxis(daysAxis);
 }
 
-void PomopeakStats::ShowBarText(bool status, int index)
+void PomopeakStats::OnHoverBar(bool status, int index)
 {
 
     QBarSet* set = qobject_cast<QBarSet*>(sender());
     if(status)
     {
-        QToolTip::showText(QCursor::pos(), QString("%1: %2").arg(set->label()).arg(set->at(index)));
+        tooltipText = QString("%1: %2").arg(set->label()).arg(set->at(index));
+        showTooltipTimer->start(500);
     }
+    else
+    {
+        showTooltipTimer->stop();
+        QToolTip::hideText();
+    }
+}
+void PomopeakStats::ShowBarText()
+{
+    QToolTip::showText(QCursor::pos(), tooltipText);
 }

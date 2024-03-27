@@ -10,8 +10,8 @@ class UserStats
 public:
     UserStats();
     QMap<QDate,DayTaskStats> GetUserStats() const;
-    void AddTaskCompletion();
-    void AddTimeSpend(float time);
+    void AddTaskCompletion(const QDate date = QDate::currentDate());
+    void AddTimeSpend(const float minutes, const QDate date = QDate::currentDate());
 
 
     QJsonObject ToJson() const

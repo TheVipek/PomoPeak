@@ -43,6 +43,31 @@ PomoPeak::PomoPeak(QWidget *parent)
     userStats = new UserStats();
     userStats->AddTaskCompletion();
     userStats->AddTimeSpend(25);
+
+    userStats->AddTaskCompletion(QDate::currentDate().addDays(-1));
+    userStats->AddTimeSpend(25,QDate::currentDate().addDays(-1));
+
+    userStats->AddTaskCompletion(QDate::currentDate().addDays(-2));
+    userStats->AddTimeSpend(25,QDate::currentDate().addDays(-2));
+
+    userStats->AddTaskCompletion(QDate::currentDate().addDays(-3));
+    userStats->AddTimeSpend(25,QDate::currentDate().addDays(-3));
+
+    userStats->AddTaskCompletion(QDate::currentDate().addDays(-4));
+    userStats->AddTimeSpend(25, QDate::currentDate().addDays(-4));
+
+    userStats->AddTaskCompletion(QDate::currentDate().addDays(-5));
+    userStats->AddTimeSpend(25, QDate::currentDate().addDays(-5));
+
+    userStats->AddTaskCompletion(QDate::currentDate().addDays(-6));
+    userStats->AddTimeSpend(25, QDate::currentDate().addDays(-6));
+
+    userStats->AddTaskCompletion(QDate::currentDate().addDays(-7));
+    userStats->AddTimeSpend(25, QDate::currentDate().addDays(-7));
+
+    userStats->AddTaskCompletion(QDate::currentDate().addDays(-8));
+    userStats->AddTimeSpend(25, QDate::currentDate().addDays(-8));
+
     pomopeakStats = new PomopeakStats(*userStats,this);
     connect(pomopeakStats, &PomopeakStats::OnClose, this, &PomoPeak::OnHideStats);
     pomopeakStats->hide();

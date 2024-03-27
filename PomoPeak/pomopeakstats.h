@@ -8,6 +8,9 @@
 #include <QtCharts/QLegend>
 #include <QtCharts/QBarCategoryAxis>
 #include "userstats.h"
+
+
+#include <QTimer>
 namespace Ui {
 class PomopeakStats;
 }
@@ -32,11 +35,15 @@ private:
     QBarSeries* allSets;
     QBarSet* completedTasksSet;
     QBarSet* taskTimeSet;
+    QBarCategoryAxis* daysAxis;
+    QTimer* showTooltipTimer;
+    QString tooltipText;
     void OnViewButtonsClick();
     void SwitchViewToMonthly();
     void SwitchViewToWeekly();
     void InitializeChart();
-    void ShowBarText(bool status, int index);
+    void OnHoverBar(bool status, int index);
+    void ShowBarText();
     void UpdateChart(int days);
 };
 
