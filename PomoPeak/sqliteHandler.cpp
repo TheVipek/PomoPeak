@@ -43,6 +43,22 @@ void SqliteHandler::CheckIfDatabaseIsInCorrectState()
     {
         qDebug() << "Successfully created settings table";
     }
+
+    QString createStatsTableQ = QString("CREATE TABLE IF NOT EXISTS %1 ("
+                                        "UserID INTEGER PRIMARY KEY,"
+                                        "StatsData TEXT);").arg(DatabaseTables::STATS);
+    query.prepare(createStatsTableQ);
+
+    if(!query.exec())
+    {
+        qDebug() << "Error creating table s:" << query.lastError().text();
+    }
+    else
+    {
+        qDebug() << "Successfully created stats table";
+    }
+
+
     db.close();
 }
 

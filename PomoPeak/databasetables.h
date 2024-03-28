@@ -5,8 +5,7 @@ class DatabaseTables
 {
 public:
     static QString SETTINGS;
-    static QString TASKS;
-    static QString ACTIVITY;
+    static QString STATS;
 };
 
 #endif // DATABASETABLES_H
