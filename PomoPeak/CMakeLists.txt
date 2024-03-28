@@ -16,37 +16,33 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Sql)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Charts)
 set(PROJECT_SOURCES
         main.cpp
-        pomopeak.cpp
-        pomopeak.h
-        pomopeak.ui
-        taskQT.ui
-        taskQT.h taskQT.cpp
-
+        pomopeak.h pomopeak.cpp pomopeak.ui
+        taskQT.h taskQT.cpp taskQT.ui
+        pomopeakstats.h pomopeakstats.cpp pomopeakstats.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(PomoPeak
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+
+        Resources.qrc
+
         FlowHandler.h flowhandler.cpp
         settings.h settings.cpp
         taskmanager.h taskmanager.cpp
-        task.h
-        task.cpp
+        task.h task.cpp
         TaskInputFilter.h
-
         pomopeaksettings.h pomopeaksettings.cpp pomopeaksettings.ui
         sqliteHandler.h sqliteHandler.cpp
         databasetables.h databasetables.cpp
         settingsdto.h settingsdto.cpp
         audiomimetypeshelper.h audiomimetypeshelper.cpp
-        Resources.qrc
         trayiconhandler.h trayiconhandler.cpp
-        Skin.h
-        Skin.cpp
-        pomopeakstats.h pomopeakstats.cpp pomopeakstats.ui
+        Skin.h Skin.cpp
         userstats.h userstats.cpp
         daytaskstats.h daytaskstats.cpp
+        userstatsdto.h userstatsdto.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET PomoPeak APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

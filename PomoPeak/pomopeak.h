@@ -63,25 +63,28 @@ private:
     std::vector<Ui::taskQT*> avaliableTasks;
     taskQT* currentActiveTaskUI = nullptr;
     taskQT* currentInViewModeTaskUI = nullptr;
-
+    FlowHandler* flowHandler;
     QSoundEffect* startButtonClickEffect;
     QSoundEffect* endBreakEffect;
-    FlowHandler* flowHandler;
+    QShortcut* quickActionShortcut;
 
     QTimer timer;
     TaskManager taskManager;
     TrayIconHandler trayIconHandler;
-    int globalCounter;
 
+    int globalCounter = 0;
     int durationLeft;
     int baseDuration;
 
-    bool isRunning;
-
+    bool isRunning = false;
     bool isTaskBeingCreated = false;
     bool isQuitting = false;
-    QShortcut* quickActionShortcut;
 
+
+
+    void InitializeDataContainer();
+    void InitializeObjects();
+    void SubscribeToEvents();
     void UpdateCounter();
     void Skip();
     void UpdateTimerLabel(QString value);

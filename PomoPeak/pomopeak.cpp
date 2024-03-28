@@ -1,6 +1,5 @@
 #include "pomopeak.h"
 #include "./ui_pomopeak.h"
-#include <sstream>
 #include "settingsdto.h"
 #include "databasetables.h"
 #include <QDir>
@@ -8,20 +7,55 @@
 PomoPeak::PomoPeak(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::PomoPeak)
+    , sqliteHandler(new SqliteHandler(QCoreApplication::applicationDirPath() + "/data/database/applicationData.sqlite"))
     , timer(new QTimer)
     , taskManager()
     , trayIconHandler()
 {
-    sqliteHandler = new SqliteHandler(QCoreApplication::applicationDirPath() + "/data/database/applicationData.sqlite");
+    ui->setupUi(this);
+    ui->widgetsLayout->setAlignment(Qt::AlignCenter);
+    ui->tasksContentV2->setAlignment(Qt::AlignTop);
 
-    std::ostringstream ss;
+    trayIconHandler.Show();
+
+    InitializeDataContainer();
+    InitializeObjects();
+    SubscribeToEvents();
+}
+
+PomoPeak::~PomoPeak()
+{
+    delete ui;
+    delete flowHandler;
+    delete startButtonClickEffect;
+    delete endBreakEffect;
+    delete settings;
+    delete sqliteHandler;
+    delete userStats;
+    delete pomopeakStats;
+    delete quickActionShortcut;
+    //https://doc.qt.io/qt-6/objecttrees.html
+
+    //no need to do it?
+       // delete pomopeakSettings;
+    // for (auto taskPtr : avaliableTasks) {
+    //     delete taskPtr;
+    // }
+    //avaliableTasks.clear();
+
+
+}
+
+void PomoPeak::InitializeDataContainer()
+{
     QString query = QString("SELECT * FROM %1 WHERE UserID = 0 LIMIT 1").arg(DatabaseTables::SETTINGS);
-    auto DTO = sqliteHandler->GetData<SettingsDTO>(query);
-    qDebug() << DTO.data();
-    if(!DTO.empty())
+
+    auto settingsDTO = sqliteHandler->GetData<SettingsDTO>(query);
+    qDebug() << settingsDTO.data();
+    if(!settingsDTO.empty())
     {
         qDebug() << "Creating settings from DTO";
-        settings = new Settings(DTO.front());
+        settings = new Settings(settingsDTO.front());
     }
     else
     {
@@ -29,61 +63,49 @@ PomoPeak::PomoPeak(QWidget *parent)
         settings = new Settings();
         sqliteHandler->SetData(DatabaseTables::SETTINGS, settings->ToData(settings->DefaultID));
     }
+}
 
+void PomoPeak::InitializeObjects()
+{
     flowHandler = new FlowHandler(*settings);
 
-    ui->setupUi(this);
-    ui->widgetsLayout->setAlignment(Qt::AlignCenter);
-
     pomopeakSettings = new pomopeaksettings(*settings, *sqliteHandler , this);
-    connect(pomopeakSettings, &pomopeaksettings::OnClose, this, &PomoPeak::OnHideSettings);
     pomopeakSettings->hide();
-
+    ui->widgetsLayout->addWidget(pomopeakSettings);
 
     userStats = new UserStats();
-    userStats->AddTaskCompletion();
-    userStats->AddTimeSpend(25);
+    // userStats->AddTaskCompletion();
+    // userStats->AddTimeSpend(25);
 
-    userStats->AddTaskCompletion(QDate::currentDate().addDays(-1));
-    userStats->AddTimeSpend(25,QDate::currentDate().addDays(-1));
+    // userStats->AddTaskCompletion(QDate::currentDate().addDays(-1));
+    // userStats->AddTimeSpend(25,QDate::currentDate().addDays(-1));
 
-    userStats->AddTaskCompletion(QDate::currentDate().addDays(-2));
-    userStats->AddTimeSpend(25,QDate::currentDate().addDays(-2));
+    // userStats->AddTaskCompletion(QDate::currentDate().addDays(-2));
+    // userStats->AddTimeSpend(25,QDate::currentDate().addDays(-2));
 
-    userStats->AddTaskCompletion(QDate::currentDate().addDays(-3));
-    userStats->AddTimeSpend(25,QDate::currentDate().addDays(-3));
+    // userStats->AddTaskCompletion(QDate::currentDate().addDays(-3));
+    // userStats->AddTimeSpend(25,QDate::currentDate().addDays(-3));
 
-    userStats->AddTaskCompletion(QDate::currentDate().addDays(-4));
-    userStats->AddTimeSpend(25, QDate::currentDate().addDays(-4));
+    // userStats->AddTaskCompletion(QDate::currentDate().addDays(-4));
+    // userStats->AddTimeSpend(25, QDate::currentDate().addDays(-4));
 
-    userStats->AddTaskCompletion(QDate::currentDate().addDays(-5));
-    userStats->AddTimeSpend(25, QDate::currentDate().addDays(-5));
+    // userStats->AddTaskCompletion(QDate::currentDate().addDays(-5));
+    // userStats->AddTimeSpend(25, QDate::currentDate().addDays(-5));
 
-    userStats->AddTaskCompletion(QDate::currentDate().addDays(-6));
-    userStats->AddTimeSpend(25, QDate::currentDate().addDays(-6));
+    // userStats->AddTaskCompletion(QDate::currentDate().addDays(-6));
+    // userStats->AddTimeSpend(25, QDate::currentDate().addDays(-6));
 
-    userStats->AddTaskCompletion(QDate::currentDate().addDays(-7));
-    userStats->AddTimeSpend(25, QDate::currentDate().addDays(-7));
+    // userStats->AddTaskCompletion(QDate::currentDate().addDays(-7));
+    // userStats->AddTimeSpend(25, QDate::currentDate().addDays(-7));
 
-    userStats->AddTaskCompletion(QDate::currentDate().addDays(-8));
-    userStats->AddTimeSpend(25, QDate::currentDate().addDays(-8));
+    // userStats->AddTaskCompletion(QDate::currentDate().addDays(-8));
+    // userStats->AddTimeSpend(25, QDate::currentDate().addDays(-8));
 
     pomopeakStats = new PomopeakStats(*userStats,this);
-    connect(pomopeakStats, &PomopeakStats::OnClose, this, &PomoPeak::OnHideStats);
     pomopeakStats->hide();
-
-
-    ui->widgetsLayout->addWidget(pomopeakSettings);
     ui->widgetsLayout->addWidget(pomopeakStats);
 
-
-    isRunning = false;
-    durationLeft = settings->SessionDuration;
-    baseDuration = settings->SessionDuration;
-    globalCounter = 0;
-
     quickActionShortcut = new QShortcut(settings->QuickActionShortcut, this);
-    connect(quickActionShortcut, &QShortcut::activated, this, &PomoPeak::TriggerQuickAction);
 
     startButtonClickEffect = new QSoundEffect(this);
     startButtonClickEffect->setSource(QUrl::fromLocalFile(settings->CurrentSessionAlarm.fileName()));
@@ -94,50 +116,29 @@ PomoPeak::PomoPeak(QWidget *parent)
     endBreakEffect->setVolume(settings->GetBreakVolumeForAudio());
     endBreakEffect->setLoopCount(settings->BreakAlarmRepetitions);
 
-    UpdateTimerLabel(QString("%1:%2").arg(durationLeft / 60,2,10,QChar('0')).arg((durationLeft % 60),2,10,QChar('0')));
-    AdjustButtonsVisibilityDependingOnCurrentState();
+    durationLeft = settings->SessionDuration;
+    baseDuration = settings->SessionDuration;
 
+    UpdateTimerLabel(QString("%1:%2").arg(durationLeft / 60,2,10,QChar('0')).arg((durationLeft % 60),2,10,QChar('0')));
     timer.setInterval(1000);
 
+    AdjustButtonsVisibilityDependingOnCurrentState();
+}
+
+void PomoPeak::SubscribeToEvents()
+{
+    connect(pomopeakSettings, &pomopeaksettings::OnClose, this, &PomoPeak::OnHideSettings);
+    connect(pomopeakStats, &PomopeakStats::OnClose, this, &PomoPeak::OnHideStats);
+    connect(quickActionShortcut, &QShortcut::activated, this, &PomoPeak::TriggerQuickAction);
     connect(ui->settingsBtn, &QPushButton::clicked, this, &PomoPeak::OnOpenSettings);
     connect(ui->statsBtn, &QPushButton::clicked, this, &PomoPeak::OnOpenStats);
-
     connect(&timer, &QTimer::timeout, this, &PomoPeak::OnTimerTimeout);
     connect(ui->ChangeFlowBtn, &QPushButton::clicked, this, &PomoPeak::OnChangeState);
     connect(ui->SkipBtn, &QPushButton::clicked, this, &PomoPeak::Skip);
     connect(ui->AddTaskBtn, &QPushButton::clicked, this, &PomoPeak::OnTryAddTask);
     connect(&trayIconHandler, &TrayIconHandler::Open, this, &PomoPeak::show);
     connect(&trayIconHandler, &TrayIconHandler::Exit, this, &PomoPeak::OnAppQuit);
-    ui->tasksContentV2->setAlignment(Qt::AlignTop);
-
-    trayIconHandler.Show();
 }
-
-PomoPeak::~PomoPeak()
-{
-    delete ui;
-
-    delete flowHandler;
-
-    delete startButtonClickEffect;
-
-    delete endBreakEffect;
-
-    delete settings;
-    delete sqliteHandler;
-
-    //https://doc.qt.io/qt-6/objecttrees.html
-
-    //no need to do it?
-       // delete pomopeakSettings;
-    // for (auto taskPtr : avaliableTasks) {
-    //     delete taskPtr;
-    // }
-    //avaliableTasks.clear();
-
-}
-
-
 
 void PomoPeak::OnChangeState()
 {
@@ -163,6 +164,7 @@ void PomoPeak::OnChangeState()
 
     AdjustButtonsVisibilityDependingOnCurrentState();
 }
+
 void PomoPeak::OnTimerTimeout()
 {
     durationLeft -= 1;
@@ -195,6 +197,7 @@ void PomoPeak::OnTimerTimeout()
 
     UpdateTimerLabel(QString("%1:%2").arg(durationLeft / 60,2,10,QChar('0')).arg((durationLeft % 60),2,10,QChar('0')));
 }
+
 void PomoPeak::OnTryAddTask()
 {
     taskQT* newTaskUI = new taskQT(this);
@@ -205,16 +208,18 @@ void PomoPeak::OnTryAddTask()
     connect(newTaskUI, &taskQT::OnSelectRequest, this, &PomoPeak::OnCurrentActiveTaskChanged);
 
     ui->tasksContentV2->addWidget(newTaskUI);
-
 }
+
 void PomoPeak::AddTask(std::shared_ptr<Task> task)
 {
     taskManager.AddTask(task);
 }
+
 void PomoPeak::RemoveTask(std::shared_ptr<Task> task)
 {
     taskManager.RemoveTask(task);
 }
+
 void PomoPeak::OnViewModeTaskChanged(taskQT* taskUI)
 {
     if(currentInViewModeTaskUI != nullptr && currentInViewModeTaskUI != taskUI)
@@ -222,8 +227,8 @@ void PomoPeak::OnViewModeTaskChanged(taskQT* taskUI)
         currentInViewModeTaskUI->DisableViewMode();
     }
     currentInViewModeTaskUI = taskUI;
-
 }
+
 void PomoPeak::OnCurrentActiveTaskChanged(taskQT* taskUI)
 {
     if(currentActiveTaskUI != nullptr && currentActiveTaskUI != taskUI)
@@ -232,15 +237,18 @@ void PomoPeak::OnCurrentActiveTaskChanged(taskQT* taskUI)
     }
     currentActiveTaskUI = taskUI;
 }
+
 void PomoPeak::Skip()
 {
     durationLeft = 0;
     OnTimerTimeout();
 }
+
 void PomoPeak::UpdateTimerLabel(QString value)
 {
     ui->TimeLabel->setText(value);
 }
+
 void PomoPeak::UpdateTimerDuration(FlowSequence sequence)
 {
     switch(sequence)
@@ -261,20 +269,19 @@ void PomoPeak::UpdateTimerDuration(FlowSequence sequence)
 
     durationLeft = baseDuration;
 }
+
 void PomoPeak::AdjustButtonsVisibilityDependingOnCurrentState()
 {
+    ui->SkipBtn->setVisible(isRunning);
     if(isRunning)
     {
         ui->ChangeFlowBtn->setText("Stop");
-        ui->SkipBtn->setVisible(true);
     }
     else
     {
         ui->ChangeFlowBtn->setText("Start");
-        ui->SkipBtn->setVisible(false);
     }
 }
-
 
 void PomoPeak::ForceTimerUpdate(int& durationLeft, int& baseDuration, const int targetDuration)
 {
@@ -292,6 +299,7 @@ void PomoPeak::ForceTimerUpdate(int& durationLeft, int& baseDuration, const int 
         UpdateTimerLabel(QString("%1:%2").arg(durationLeft / 60, 2, 10, QChar('0')).arg((durationLeft % 60), 2, 10, QChar('0')));
     }
 }
+
 void PomoPeak::TriggerQuickAction()
 {
     if(!pomopeakSettings->IsOpened)
@@ -376,6 +384,7 @@ void PomoPeak::OnHideStats()
     pomopeakStats->hide();
     ui->widget->show();
 }
+
 void PomoPeak::PlaySoundEffect(QSoundEffect* effect, bool play)
 {
     if(settings->AlarmSound)
@@ -390,6 +399,7 @@ void PomoPeak::PlaySoundEffect(QSoundEffect* effect, bool play)
         }
     }
 }
+
 void PomoPeak::PlayNotification(const QString title, const QString message, const int msDuration)
 {
     if(!settings->AlarmSound)
