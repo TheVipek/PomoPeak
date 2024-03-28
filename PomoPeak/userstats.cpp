@@ -4,7 +4,11 @@ UserStats::UserStats()
 {
     TaskStats = QMap<QDate, DayTaskStats>();
 }
+UserStats::UserStats(const UserStatsDTO& stats)
+{
 
+    TaskStats = stats.Data;
+}
 
 QMap<QDate,DayTaskStats> UserStats::GetUserStats() const
 {
@@ -34,3 +38,19 @@ void UserStats::AddTimeSpend(const float minutes, const QDate date)
     }
 }
 
+QList<QPair<QString,QVariant>> UserStats::ToData()
+{
+    return
+    {
+        {"TaskStats", ToJson()}
+    };
+}
+QList<QPair<QString,QVariant>> UserStats::ToData(const int userID)
+{
+
+    return
+    {
+        {"UserID", userID},
+        {"TaskStats", ToJson()}
+    };
+}

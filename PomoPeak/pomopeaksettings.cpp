@@ -225,11 +225,11 @@ void pomopeaksettings::OnExitClicked()
 {
     if(isDirty)
     {
-        QList<QPair<QString,QVariant>> conditions = { {"UserID", settings.DefaultID} };
+        QList<QPair<QString,QVariant>> conditions = { {"UserID", 0} };
         if(!handler.Exist(DatabaseTables::SETTINGS, conditions))
         {
             qDebug() << "doesnt exist";
-            handler.SetData(DatabaseTables::SETTINGS, settings.ToData(settings.DefaultID));
+            handler.SetData(DatabaseTables::SETTINGS, settings.ToData(0));
         }
         else
         {

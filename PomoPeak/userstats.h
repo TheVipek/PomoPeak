@@ -5,25 +5,28 @@
 #include "QDate"
 #include "daytaskstats.h"
 #include <QJsonObject>
+#include <QJsonDocument>
+#include "userstatsdto.h"
 class UserStats
 {
 public:
     UserStats();
+    UserStats(const UserStatsDTO& dto);
     QMap<QDate,DayTaskStats> GetUserStats() const;
     void AddTaskCompletion(const QDate date = QDate::currentDate());
     void AddTimeSpend(const float minutes, const QDate date = QDate::currentDate());
 
 
-    QJsonObject ToJson() const
+    QString ToJson() const
     {
-        QJsonObject obj;
         QJsonObject taskStatsObj;
         for(auto it = TaskStats.constBegin(); it != TaskStats.constEnd(); ++it) {
             taskStatsObj[it.key().toString(Qt::ISODate)] = it.value().ToJson();
         }
-        obj["TaskStats"] = taskStatsObj;
-        return obj;
+        return QJsonDocument(taskStatsObj).toJson();
     }
+    QList<QPair<QString,QVariant>> ToData();
+    QList<QPair<QString,QVariant>> ToData(const int userID);
 
 private:
     QMap<QDate,DayTaskStats> TaskStats;

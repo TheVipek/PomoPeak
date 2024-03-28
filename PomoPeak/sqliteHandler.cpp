@@ -46,7 +46,7 @@ void SqliteHandler::CheckIfDatabaseIsInCorrectState()
 
     QString createStatsTableQ = QString("CREATE TABLE IF NOT EXISTS %1 ("
                                         "UserID INTEGER PRIMARY KEY,"
-                                        "StatsData TEXT);").arg(DatabaseTables::STATS);
+                                        "TaskStats TEXT);").arg(DatabaseTables::STATS);
     query.prepare(createStatsTableQ);
 
     if(!query.exec())

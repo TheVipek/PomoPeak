@@ -3,7 +3,7 @@
 #include "settingsdto.h"
 #include "databasetables.h"
 #include <QDir>
-
+#include "userstatsdto.h"
 PomoPeak::PomoPeak(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::PomoPeak)
@@ -48,9 +48,9 @@ PomoPeak::~PomoPeak()
 
 void PomoPeak::InitializeDataContainer()
 {
-    QString query = QString("SELECT * FROM %1 WHERE UserID = 0 LIMIT 1").arg(DatabaseTables::SETTINGS);
+    QString settingsQuery = QString("SELECT * FROM %1 WHERE UserID = 0 LIMIT 1").arg(DatabaseTables::SETTINGS);
 
-    auto settingsDTO = sqliteHandler->GetData<SettingsDTO>(query);
+    auto settingsDTO = sqliteHandler->GetData<SettingsDTO>(settingsQuery);
     qDebug() << settingsDTO.data();
     if(!settingsDTO.empty())
     {
@@ -61,8 +61,25 @@ void PomoPeak::InitializeDataContainer()
     {
         qDebug() << "Creatin default settings";
         settings = new Settings();
-        sqliteHandler->SetData(DatabaseTables::SETTINGS, settings->ToData(settings->DefaultID));
+        sqliteHandler->SetData(DatabaseTables::SETTINGS, settings->ToData(0));
     }
+
+    QString statsQuery = QString("SELECT * FROM %1 WHERE UserID = 0 LIMIT 1").arg(DatabaseTables::STATS);
+    auto statsDTO = sqliteHandler->GetData<UserStatsDTO>(statsQuery);
+    qDebug() << statsDTO.data();
+    if(!statsDTO.empty())
+    {
+        qDebug() << "Creating stats from DTO";
+        userStats = new UserStats(statsDTO.front());
+    }
+    else
+    {
+        qDebug() << "Creatin default stats";
+        userStats = new UserStats();
+        sqliteHandler->SetData(DatabaseTables::STATS, userStats->ToData(0));
+    }
+
+
 }
 
 void PomoPeak::InitializeObjects()
@@ -73,33 +90,32 @@ void PomoPeak::InitializeObjects()
     pomopeakSettings->hide();
     ui->widgetsLayout->addWidget(pomopeakSettings);
 
-    userStats = new UserStats();
-    // userStats->AddTaskCompletion();
-    // userStats->AddTimeSpend(25);
+    userStats->AddTaskCompletion();
+    userStats->AddTimeSpend(25);
 
-    // userStats->AddTaskCompletion(QDate::currentDate().addDays(-1));
-    // userStats->AddTimeSpend(25,QDate::currentDate().addDays(-1));
+    userStats->AddTaskCompletion(QDate::currentDate().addDays(-1));
+    userStats->AddTimeSpend(25,QDate::currentDate().addDays(-1));
 
-    // userStats->AddTaskCompletion(QDate::currentDate().addDays(-2));
-    // userStats->AddTimeSpend(25,QDate::currentDate().addDays(-2));
+    userStats->AddTaskCompletion(QDate::currentDate().addDays(-2));
+    userStats->AddTimeSpend(25,QDate::currentDate().addDays(-2));
 
-    // userStats->AddTaskCompletion(QDate::currentDate().addDays(-3));
-    // userStats->AddTimeSpend(25,QDate::currentDate().addDays(-3));
+    userStats->AddTaskCompletion(QDate::currentDate().addDays(-3));
+    userStats->AddTimeSpend(25,QDate::currentDate().addDays(-3));
 
-    // userStats->AddTaskCompletion(QDate::currentDate().addDays(-4));
-    // userStats->AddTimeSpend(25, QDate::currentDate().addDays(-4));
+    userStats->AddTaskCompletion(QDate::currentDate().addDays(-4));
+    userStats->AddTimeSpend(25, QDate::currentDate().addDays(-4));
 
-    // userStats->AddTaskCompletion(QDate::currentDate().addDays(-5));
-    // userStats->AddTimeSpend(25, QDate::currentDate().addDays(-5));
+    userStats->AddTaskCompletion(QDate::currentDate().addDays(-5));
+    userStats->AddTimeSpend(25, QDate::currentDate().addDays(-5));
 
-    // userStats->AddTaskCompletion(QDate::currentDate().addDays(-6));
-    // userStats->AddTimeSpend(25, QDate::currentDate().addDays(-6));
+    userStats->AddTaskCompletion(QDate::currentDate().addDays(-6));
+    userStats->AddTimeSpend(25, QDate::currentDate().addDays(-6));
 
-    // userStats->AddTaskCompletion(QDate::currentDate().addDays(-7));
-    // userStats->AddTimeSpend(25, QDate::currentDate().addDays(-7));
+    userStats->AddTaskCompletion(QDate::currentDate().addDays(-7));
+    userStats->AddTimeSpend(25, QDate::currentDate().addDays(-7));
 
-    // userStats->AddTaskCompletion(QDate::currentDate().addDays(-8));
-    // userStats->AddTimeSpend(25, QDate::currentDate().addDays(-8));
+    userStats->AddTaskCompletion(QDate::currentDate().addDays(-8));
+    userStats->AddTimeSpend(25, QDate::currentDate().addDays(-8));
 
     pomopeakStats = new PomopeakStats(*userStats,this);
     pomopeakStats->hide();
@@ -418,5 +434,7 @@ void PomoPeak::PlayNotification(const QString title, const QString message, cons
 void PomoPeak::OnAppQuit()
 {
     isQuitting = true;
+    QList<QPair<QString,QVariant>> conditions = { {"UserID", 0} };
+    sqliteHandler->Update(DatabaseTables::STATS, userStats->ToData(),conditions);
     QApplication::quit();
 }
