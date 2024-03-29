@@ -13,7 +13,7 @@ public:
     UserStats();
     UserStats(const UserStatsDTO& dto);
     QMap<QDate,DayTaskStats> GetUserStats() const;
-    void AddTaskCompletion(const QDate date = QDate::currentDate());
+    void AddTaskCompletion(const QDate date = QDate::currentDate(), int val = 1);
     void AddTimeSpend(const float minutes, const QDate date = QDate::currentDate());
 
 

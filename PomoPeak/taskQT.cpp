@@ -214,6 +214,7 @@ void taskQT::OnChangeStatus()
         ui->taskStatusBtn->setText("Mark as completed");
         SetAsUndone();
     }
+    emit OnStatusChanged(task->isDone);
 }
 void taskQT::SetAsDone()
 {

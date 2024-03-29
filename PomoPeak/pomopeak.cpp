@@ -89,34 +89,6 @@ void PomoPeak::InitializeObjects()
     pomopeakSettings = new pomopeaksettings(*settings, *sqliteHandler , this);
     pomopeakSettings->hide();
     ui->widgetsLayout->addWidget(pomopeakSettings);
-
-    userStats->AddTaskCompletion();
-    userStats->AddTimeSpend(25);
-
-    userStats->AddTaskCompletion(QDate::currentDate().addDays(-1));
-    userStats->AddTimeSpend(25,QDate::currentDate().addDays(-1));
-
-    userStats->AddTaskCompletion(QDate::currentDate().addDays(-2));
-    userStats->AddTimeSpend(25,QDate::currentDate().addDays(-2));
-
-    userStats->AddTaskCompletion(QDate::currentDate().addDays(-3));
-    userStats->AddTimeSpend(25,QDate::currentDate().addDays(-3));
-
-    userStats->AddTaskCompletion(QDate::currentDate().addDays(-4));
-    userStats->AddTimeSpend(25, QDate::currentDate().addDays(-4));
-
-    userStats->AddTaskCompletion(QDate::currentDate().addDays(-5));
-    userStats->AddTimeSpend(25, QDate::currentDate().addDays(-5));
-
-    userStats->AddTaskCompletion(QDate::currentDate().addDays(-6));
-    userStats->AddTimeSpend(25, QDate::currentDate().addDays(-6));
-
-    userStats->AddTaskCompletion(QDate::currentDate().addDays(-7));
-    userStats->AddTimeSpend(25, QDate::currentDate().addDays(-7));
-
-    userStats->AddTaskCompletion(QDate::currentDate().addDays(-8));
-    userStats->AddTimeSpend(25, QDate::currentDate().addDays(-8));
-
     pomopeakStats = new PomopeakStats(*userStats,this);
     pomopeakStats->hide();
     ui->widgetsLayout->addWidget(pomopeakStats);
@@ -196,6 +168,7 @@ void PomoPeak::OnTimerTimeout()
             {
                 currentActiveTaskUI->ElapsedIncrease();
             }
+            userStats->AddTimeSpend(((float)settings->SessionDuration/60));
             globalCounter++;
             PlayNotification("Break", "", 5000);
 
@@ -222,7 +195,7 @@ void PomoPeak::OnTryAddTask()
     connect(newTaskUI, &taskQT::DeleteRequest, this, &PomoPeak::RemoveTask);
     connect(newTaskUI, &taskQT::OnEnableViewModeRequest, this, &PomoPeak::OnViewModeTaskChanged);
     connect(newTaskUI, &taskQT::OnSelectRequest, this, &PomoPeak::OnCurrentActiveTaskChanged);
-
+    connect(newTaskUI, &taskQT::OnStatusChanged, this, &PomoPeak::TaskStatusChanged);
     ui->tasksContentV2->addWidget(newTaskUI);
 }
 
@@ -252,6 +225,11 @@ void PomoPeak::OnCurrentActiveTaskChanged(taskQT* taskUI)
         currentActiveTaskUI->SwitchSelectState();
     }
     currentActiveTaskUI = taskUI;
+}
+
+void PomoPeak::TaskStatusChanged(bool done)
+{
+    userStats->AddTaskCompletion(QDate::currentDate(), done ? 1 : -1);
 }
 
 void PomoPeak::Skip()
@@ -392,6 +370,8 @@ void PomoPeak::OnHideSettings(const bool alarmStartChanged,const bool alarmBreak
 void PomoPeak::OnOpenStats()
 {
     ui->widget->hide();
+
+    pomopeakStats->ForceUpdateChart();
     pomopeakStats->show();
 }
 

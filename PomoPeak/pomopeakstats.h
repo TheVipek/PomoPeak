@@ -22,14 +22,14 @@ class PomopeakStats : public QWidget
 public:
     explicit PomopeakStats( UserStats& stats, QWidget *parent = nullptr);
     ~PomopeakStats();
-
+    void ForceUpdateChart();
 signals:
     void OnClose();
 private slots:
     void OnExitClicked();
 private:
+    int chartDays;
     Ui::PomopeakStats *ui;
-
     UserStats& stats;
     QChart* chart;
     QBarSeries* allSets;

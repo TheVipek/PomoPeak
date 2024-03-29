@@ -92,6 +92,7 @@ private:
     void AdjustButtonsVisibilityDependingOnCurrentState();
     void AddTask(std::shared_ptr<Task> task);
     void RemoveTask(std::shared_ptr<Task> task);
+    void TaskStatusChanged(bool done);
     void ForceTimerUpdate(int& durationLeft, int& baseDuration, const int targetDuration);
     void TriggerQuickAction();
     void PlaySoundEffect(QSoundEffect* effect, bool play);

@@ -28,6 +28,7 @@ signals:
     void CreateRequest(std::shared_ptr<Task> task);
     void OnEnableViewModeRequest(taskQT* ui);
     void OnSelectRequest(taskQT* ui);
+    void OnStatusChanged(bool done);
 protected:
     void mousePressEvent(QMouseEvent* event) override
     {

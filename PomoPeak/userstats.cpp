@@ -15,15 +15,15 @@ QMap<QDate,DayTaskStats> UserStats::GetUserStats() const
     return TaskStats;
 }
 
-void UserStats::AddTaskCompletion(const QDate date)
+void UserStats::AddTaskCompletion(const QDate date, int val)
 {
     if(TaskStats.contains(date))
     {
-        TaskStats[date].TaskCompletedCount += 1;
+        TaskStats[date].TaskCompletedCount += val;
     }
     else
     {
-        TaskStats.insert(date, DayTaskStats(1,0));
+        TaskStats.insert(date, DayTaskStats(val,0));
     }
 }
 void UserStats::AddTimeSpend(const float minutes, const QDate date)

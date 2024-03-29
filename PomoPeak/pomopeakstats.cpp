@@ -55,14 +55,16 @@ void PomopeakStats::SwitchViewToMonthly()
 {
     ui->monthlyBtn->setEnabled(false);
     ui->weeklyBtn->setEnabled(true);
-    UpdateChart(30);
+    chartDays = 30;
+    UpdateChart(chartDays);
 }
 
 void PomopeakStats::SwitchViewToWeekly()
 {
     ui->weeklyBtn->setEnabled(false);
     ui->monthlyBtn->setEnabled(true);
-    UpdateChart(7);
+    chartDays = 7;
+    UpdateChart(chartDays);
 }
 
 void PomopeakStats::InitializeChart()
@@ -140,4 +142,9 @@ void PomopeakStats::OnHoverBar(bool status, int index)
 void PomopeakStats::ShowBarText()
 {
     QToolTip::showText(QCursor::pos(), tooltipText);
+}
+
+void PomopeakStats::ForceUpdateChart()
+{
+    UpdateChart(chartDays);
 }
