@@ -8,8 +8,7 @@ Settings::Settings()
     SessionAlarmVolume = 100;
     BreakAlarmVolume = 100;
     BreakAlarmRepetitions = 5;
-    ShortBreakAfterSessions = 1;
-    LongBreakAfterShortBreaks = 2;
+    LongBreakFrequency = 2;
 
     QuickActionShortcut = QKeySequence(Qt::Key_Space);
 
@@ -31,8 +30,7 @@ Settings::Settings(const SettingsDTO& dto)
     BreakAlarmVolume = dto.BreakAlarmVolume;
     BreakAlarmRepetitions = dto.BreakAlarmRepetitions;
 
-    ShortBreakAfterSessions = dto.ShortBreakAfterSessions;
-    LongBreakAfterShortBreaks = dto.LongBreakAfterShortBreaks;
+    LongBreakFrequency = dto.LongBreakFrequency;
 
     QuickActionShortcut = QKeySequence(dto.QuickActionShortcut);
 
@@ -165,8 +163,7 @@ QList<QPair<QString,QVariant>> Settings::ToData()
         {"SessionAlarmVolume", SessionAlarmVolume},
         {"BreakAlarmVolume", BreakAlarmVolume},
         {"BreakAlarmRepetitions", BreakAlarmRepetitions},
-        {"ShortBreakAfterSessions", ShortBreakAfterSessions},
-        {"LongBreakAfterShortBreaks", LongBreakAfterShortBreaks},
+        {"LongBreakFrequency", LongBreakFrequency},
         {"QuickActionShortcut", QuickActionShortcut.toString()},
         {"SessionAlarm",currentSessArr},
         {"SessionAlarmName", sessionAlarmInfo.baseName()},
@@ -205,8 +202,7 @@ QList<QPair<QString,QVariant>> Settings::ToData(const int userID)
         {"SessionAlarmVolume", SessionAlarmVolume},
         {"BreakAlarmVolume", BreakAlarmVolume},
         {"BreakAlarmRepetitions", BreakAlarmRepetitions},
-        {"ShortBreakAfterSessions", ShortBreakAfterSessions},
-        {"LongBreakAfterShortBreaks", LongBreakAfterShortBreaks},
+        {"LongBreakFrequency", LongBreakFrequency},
         {"QuickActionShortcut", QuickActionShortcut.toString()},
         {"SessionAlarm", currentSessArr},
         {"SessionAlarmName", sessionAlarmInfo.baseName()},

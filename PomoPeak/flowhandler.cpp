@@ -2,37 +2,35 @@
 
 FlowHandler::FlowHandler(const Settings& _settings) : settings(_settings)
 {
-    currentToShortBreak = settings.ShortBreakAfterSessions;
-    currentToLongBreak = settings.LongBreakAfterShortBreaks;
+    sessionsCount = 0;
+    _currentFlowSequence = FlowSequence::Session;
+    isBreak = false;
 }
-
-FlowSequence FlowHandler::GetCurrentSequence()
+FlowSequence FlowHandler::Next()
 {
-    if (currentToShortBreak > 0) {
-        return FlowSequence::Session;
-    } else if (currentToLongBreak > 0) {
-        return FlowSequence::ShortBreak;
-    } else {
-        return FlowSequence::LongBreak;
-    }
-}
+    isBreak = !isBreak;
 
-void FlowHandler::Next()
-{
-    if(GetCurrentSequence() == FlowSequence::Session)
+    if(isBreak)
     {
-        currentToShortBreak--;
+        sessionsCount++;
+        if(sessionsCount % settings.LongBreakFrequency == 0)
+        {
+            _currentFlowSequence = FlowSequence::LongBreak;
+        }
+        else
+        {
+            _currentFlowSequence = FlowSequence::ShortBreak;
+        }
     }
     else
     {
-        if (GetCurrentSequence() == FlowSequence::LongBreak) {
-            currentToLongBreak = settings.ShortBreakAfterSessions;
-            currentToShortBreak = settings.LongBreakAfterShortBreaks;
-        } else if (GetCurrentSequence() == FlowSequence::ShortBreak) {
-            currentToShortBreak = settings.ShortBreakAfterSessions;
-            currentToLongBreak--;
-        }
+        _currentFlowSequence = FlowSequence::Session;
     }
 
+    return _currentFlowSequence;
 
+}
+FlowSequence FlowHandler::GetCurrentFlowSequence()
+{
+    return _currentFlowSequence;
 }

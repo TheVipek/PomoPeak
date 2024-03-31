@@ -8,15 +8,15 @@ class FlowHandler
 {
 public:
     FlowHandler(const Settings& _settings);
-    void Next();
-    FlowSequence GetCurrentSequence();
+    FlowSequence GetCurrentFlowSequence();
+    FlowSequence Next();
 
 
 private:
     const Settings& settings;
-    int currentToShortBreak;
-    int currentToLongBreak;
-
+    FlowSequence _currentFlowSequence;
+    bool isBreak;
+    int sessionsCount;
 
 };
 #endif // FLOWHANDLER_H

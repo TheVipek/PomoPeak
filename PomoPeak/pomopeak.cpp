@@ -51,7 +51,6 @@ void PomoPeak::InitializeDataContainer()
     QString settingsQuery = QString("SELECT * FROM %1 WHERE UserID = 0 LIMIT 1").arg(DatabaseTables::SETTINGS);
 
     auto settingsDTO = sqliteHandler->GetData<SettingsDTO>(settingsQuery);
-    qDebug() << settingsDTO.data();
     if(!settingsDTO.empty())
     {
         qDebug() << "Creating settings from DTO";
@@ -66,7 +65,6 @@ void PomoPeak::InitializeDataContainer()
 
     QString statsQuery = QString("SELECT * FROM %1 WHERE UserID = 0 LIMIT 1").arg(DatabaseTables::STATS);
     auto statsDTO = sqliteHandler->GetData<UserStatsDTO>(statsQuery);
-    qDebug() << statsDTO.data();
     if(!statsDTO.empty())
     {
         qDebug() << "Creating stats from DTO";
@@ -89,6 +87,7 @@ void PomoPeak::InitializeObjects()
     pomopeakSettings = new pomopeaksettings(*settings, *sqliteHandler , this);
     pomopeakSettings->hide();
     ui->widgetsLayout->addWidget(pomopeakSettings);
+
     pomopeakStats = new PomopeakStats(*userStats,this);
     pomopeakStats->hide();
     ui->widgetsLayout->addWidget(pomopeakStats);
@@ -159,9 +158,9 @@ void PomoPeak::OnTimerTimeout()
     if(durationLeft <= 0)
     {
         OnChangeState();
+        auto currentSequence = flowHandler->GetCurrentFlowSequence();
 
-
-        if(flowHandler->GetCurrentSequence() == FlowSequence::Session)
+        if(currentSequence == FlowSequence::Session)
         {
             //Call to current task update
             if(currentActiveTaskUI != nullptr)
@@ -173,15 +172,35 @@ void PomoPeak::OnTimerTimeout()
             PlayNotification("Break", "", 5000);
 
         }
-        if(flowHandler->GetCurrentSequence() == FlowSequence::LongBreak || flowHandler->GetCurrentSequence() == FlowSequence::ShortBreak)
+        if(currentSequence == FlowSequence::LongBreak || currentSequence == FlowSequence::ShortBreak)
         {
             PlaySoundEffect(endBreakEffect, true);
             PlayNotification("Session", "", 5000);
 
         }
+        UpdateTimerDuration(flowHandler->Next());
 
-        flowHandler->Next();
-        UpdateTimerDuration(flowHandler->GetCurrentSequence());
+        // if(flowHandler->GetCurrentSequence() == FlowSequence::Session)
+        // {
+        //     //Call to current task update
+        //     if(currentActiveTaskUI != nullptr)
+        //     {
+        //         currentActiveTaskUI->ElapsedIncrease();
+        //     }
+        //     userStats->AddTimeSpend(((float)settings->SessionDuration/60));
+        //     globalCounter++;
+        //     PlayNotification("Break", "", 5000);
+
+        // }
+        // if(flowHandler->GetCurrentSequence() == FlowSequence::LongBreak || flowHandler->GetCurrentSequence() == FlowSequence::ShortBreak)
+        // {
+        //     PlaySoundEffect(endBreakEffect, true);
+        //     PlayNotification("Session", "", 5000);
+
+        // }
+
+        // flowHandler->Next();
+        // UpdateTimerDuration(flowHandler->GetCurrentSequence());
     }
 
     UpdateTimerLabel(QString("%1:%2").arg(durationLeft / 60,2,10,QChar('0')).arg((durationLeft % 60),2,10,QChar('0')));
@@ -319,7 +338,7 @@ void PomoPeak::OnHideSettings(const bool alarmStartChanged,const bool alarmBreak
         pomopeakSettings->hide();
     }
 
-    switch(flowHandler->GetCurrentSequence())
+    switch(flowHandler->GetCurrentFlowSequence())
     {
         case FlowSequence::Session:
             ForceTimerUpdate(durationLeft, baseDuration, settings->SessionDuration);

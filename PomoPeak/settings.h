@@ -28,8 +28,7 @@ public:
     qint16 SessionAlarmVolume;
     qint16 BreakAlarmVolume;
     qint16 BreakAlarmRepetitions;
-    qint16 ShortBreakAfterSessions;
-    qint16 LongBreakAfterShortBreaks;
+    qint16 LongBreakFrequency;
 
     QKeySequence QuickActionShortcut;
     const QString SessionAlarmsPath = "/data/sounds/sessionAlarms/";

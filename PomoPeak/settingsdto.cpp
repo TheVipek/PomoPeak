@@ -7,9 +7,8 @@ SettingsDTO SettingsDTO::FromSqlRecord(const QSqlRecord& record)
     qint16 longBreakDuration = record.value("LongBreakDuration").isNull() ? 0 : static_cast<qint16>(record.value("LongBreakDuration").toInt());
     qint16 sessionAlarmVolume = record.value("SessionAlarmVolume").isNull() ? 0 : static_cast<qint16>(record.value("SessionAlarmVolume").toInt());
     qint16 breakAlarmVolume = record.value("BreakAlarmVolume").isNull() ? 0 : static_cast<qint16>(record.value("BreakAlarmVolume").toInt());
-    qint16 breakAlarmRepetitions = record.value("BreakAlarmRepetitions").isNull() ? 0 : static_cast<qint16>(record.value("BreakAlarmRepetitions").toInt());
-    qint16 shortBreakAfterSessions = record.value("ShortBreakAfterSessions").isNull() ? 0 : static_cast<qint16>(record.value("ShortBreakAfterSessions").toInt());
-    qint16 longBreakAfterShortBreaks = record.value("LongBreakAfterShortBreaks").isNull() ? 0 : static_cast<qint16>(record.value("LongBreakAfterShortBreaks").toInt());
+    qint16 breakAlarmRepetitions = record.value("BreakAlarmRepetitions").isNull() ? 0 : static_cast<qint16>(record.value("BreakAlarmRepetitions").toInt());\
+    qint16 longBreakFrequency = record.value("LongBreakFrequency").isNull() ? 0 : static_cast<qint16>(record.value("LongBreakFrequency").toInt());
     QKeySequence quickActionShortcut = record.value("QuickActionShortcut").isNull() ? QKeySequence() : static_cast<QKeySequence>(record.value("QuickActionShortcut").toString());
     QByteArray sessionAlarm = record.value("SessionAlarm").isNull() ? QByteArray() : record.value("SessionAlarm").toByteArray();
     QString sessionAlarmName = record.value("SessionAlarmName").isNull() ? QString("SessionAlarmName") : record.value("SessionAlarmName").toString();
@@ -29,8 +28,7 @@ SettingsDTO SettingsDTO::FromSqlRecord(const QSqlRecord& record)
         sessionAlarmVolume ,
         breakAlarmVolume ,
         breakAlarmRepetitions ,
-        shortBreakAfterSessions ,
-        longBreakAfterShortBreaks ,
+        longBreakFrequency,
         quickActionShortcut ,
         sessionAlarm ,
         sessionAlarmName,
