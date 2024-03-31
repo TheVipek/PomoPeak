@@ -16,9 +16,22 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Sql)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Charts)
 set(PROJECT_SOURCES
         main.cpp
-        pomopeak.h pomopeak.cpp pomopeak.ui
-        taskQT.h taskQT.cpp taskQT.ui
-        pomopeakstats.h pomopeakstats.cpp pomopeakstats.ui
+
+        ui/pomopeak.h
+        ui/pomopeak.cpp
+        ui/pomopeak.ui
+
+        ui/taskQT.h
+        ui/taskQT.cpp
+        ui/taskQT.ui
+
+        ui/pomopeakstats.h
+        ui/pomopeakstats.cpp
+        ui/pomopeakstats.ui
+
+        ui/pomopeaksettings.h
+        ui/pomopeaksettings.cpp
+        ui/pomopeaksettings.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -26,23 +39,48 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
 
-        Resources.qrc
+        data/Resources.qrc
 
-        FlowHandler.h flowhandler.cpp
-        settings.h settings.cpp
-        taskmanager.h taskmanager.cpp
-        task.h task.cpp
-        TaskInputFilter.h
-        pomopeaksettings.h pomopeaksettings.cpp pomopeaksettings.ui
-        sqliteHandler.h sqliteHandler.cpp
-        databasetables.h databasetables.cpp
-        settingsdto.h settingsdto.cpp
-        audiomimetypeshelper.h audiomimetypeshelper.cpp
-        trayiconhandler.h trayiconhandler.cpp
-        Skin.h Skin.cpp
-        userstats.h userstats.cpp
-        daytaskstats.h daytaskstats.cpp
-        userstatsdto.h userstatsdto.cpp
+        include/FlowHandler.h
+        src/flowhandler.cpp
+
+        include/settings.h
+        src/settings.cpp
+
+        include/taskmanager.h
+        src/taskmanager.cpp
+
+        include/task.h
+        src/task.cpp
+
+        include/TaskInputFilter.h
+
+        include/sqliteHandler.h
+        src/sqliteHandler.cpp
+
+        include/databasetables.h
+        src/databasetables.cpp
+
+        include/settingsdto.h
+        src/settingsdto.cpp
+
+        include/audiomimetypeshelper.h
+        src/audiomimetypeshelper.cpp
+
+        include/trayiconhandler.h
+        src/trayiconhandler.cpp
+
+        include/Skin.h
+        src/Skin.cpp
+
+        include/userstats.h
+        src/userstats.cpp
+
+        include/daytaskstats.h
+        src/daytaskstats.cpp
+
+        include/userstatsdto.h
+        src/userstatsdto.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET PomoPeak APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -62,6 +100,8 @@ else()
     endif()
 endif()
 
+target_include_directories(PomoPeak PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(PomoPeak PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ui)
 target_link_libraries(PomoPeak PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(PomoPeak PRIVATE Qt${QT_VERSION_MAJOR}::Multimedia)
 target_link_libraries(PomoPeak PRIVATE Qt${QT_VERSION_MAJOR}::Sql)

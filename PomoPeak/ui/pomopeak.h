@@ -37,9 +37,10 @@ public:
 protected:
     void closeEvent(QCloseEvent* event)
     {
+
         if(!isQuitting)
         {
-            PlayNotification("Application has been minimized to tray","", 1000);
+            PlayNotification("Application has been minimized to tray","", 1000, true);
         }
         QMainWindow::closeEvent(event);
     }
@@ -95,7 +96,7 @@ private:
     void ForceTimerUpdate(int& durationLeft, int& baseDuration, const int targetDuration);
     void TriggerQuickAction();
     void PlaySoundEffect(QSoundEffect* effect, bool play);
-    void PlayNotification(const QString title, const QString message, const int msDuration);
+    void PlayNotification(const QString title, const QString message, const int msDuration, bool ignoreRestrictions = false);
     void OnAppQuit();
 };
 #endif // POMOPEAK_H

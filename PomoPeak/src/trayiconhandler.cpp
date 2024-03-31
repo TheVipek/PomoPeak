@@ -1,6 +1,6 @@
 #include "trayiconhandler.h"
 #include <QAction>
-TrayIconHandler::TrayIconHandler() : icon(":/icon/data/images/icon.jpg"), trayIcon(), menu()
+TrayIconHandler::TrayIconHandler() : icon(":/icon/images/icon.jpg"), trayIcon(), menu()
 {
     trayIcon.setIcon(icon);
     QAction* openAction = menu.addAction("Open");

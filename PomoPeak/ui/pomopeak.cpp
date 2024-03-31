@@ -384,18 +384,25 @@ void PomoPeak::PlaySoundEffect(QSoundEffect* effect, bool play)
     }
 }
 
-void PomoPeak::PlayNotification(const QString title, const QString message, const int msDuration)
+void PomoPeak::PlayNotification(const QString title, const QString message, const int msDuration, bool ignoreRestrictions)
 {
-    if(!settings->AlarmSound)
+    if(ignoreRestrictions)
     {
-        if(settings->Notifications)
+        trayIconHandler.SendMessage(title, message, msDuration);
+    }
+    else
+    {
+        if(!settings->AlarmSound)
+        {
+            if(settings->Notifications)
+            {
+                trayIconHandler.SendMessage(title, message, msDuration);
+            }
+        }
+        else if(settings->Notifications && !this->isActiveWindow())
         {
             trayIconHandler.SendMessage(title, message, msDuration);
         }
-    }
-    else if(settings->Notifications && !this->isActiveWindow())
-    {
-        trayIconHandler.SendMessage(title, message, msDuration);
     }
 }
 
