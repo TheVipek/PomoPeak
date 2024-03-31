@@ -10,21 +10,29 @@ PomopeakStats::PomopeakStats(UserStats& stats,QWidget *parent)
 {
     ui->setupUi(this);
 
-    connect(ui->exitButton, &QPushButton::clicked, this, &PomopeakStats::OnExitClicked);
-    connect(ui->monthlyBtn, &QPushButton::clicked, this, &PomopeakStats::OnViewButtonsClick);
-    connect(ui->weeklyBtn, &QPushButton::clicked, this, &PomopeakStats::OnViewButtonsClick);
-
-    showTooltipTimer = new QTimer(this);
-    showTooltipTimer->setSingleShot(true);
-    connect(showTooltipTimer, &QTimer::timeout, this, &PomopeakStats::ShowBarText);
+    InitializeObjects();
+    SubscribeToEvents();
     InitializeChart();
-    SwitchViewToWeekly();
+    SwtichChartView(ChartVisibility::Weekly);
 }
-
 
 PomopeakStats::~PomopeakStats()
 {
     delete ui;
+}
+
+void PomopeakStats::InitializeObjects()
+{
+    showTooltipTimer = new QTimer(this);
+    showTooltipTimer->setSingleShot(true);
+}
+
+void PomopeakStats::SubscribeToEvents()
+{
+    connect(ui->exitButton, &QPushButton::clicked, this, &PomopeakStats::OnExitClicked);
+    connect(ui->monthlyBtn, &QPushButton::clicked, this, &PomopeakStats::OnViewButtonsClick);
+    connect(ui->weeklyBtn, &QPushButton::clicked, this, &PomopeakStats::OnViewButtonsClick);
+    connect(showTooltipTimer, &QTimer::timeout, this, &PomopeakStats::ShowBarText);
 }
 
 void PomopeakStats::OnExitClicked()
@@ -39,32 +47,29 @@ void PomopeakStats::OnViewButtonsClick()
     if(obj == ui->weeklyBtn)
     {
         qDebug() << "Clicked at; " << obj->objectName();
-        SwitchViewToWeekly();
+        SwtichChartView(ChartVisibility::Weekly);
     }
     else if(obj == ui->monthlyBtn)
     {
         qDebug() << "Clicked at; " << obj->objectName();
-        SwitchViewToMonthly();
+        SwtichChartView(ChartVisibility::Monthly);
     }
-
-
 }
 
-
-void PomopeakStats::SwitchViewToMonthly()
+void PomopeakStats::SwtichChartView(ChartVisibility visibility)
 {
-    ui->monthlyBtn->setEnabled(false);
-    ui->weeklyBtn->setEnabled(true);
-    chartDays = 30;
-    UpdateChart(chartDays);
-}
-
-void PomopeakStats::SwitchViewToWeekly()
-{
-    ui->weeklyBtn->setEnabled(false);
-    ui->monthlyBtn->setEnabled(true);
-    chartDays = 7;
-    UpdateChart(chartDays);
+    currentVisibility = visibility;
+    if(visibility == ChartVisibility::Weekly)
+    {
+        ui->weeklyBtn->setEnabled(false);
+        ui->monthlyBtn->setEnabled(true);
+    }
+    else if(visibility == ChartVisibility::Monthly)
+    {
+        ui->monthlyBtn->setEnabled(false);
+        ui->weeklyBtn->setEnabled(true);
+    }
+    UpdateChart(VisibilitySettings[visibility]);
 }
 
 void PomopeakStats::InitializeChart()
@@ -146,5 +151,5 @@ void PomopeakStats::ShowBarText()
 
 void PomopeakStats::ForceUpdateChart()
 {
-    UpdateChart(chartDays);
+    UpdateChart(currentVisibility);
 }

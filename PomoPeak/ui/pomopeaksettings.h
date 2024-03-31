@@ -40,6 +40,9 @@ private:
     bool isDirty = false;
     bool startAlarmChanged = false;
     bool breakAlarmChanged = false;
+
+    void InitializeObjects();
+    void SubscribeToEvents();
 };
 
 #endif // POMOPEAKSETTINGS_H

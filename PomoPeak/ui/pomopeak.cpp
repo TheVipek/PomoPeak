@@ -93,9 +93,8 @@ void PomoPeak::InitializeObjects()
     endBreakEffect->setVolume(settings->GetBreakVolumeForAudio());
     endBreakEffect->setLoopCount(settings->BreakAlarmRepetitions);
 
-    durationLeft = settings->SessionDuration;
-    baseDuration = settings->SessionDuration;
 
+    UpdateTimerDuration(flowHandler->GetCurrentFlowSequence());
     UpdateTimerLabel(QString("%1:%2").arg(durationLeft / 60,2,10,QChar('0')).arg((durationLeft % 60),2,10,QChar('0')));
     timer.setInterval(1000);
 
@@ -152,7 +151,6 @@ void PomoPeak::OnTimerTimeout()
 
         if(currentSequence == FlowSequence::Session)
         {
-            //Call to current task update
             if(currentActiveTaskUI != nullptr)
             {
                 currentActiveTaskUI->ElapsedIncrease();
@@ -197,6 +195,7 @@ void PomoPeak::RemoveTask(std::shared_ptr<Task> task, taskQT* taskUI)
     taskManager.RemoveTask(task);
     taskUI->deleteLater();
 }
+
 void PomoPeak::OnViewModeTaskChanged(taskQT* taskUI)
 {
     if(currentInViewModeTaskUI != nullptr && currentInViewModeTaskUI != taskUI)
@@ -255,14 +254,7 @@ void PomoPeak::UpdateTimerDuration(FlowSequence sequence)
 void PomoPeak::AdjustButtonsVisibilityDependingOnCurrentState()
 {
     ui->SkipBtn->setVisible(isRunning);
-    if(isRunning)
-    {
-        ui->ChangeFlowBtn->setText("Stop");
-    }
-    else
-    {
-        ui->ChangeFlowBtn->setText("Start");
-    }
+    isRunning ? ui->ChangeFlowBtn->setText("Stop") :  ui->ChangeFlowBtn->setText("Start");
 }
 
 void PomoPeak::ForceTimerUpdate(int& durationLeft, int& baseDuration, const int targetDuration)
@@ -373,14 +365,7 @@ void PomoPeak::PlaySoundEffect(QSoundEffect* effect, bool play)
 {
     if(settings->AlarmSound)
     {
-        if(play)
-        {
-            effect->play();
-        }
-        else
-        {
-            effect->stop();
-        }
+        play ? effect->play() : effect->stop();
     }
 }
 

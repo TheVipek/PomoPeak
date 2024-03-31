@@ -19,6 +19,12 @@ class PomopeakStats : public QWidget
 {
     Q_OBJECT
 
+    enum ChartVisibility
+    {
+        Weekly,
+        Monthly
+    };
+
 public:
     explicit PomopeakStats( UserStats& stats, QWidget *parent = nullptr);
     ~PomopeakStats();
@@ -28,7 +34,16 @@ signals:
 private slots:
     void OnExitClicked();
 private:
-    int chartDays;
+
+    const QMap<ChartVisibility, int> VisibilitySettings =
+    {
+        { PomopeakStats::Weekly, 7 },
+        { PomopeakStats::Monthly, 30}
+    };
+
+    ChartVisibility currentVisibility;
+
+
     Ui::PomopeakStats *ui;
     UserStats& stats;
     QChart* chart;
@@ -38,9 +53,10 @@ private:
     QBarCategoryAxis* daysAxis;
     QTimer* showTooltipTimer;
     QString tooltipText;
+    void InitializeObjects();
+    void SubscribeToEvents();
     void OnViewButtonsClick();
-    void SwitchViewToMonthly();
-    void SwitchViewToWeekly();
+    void SwtichChartView(ChartVisibility visibility);
     void InitializeChart();
     void OnHoverBar(bool status, int index);
     void ShowBarText();

@@ -18,32 +18,47 @@ pomopeaksettings::pomopeaksettings(Settings& _settings, SqliteHandler& _handler,
     ui->setupUi(this);
 
 
-    ui->sessionDoubleSpinBox->setValue((double)_settings.SessionDuration / 60);
-    ui->longBreakDoubleSpinBox->setValue((double)_settings.LongBreakDuration / 60);
-    ui->shortBreakDoubleSpinBox->setValue((double)_settings.ShortBreakDuration / 60);
+    InitializeObjects();
 
-    ui->alarmEndBreakRepSpinBox->setValue(_settings.BreakAlarmRepetitions);
+    SubscribeToEvents();
+}
+pomopeaksettings::~pomopeaksettings()
+{
+    delete ui;
+}
 
-    ui->alarmStartCurrentLabel->setText(QFileInfo(_settings.CurrentSessionAlarm.fileName()).fileName());
-    ui->alarmEndBreakCurrentLabel->setText(QFileInfo(_settings.CurrentBreakAlarm.fileName()).fileName());
 
-    ui->alarmStartSlider->setValue(_settings.SessionAlarmVolume);
-    ui->alarmStartSliderValueLabel->setText(QString::number(_settings.SessionAlarmVolume));
+void pomopeaksettings::InitializeObjects()
+{
+    ui->sessionDoubleSpinBox->setValue((double)settings.SessionDuration / 60);
+    ui->longBreakDoubleSpinBox->setValue((double)settings.LongBreakDuration / 60);
+    ui->shortBreakDoubleSpinBox->setValue((double)settings.ShortBreakDuration / 60);
 
-    ui->alarmEndBreakVolumeSlider->setValue(_settings.BreakAlarmVolume);
-    ui->alarmEndSliderValue->setText(QString::number(_settings.BreakAlarmVolume));
+    ui->alarmEndBreakRepSpinBox->setValue(settings.BreakAlarmRepetitions);
 
-    ui->quickActionSequenceEdit->setKeySequence(_settings.QuickActionShortcut);
+    ui->alarmStartCurrentLabel->setText(QFileInfo(settings.CurrentSessionAlarm.fileName()).fileName());
+    ui->alarmEndBreakCurrentLabel->setText(QFileInfo(settings.CurrentBreakAlarm.fileName()).fileName());
 
-    ui->notificationsCheckbox->setChecked(_settings.Notifications);
-    ui->alarmSoundCheckBox->setChecked(_settings.AlarmSound);
+    ui->alarmStartSlider->setValue(settings.SessionAlarmVolume);
+    ui->alarmStartSliderValueLabel->setText(QString::number(settings.SessionAlarmVolume));
+
+    ui->alarmEndBreakVolumeSlider->setValue(settings.BreakAlarmVolume);
+    ui->alarmEndSliderValue->setText(QString::number(settings.BreakAlarmVolume));
+
+    ui->quickActionSequenceEdit->setKeySequence(settings.QuickActionShortcut);
+
+    ui->notificationsCheckbox->setChecked(settings.Notifications);
+    ui->alarmSoundCheckBox->setChecked(settings.AlarmSound);
 
     for(auto item : Skin::SkinTypesEnumerable)
     {
         ui->SkinSelectionComboBox->addItem(item.first,QVariant::fromValue(item.second));
     }
-    ui->SkinSelectionComboBox->setCurrentIndex(static_cast<int>(_settings.Skin));
+    ui->SkinSelectionComboBox->setCurrentIndex(static_cast<int>(settings.Skin));
+}
 
+void pomopeaksettings::SubscribeToEvents()
+{
     connect(ui->sessionDoubleSpinBox, &QDoubleSpinBox::valueChanged, this, &pomopeaksettings::OnDoubleSpinBoxValueChanged);
     connect(ui->longBreakDoubleSpinBox, &QDoubleSpinBox::valueChanged, this, &pomopeaksettings::OnDoubleSpinBoxValueChanged);
     connect(ui->shortBreakDoubleSpinBox, &QDoubleSpinBox::valueChanged, this, &pomopeaksettings::OnDoubleSpinBoxValueChanged);
@@ -66,10 +81,7 @@ pomopeaksettings::pomopeaksettings(Settings& _settings, SqliteHandler& _handler,
 
     connect(ui->SkinSelectionComboBox, &QComboBox::currentIndexChanged, this, &pomopeaksettings::OnIndexInComboBoxChanged);
 }
-pomopeaksettings::~pomopeaksettings()
-{
-    delete ui;
-}
+
 void pomopeaksettings::OnQuickActionSequenceFinished()
 {
     QObject* obj = sender();
@@ -92,63 +104,65 @@ void pomopeaksettings::OnSelectAudioClicked()
         QFileInfo fileInfo(file);
         QString ext = fileInfo.suffix();
         bool isValid = audioMimeTypesHelper::IsMimeTypeValid(ext);
-        if(isValid)
+        if(!isValid)
         {
-            qDebug() << "valid!";
+            return;
+        }
 
-            if(obj == ui->alarmStartSelectBtn)
+        qDebug() << "valid!";
+
+        if(obj == ui->alarmStartSelectBtn)
+        {
+            if(settings.CurrentSessionAlarm.size() == file.size())
             {
-                QString newPath = QDir(QCoreApplication::applicationDirPath() + settings.SessionAlarmsPath).filePath(fileInfo.fileName());
-
-                if(settings.CurrentSessionAlarm.size() == file.size())
-                {
-                    qDebug() << "you selected the same file? (its size is equal)";
-                    return;
-                }
-
-                if(settings.CurrentSessionAlarm.size() != settings.DefaultSessionAlarm.size())
-                {
-                    QFile::remove(settings.CurrentSessionAlarm.fileName());
-                    file.copy(newPath);
-                }
-                else if(settings.CurrentSessionAlarm.size() == settings.DefaultSessionAlarm.size())
-                {
-                    file.copy(newPath);
-                }
-
-                settings.CurrentSessionAlarm.setFileName(newPath);
-                ui->alarmStartCurrentLabel->setText(fileInfo.fileName());
-                isDirty = true;
-                startAlarmChanged = true;
+                qDebug() << "you selected the same file? (its size is equal)";
+                return;
             }
-            else if(obj == ui->alarmEndBreakSelectBtn)
+
+            QString newPath = QDir(QCoreApplication::applicationDirPath() + settings.SessionAlarmsPath).filePath(fileInfo.fileName());
+
+            if(settings.CurrentSessionAlarm.size() != settings.DefaultSessionAlarm.size())
             {
-                QString newPath = QDir(QCoreApplication::applicationDirPath() + settings.BreakAlarmsPath).filePath(fileInfo.fileName());
-
-                if(settings.CurrentBreakAlarm.size() == file.size())
-                {
-                    qDebug() << "you selected the same file? (its size is equal)";
-                    return;
-                }
-
-
-                if(settings.CurrentBreakAlarm.size() != settings.DefaultBreakAlarm.size())
-                {
-                    QFile::remove(settings.CurrentBreakAlarm.fileName());
-                    file.copy(newPath);
-                }
-                else if(settings.CurrentBreakAlarm.size() == settings.DefaultBreakAlarm.size())
-                {
-                    file.copy(newPath);
-                }
-
-                settings.CurrentBreakAlarm.setFileName(newPath);
-                ui->alarmEndBreakLabel->setText(fileInfo.fileName());
-                isDirty = true;
-                breakAlarmChanged = true;
+                QFile::remove(settings.CurrentSessionAlarm.fileName());
+                file.copy(newPath);
             }
+            else if(settings.CurrentSessionAlarm.size() == settings.DefaultSessionAlarm.size())
+            {
+                file.copy(newPath);
+            }
+
+            settings.CurrentSessionAlarm.setFileName(newPath);
+            ui->alarmStartCurrentLabel->setText(fileInfo.fileName());
+            isDirty = true;
+            startAlarmChanged = true;
+        }
+        else if(obj == ui->alarmEndBreakSelectBtn)
+        {
+            if(settings.CurrentBreakAlarm.size() == file.size())
+            {
+                qDebug() << "you selected the same file? (its size is equal)";
+                return;
+            }
+
+            QString newPath = QDir(QCoreApplication::applicationDirPath() + settings.BreakAlarmsPath).filePath(fileInfo.fileName());
+
+            if(settings.CurrentBreakAlarm.size() != settings.DefaultBreakAlarm.size())
+            {
+                QFile::remove(settings.CurrentBreakAlarm.fileName());
+                file.copy(newPath);
+            }
+            else if(settings.CurrentBreakAlarm.size() == settings.DefaultBreakAlarm.size())
+            {
+                file.copy(newPath);
+            }
+
+            settings.CurrentBreakAlarm.setFileName(newPath);
+            ui->alarmEndBreakLabel->setText(fileInfo.fileName());
+            isDirty = true;
+            breakAlarmChanged = true;
         }
     }
+
 }
 
 void pomopeaksettings::OnSpinBoxValueChanged(int value)
@@ -197,6 +211,7 @@ void pomopeaksettings::OnSliderValueChanged(int value)
         isDirty = true;
     }
 }
+
 void pomopeaksettings::OnIndexInComboBoxChanged(int index)
 {
     QObject* obj = sender();
@@ -206,6 +221,7 @@ void pomopeaksettings::OnIndexInComboBoxChanged(int index)
         isDirty = true;
     }
 }
+
 void pomopeaksettings::OnCheckBoxValueChanged(bool value)
 {
     QObject* obj = sender();
@@ -226,17 +242,8 @@ void pomopeaksettings::OnExitClicked()
     if(isDirty)
     {
         QList<QPair<QString,QVariant>> conditions = { {"UserID", 0} };
-        if(!handler.Exist(DatabaseTables::SETTINGS, conditions))
-        {
-            qDebug() << "doesnt exist";
-            handler.SetData(DatabaseTables::SETTINGS, settings.ToData(0));
-        }
-        else
-        {
-            qDebug() << "updating";
-            handler.Update(DatabaseTables::SETTINGS, settings.ToData(),conditions);
-        }
 
+        handler.Exist(DatabaseTables::SETTINGS, conditions) ? handler.Update(DatabaseTables::SETTINGS, settings.ToData(),conditions) : handler.SetData(DatabaseTables::SETTINGS, settings.ToData(0));
         isDirty = false;
     }
     emit OnClose(startAlarmChanged, breakAlarmChanged);
