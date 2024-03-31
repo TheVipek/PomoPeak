@@ -21,10 +21,9 @@ public:
     ~taskQT();
     void ElapsedIncrease();
     void SwitchSelectState();
-    void EnableViewMode();
-    void DisableViewMode();
+    void ChangeViewModeState(bool enabled);
 signals:
-    void DeleteRequest(std::shared_ptr<Task> task);
+    void DeleteRequest(std::shared_ptr<Task> task, taskQT* taskU);
     void CreateRequest(std::shared_ptr<Task> task);
     void OnEnableViewModeRequest(taskQT* ui);
     void OnSelectRequest(taskQT* ui);
@@ -34,7 +33,7 @@ protected:
     {
         if(event->button() == Qt::LeftButton && !isViewMode && !task->isDone)
         {
-            EnableViewMode();
+            ChangeViewModeState(true);
         }
     }
 
@@ -96,7 +95,8 @@ private:
         })";
     const QString viewLabelValue = "Currently in View Mode";
     const QString editLabelValue = "Currently in Edit Mode";
-
+    const QString deleteButtonText[2] = { "Cancel", "Delete" };
+    const QString taskStatusText[2] = {  "Mark as incompleted", "Mark as completed" };
     bool isCreated = false;
     bool isEditMode = false;
     bool isSelected = false;
@@ -109,16 +109,12 @@ private:
 
     void OnTaskTitleChanged();
 
-    void EnableEditMode();
-    void DisableEditMode();
+    void ChangeEditModeState(bool value);
 
     void ProceedTaskModifications();
     void CancelTaskModifications();
 
     void UpdateModeLabel(QString val);
-    void UpdateTimeSpent();
-
-    void SetAsDone();
-    void SetAsUndone();
+    void SetState(bool done);
 };
 #endif // TASKQT_H

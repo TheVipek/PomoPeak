@@ -15,8 +15,7 @@ taskQT::taskQT(QWidget *parent)
     ui->taskLayout->setGraphicsEffect(opacityEffect);
     OnTaskTitleChanged();
 
-    EnableViewMode();
-
+    ChangeViewModeState(true);
 
     OnModifyEnter();
 
@@ -35,6 +34,7 @@ taskQT::~taskQT()
 {
     delete ui;
     delete filter;
+    delete opacityEffect;
 }
 
 void taskQT::OnModifyButton()
@@ -47,7 +47,7 @@ void taskQT::OnModifyButton()
 
 void taskQT::OnProceedButton()
 {
-    isEditMode ? OnModifyProceed() : DisableViewMode();
+    isEditMode ? OnModifyProceed() : ChangeViewModeState(false);
 }
 
 void taskQT::OnCancelButton()
@@ -84,7 +84,7 @@ void taskQT::OnModifyCancel()
 
 void taskQT::OnModifyEnter()
 {
-    EnableEditMode();
+    ChangeEditModeState(true);
 
     ui->modifyBtn->setEnabled(false);
     UpdateModeLabel(editLabelValue);
@@ -92,7 +92,7 @@ void taskQT::OnModifyEnter()
 
 void taskQT::OnModifyExit()
 {
-    DisableEditMode();
+    ChangeEditModeState(false);
 
     ui->modifyBtn->setEnabled(true);
     UpdateModeLabel(viewLabelValue);
@@ -102,9 +102,8 @@ void taskQT::OnDelete()
 {
     if(isCreated)
     {
-        emit DeleteRequest(task);
+        emit DeleteRequest(task, this);
     }
-    taskQT::~taskQT();
 }
 
 void taskQT::ProceedTaskModifications()
@@ -115,7 +114,6 @@ void taskQT::ProceedTaskModifications()
     task->pomodorodsToDo = ui->estimationSpinBox->text().toInt();
 
     task->pomodorosDone = ui->currentSpinBox->text().toInt();
-    UpdateTimeSpent();
 }
 
 void taskQT::CancelTaskModifications()
@@ -140,58 +138,36 @@ void taskQT::SwitchSelectState()
     }
 }
 
-void taskQT::EnableViewMode()
+void taskQT::ChangeViewModeState(bool enabled)
 {
-    if(isViewMode)
+    if(isViewMode == enabled)
         return;
-    isViewMode = true;
-    this->setStyleSheet(selectedTaskWidgetSheet);
-    ui->modifyBtn->setVisible(true);
-    ui->okBtn->setVisible(true);
-    ui->delBtn->setVisible(true);
 
-    ui->activeBtn->setVisible(false);
-    ui->modeLabel->setVisible(true);
+    isViewMode = enabled;
+    this->setStyleSheet(enabled ? selectedTaskWidgetSheet : unselectedTaskWidgetSheet);
+    ui->modifyBtn->setVisible(enabled);
+    ui->okBtn->setVisible(enabled);
+    ui->delBtn->setVisible(enabled);
 
-    ui->taskStatusBtn->setEnabled(false);
+    ui->activeBtn->setVisible(!enabled);
+    ui->modeLabel->setVisible(enabled);
 
-    emit OnEnableViewModeRequest(this);
+    ui->taskStatusBtn->setEnabled(!enabled);
+
+    if(enabled)
+    {
+        emit OnEnableViewModeRequest(this);
+    }
 }
 
-void taskQT::DisableViewMode()
+void taskQT::ChangeEditModeState(bool enabled)
 {
-    if(!isViewMode)
-        return;
-    isViewMode = false;
-    this->setStyleSheet(unselectedTaskWidgetSheet);
-    ui->modifyBtn->setVisible(false);
-    ui->okBtn->setVisible(false);
-    ui->delBtn->setVisible(false);
-
-    ui->activeBtn->setVisible(true);
-    ui->modeLabel->setVisible(false);
-
-    ui->taskStatusBtn->setEnabled(true);
-}
-
-void taskQT::EnableEditMode()
-{
-    isEditMode = true;
-    ui->taskName->setTextInteractionFlags(Qt::TextEditable);
-    ui->taskDescription->setTextInteractionFlags(Qt::TextEditable);
-    ui->currentSpinBox->setEnabled(true);
-    ui->estimationSpinBox->setEnabled(true);
-    ui->delBtn->setText("Cancel");
-}
-
-void taskQT::DisableEditMode()
-{
-    isEditMode = false;
-    ui->taskName->setTextInteractionFlags(Qt::NoTextInteraction);
-    ui->taskDescription->setTextInteractionFlags(Qt::NoTextInteraction);
-    ui->currentSpinBox->setEnabled(false);
-    ui->estimationSpinBox->setEnabled(false);
-    ui->delBtn->setText("Delete");
+    isEditMode = enabled;
+    ui->taskName->setTextInteractionFlags(enabled ? Qt::TextEditable : Qt::NoTextInteraction);
+    ui->taskDescription->setTextInteractionFlags(enabled ? Qt::TextEditable : Qt::NoTextInteraction);
+    ui->currentSpinBox->setEnabled(enabled);
+    ui->estimationSpinBox->setEnabled(enabled);
+    ui->delBtn->setText(enabled ? deleteButtonText[0] : deleteButtonText[1]);
 }
 
 void taskQT::OnTaskTitleChanged()
@@ -200,62 +176,37 @@ void taskQT::OnTaskTitleChanged()
         ? ui->okBtn->setEnabled(true)
         : ui->okBtn->setEnabled(false);
 }
+
 void taskQT::OnChangeStatus()
 {
     task->isDone = !task->isDone;
 
-    if(task->isDone)
-    {
-        ui->taskStatusBtn->setText("Mark as incompleted");
-        SetAsDone();
-    }
-    else
-    {
-        ui->taskStatusBtn->setText("Mark as completed");
-        SetAsUndone();
-    }
+    SetState(task->isDone);
     emit OnStatusChanged(task->isDone);
 }
-void taskQT::SetAsDone()
+
+void taskQT::SetState(bool done)
 {
-    task->isDone = true;
+    task->isDone = done;
 
     //TEMPORARY, no idea for another solution, looks like opaciy from parent container doesnt work on QTextEdit objects
-    ui->taskName->setStyleSheet(doneTextEditSheet);
-    ui->currentSpinBox->setStyleSheet(doneTextEditSheet);
-    ui->taskDescription->setStyleSheet(doneTextEditSheet);
-    ui->estimationSpinBox->setStyleSheet(doneTextEditSheet);
+    ui->taskStatusBtn->setText(done ? taskStatusText[0] : taskStatusText[1]);
 
-    opacityEffect->setBlurRadius(DONE_BLUR);
+    ui->taskName->setStyleSheet(done ? doneTextEditSheet : undoneTextEditSheet);
+    ui->currentSpinBox->setStyleSheet(done ? doneTextEditSheet : undoneTextEditSheet);
+    ui->taskDescription->setStyleSheet(done ? doneTextEditSheet : undoneTextEditSheet);
+    ui->estimationSpinBox->setStyleSheet(done ? doneTextEditSheet : undoneTextEditSheet);
+
+    opacityEffect->setBlurRadius(done ? DONE_BLUR : UNDONE_BLUR);
 }
-void taskQT::SetAsUndone()
-{
-    task->isDone = false;
 
-    //TEMPORARY, no idea for another solution, looks like opaciy from parent container doesnt work on QTextEdit objects
-    ui->taskName->setStyleSheet(undoneTextEditSheet);
-    ui->currentSpinBox->setStyleSheet(undoneTextEditSheet);
-    ui->taskDescription->setStyleSheet(undoneTextEditSheet);
-    ui->estimationSpinBox->setStyleSheet(undoneTextEditSheet);
-
-    opacityEffect->setBlurRadius(UNDONE_BLUR);
-}
 //Called from pomopeak.cpp when session is finished
 void taskQT::ElapsedIncrease()
 {
-    int v = ui->currentSpinBox->text().toInt();
-    ui->currentSpinBox->setValue(v+1);
+    ui->currentSpinBox->setValue(ui->currentSpinBox->text().toInt() + 1);
     task->pomodorosDone++;
-    UpdateTimeSpent();
-
 }
 
-void taskQT::UpdateTimeSpent()
-{
-    //Change it
-    //task->spentTime = task->pomodorosDone * PomoSettings::SessionDuration;
-    ui->timeSpentOnTask->setText(QString::number(task->spentTime/60));
-}
 void taskQT::UpdateModeLabel(QString val)
 {
     ui->modeLabel->setText(val);

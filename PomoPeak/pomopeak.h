@@ -60,7 +60,6 @@ private:
     Settings* settings;
     UserStats* userStats;
     SqliteHandler* sqliteHandler;
-    std::vector<Ui::taskQT*> avaliableTasks;
     taskQT* currentActiveTaskUI = nullptr;
     taskQT* currentInViewModeTaskUI = nullptr;
     FlowHandler* flowHandler;
@@ -91,7 +90,7 @@ private:
     void UpdateTimerDuration(FlowSequence sequence);
     void AdjustButtonsVisibilityDependingOnCurrentState();
     void AddTask(std::shared_ptr<Task> task);
-    void RemoveTask(std::shared_ptr<Task> task);
+    void RemoveTask(std::shared_ptr<Task> task, taskQT* taskU);
     void TaskStatusChanged(bool done);
     void ForceTimerUpdate(int& durationLeft, int& baseDuration, const int targetDuration);
     void TriggerQuickAction();

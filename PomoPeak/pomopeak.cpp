@@ -34,16 +34,6 @@ PomoPeak::~PomoPeak()
     delete userStats;
     delete pomopeakStats;
     delete quickActionShortcut;
-    //https://doc.qt.io/qt-6/objecttrees.html
-
-    //no need to do it?
-       // delete pomopeakSettings;
-    // for (auto taskPtr : avaliableTasks) {
-    //     delete taskPtr;
-    // }
-    //avaliableTasks.clear();
-
-
 }
 
 void PomoPeak::InitializeDataContainer()
@@ -179,28 +169,6 @@ void PomoPeak::OnTimerTimeout()
 
         }
         UpdateTimerDuration(flowHandler->Next());
-
-        // if(flowHandler->GetCurrentSequence() == FlowSequence::Session)
-        // {
-        //     //Call to current task update
-        //     if(currentActiveTaskUI != nullptr)
-        //     {
-        //         currentActiveTaskUI->ElapsedIncrease();
-        //     }
-        //     userStats->AddTimeSpend(((float)settings->SessionDuration/60));
-        //     globalCounter++;
-        //     PlayNotification("Break", "", 5000);
-
-        // }
-        // if(flowHandler->GetCurrentSequence() == FlowSequence::LongBreak || flowHandler->GetCurrentSequence() == FlowSequence::ShortBreak)
-        // {
-        //     PlaySoundEffect(endBreakEffect, true);
-        //     PlayNotification("Session", "", 5000);
-
-        // }
-
-        // flowHandler->Next();
-        // UpdateTimerDuration(flowHandler->GetCurrentSequence());
     }
 
     UpdateTimerLabel(QString("%1:%2").arg(durationLeft / 60,2,10,QChar('0')).arg((durationLeft % 60),2,10,QChar('0')));
@@ -220,19 +188,20 @@ void PomoPeak::OnTryAddTask()
 
 void PomoPeak::AddTask(std::shared_ptr<Task> task)
 {
+
     taskManager.AddTask(task);
 }
 
-void PomoPeak::RemoveTask(std::shared_ptr<Task> task)
+void PomoPeak::RemoveTask(std::shared_ptr<Task> task, taskQT* taskUI)
 {
     taskManager.RemoveTask(task);
+    taskUI->deleteLater();
 }
-
 void PomoPeak::OnViewModeTaskChanged(taskQT* taskUI)
 {
     if(currentInViewModeTaskUI != nullptr && currentInViewModeTaskUI != taskUI)
     {
-        currentInViewModeTaskUI->DisableViewMode();
+        currentInViewModeTaskUI->ChangeViewModeState(false);
     }
     currentInViewModeTaskUI = taskUI;
 }
