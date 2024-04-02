@@ -5,11 +5,12 @@
 #include "settings.h"
 #include "sqliteHandler.h"
 #include <QMediaPlayer>
+#include "QObjectInitialization.h"
 namespace Ui {
 class pomopeaksettings;
 }
 
-class pomopeaksettings : public QWidget
+class pomopeaksettings : public QWidget, public QObjectInitialization
 {
     Q_OBJECT
 
@@ -22,6 +23,10 @@ public:
         IsOpened  = visible;
     }
     bool IsOpened = false;
+protected:
+    void InitializeDataContainer() override;
+    void InitializeObjects() override;
+    void SubscribeToEvents() override;
 signals:
     void OnClose(const bool alarmStartChanged,const bool alarmBreakChanged);
 private slots:
@@ -40,9 +45,6 @@ private:
     bool isDirty = false;
     bool startAlarmChanged = false;
     bool breakAlarmChanged = false;
-
-    void InitializeObjects();
-    void SubscribeToEvents();
 };
 
 #endif // POMOPEAKSETTINGS_H

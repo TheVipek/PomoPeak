@@ -17,9 +17,8 @@ pomopeaksettings::pomopeaksettings(Settings& _settings, SqliteHandler& _handler,
 {
     ui->setupUi(this);
 
-
+    InitializeDataContainer();
     InitializeObjects();
-
     SubscribeToEvents();
 }
 pomopeaksettings::~pomopeaksettings()
@@ -27,7 +26,14 @@ pomopeaksettings::~pomopeaksettings()
     delete ui;
 }
 
-
+void pomopeaksettings::InitializeDataContainer()
+{
+    for(auto item : Skin::SkinTypesEnumerable)
+    {
+        ui->SkinSelectionComboBox->addItem(item.first,QVariant::fromValue(item.second));
+    }
+    ui->SkinSelectionComboBox->setCurrentIndex(static_cast<int>(settings.Skin));
+}
 void pomopeaksettings::InitializeObjects()
 {
     ui->sessionDoubleSpinBox->setValue((double)settings.SessionDuration / 60);
@@ -50,11 +56,7 @@ void pomopeaksettings::InitializeObjects()
     ui->notificationsCheckbox->setChecked(settings.Notifications);
     ui->alarmSoundCheckBox->setChecked(settings.AlarmSound);
 
-    for(auto item : Skin::SkinTypesEnumerable)
-    {
-        ui->SkinSelectionComboBox->addItem(item.first,QVariant::fromValue(item.second));
-    }
-    ui->SkinSelectionComboBox->setCurrentIndex(static_cast<int>(settings.Skin));
+
 }
 
 void pomopeaksettings::SubscribeToEvents()

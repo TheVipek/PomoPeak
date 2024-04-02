@@ -8,26 +8,11 @@ taskQT::taskQT(QWidget *parent)
     , task(std::make_shared<Task>())
 {
     setAttribute(Qt::WA_StyledBackground, true);
-    this->setStyleSheet(selectedTaskWidgetSheet);
-
     ui->setupUi(this);
-    opacityEffect->setBlurRadius(UNDONE_BLUR);
-    ui->taskLayout->setGraphicsEffect(opacityEffect);
-    OnTaskTitleChanged();
 
-    ChangeViewModeState(true);
-
-    OnModifyEnter();
-
-    ui->activeBtn->setStyleSheet(unselectedTaskBar);
-    ui->activeBtn->setVisible(false);
-
-    connect(ui->okBtn, &QPushButton::clicked, this, &taskQT::OnProceedButton);
-    connect(ui->delBtn, &QPushButton::clicked, this, &taskQT::OnCancelButton);
-    connect(ui->modifyBtn, &QPushButton::clicked, this, &taskQT::OnModifyButton);
-    connect(ui->taskName, &QTextEdit::textChanged, this, &taskQT::OnTaskTitleChanged);
-    connect(ui->activeBtn, &QPushButton::clicked, this, &taskQT::SwitchSelectState);
-    connect(ui->taskStatusBtn, &QPushButton::clicked, this, &taskQT::OnChangeStatus);
+    InitializeDataContainer();
+    InitializeObjects();
+    SubscribeToEvents();
 }
 
 taskQT::~taskQT()
@@ -37,17 +22,48 @@ taskQT::~taskQT()
     delete opacityEffect;
 }
 
+void taskQT::InitializeDataContainer()
+{
+
+}
+
+void taskQT::InitializeObjects()
+{
+    setStyleSheet(selectedTaskWidgetSheet);
+    opacityEffect->setBlurRadius(UNDONE_BLUR);
+
+    ui->taskLayout->setGraphicsEffect(opacityEffect);
+    ui->activeBtn->setStyleSheet(unselectedTaskBar);
+    ui->activeBtn->setVisible(false);
+
+    OnTaskTitleChanged();
+
+    ChangeMode(View);
+
+    OnModify(ModifyState::Enter);
+}
+
+void taskQT::SubscribeToEvents()
+{
+    connect(ui->okBtn, &QPushButton::clicked, this, &taskQT::OnProceedButton);
+    connect(ui->delBtn, &QPushButton::clicked, this, &taskQT::OnCancelButton);
+    connect(ui->modifyBtn, &QPushButton::clicked, this, &taskQT::OnModifyButton);
+    connect(ui->taskName, &QTextEdit::textChanged, this, &taskQT::OnTaskTitleChanged);
+    connect(ui->activeBtn, &QPushButton::clicked, this, &taskQT::SwitchTaskActivation);
+    connect(ui->taskStatusBtn, &QPushButton::clicked, this, &taskQT::OnChangeStatus);
+}
+
 void taskQT::OnModifyButton()
 {
-    if(!isEditMode)
+    if(CurrentMode != Edit)
     {
-        OnModifyEnter();
+        OnModify(ModifyState::Enter);
     }
 }
 
 void taskQT::OnProceedButton()
 {
-    isEditMode ? OnModifyProceed() : ChangeViewModeState(false);
+    CurrentMode == Edit ? OnModify(ModifyState::Proceed) : ChangeMode(None);
 }
 
 void taskQT::OnCancelButton()
@@ -57,45 +73,49 @@ void taskQT::OnCancelButton()
         OnDelete();
         return;
     }
-    isEditMode ? OnModifyCancel() :  OnDelete();
+    CurrentMode == Edit ? OnModify(ModifyState::Cancel) :  OnDelete();
 }
 
-void taskQT::OnModifyProceed()
+void taskQT::OnModify(ModifyState state)
 {
-    ProceedTaskModifications();
-    if(!isCreated)
-    {
-        OnCreate();
+    switch (state) {
+    case Enter:
+        ChangeMode(Edit);
+
+        ui->modifyBtn->setEnabled(false);
+        UpdateModeLabel(editLabelValue);
+        break;
+    case Proceed:
+        ProceedTaskModifications();
+        if(!isCreated)
+        {
+            OnCreate();
+        }
+        break;
+    case Cancel:
+        CancelTaskModifications();
+        break;
+    case Exit:
+        //nothingggg
+        break;
+    default:
+        break;
     }
-    OnModifyExit();
+
+    if(state == Proceed || state == Cancel || state == Exit)
+    {
+        qDebug() << "State Mod";
+
+        ChangeMode(View);
+        ui->modifyBtn->setEnabled(true);
+        UpdateModeLabel(viewLabelValue);
+    }
 }
 
 void taskQT::OnCreate()
 {
     emit CreateRequest(task);
     isCreated = true;
-}
-
-void taskQT::OnModifyCancel()
-{
-    CancelTaskModifications();
-    OnModifyExit();
-}
-
-void taskQT::OnModifyEnter()
-{
-    ChangeEditModeState(true);
-
-    ui->modifyBtn->setEnabled(false);
-    UpdateModeLabel(editLabelValue);
-}
-
-void taskQT::OnModifyExit()
-{
-    ChangeEditModeState(false);
-
-    ui->modifyBtn->setEnabled(true);
-    UpdateModeLabel(viewLabelValue);
 }
 
 void taskQT::OnDelete()
@@ -124,7 +144,7 @@ void taskQT::CancelTaskModifications()
     ui->currentSpinBox->setValue(task->pomodorosDone);
 }
 
-void taskQT::SwitchSelectState()
+void taskQT::SwitchTaskActivation()
 {
     isSelected = !isSelected;
     if(isSelected)
@@ -138,36 +158,42 @@ void taskQT::SwitchSelectState()
     }
 }
 
-void taskQT::ChangeViewModeState(bool enabled)
+void taskQT::ChangeMode(Mode mode)
 {
-    if(isViewMode == enabled)
+    if(CurrentMode == mode)
+    {
         return;
+    }
+    //General
+    setStyleSheet(mode != None ? selectedTaskWidgetSheet : unselectedTaskWidgetSheet);
 
-    isViewMode = enabled;
-    this->setStyleSheet(enabled ? selectedTaskWidgetSheet : unselectedTaskWidgetSheet);
-    ui->modifyBtn->setVisible(enabled);
-    ui->okBtn->setVisible(enabled);
-    ui->delBtn->setVisible(enabled);
+    //View
+    ui->modifyBtn->setVisible(mode != None);
+    ui->okBtn->setVisible(mode != None);
+    ui->delBtn->setVisible(mode != None);
+    ui->modeLabel->setVisible(mode != None);
 
-    ui->activeBtn->setVisible(!enabled);
-    ui->modeLabel->setVisible(enabled);
+    ui->taskStatusBtn->setEnabled(mode == None);
+    ui->activeBtn->setVisible(mode == None);
 
-    ui->taskStatusBtn->setEnabled(!enabled);
 
-    if(enabled)
+    //Edit
+
+    if(mode != None)
+    {
+        ui->taskName->setTextInteractionFlags(mode == Edit ? Qt::TextEditable : Qt::NoTextInteraction);
+        ui->taskDescription->setTextInteractionFlags(mode == Edit ? Qt::TextEditable : Qt::NoTextInteraction);
+        ui->currentSpinBox->setEnabled(mode == Edit);
+        ui->estimationSpinBox->setEnabled(mode == Edit);
+        ui->delBtn->setText(mode == Edit ? deleteButtonText[0] : deleteButtonText[1]);
+    }
+
+    //Post
+    if(mode == View)
     {
         emit OnEnableViewModeRequest(this);
     }
-}
-
-void taskQT::ChangeEditModeState(bool enabled)
-{
-    isEditMode = enabled;
-    ui->taskName->setTextInteractionFlags(enabled ? Qt::TextEditable : Qt::NoTextInteraction);
-    ui->taskDescription->setTextInteractionFlags(enabled ? Qt::TextEditable : Qt::NoTextInteraction);
-    ui->currentSpinBox->setEnabled(enabled);
-    ui->estimationSpinBox->setEnabled(enabled);
-    ui->delBtn->setText(enabled ? deleteButtonText[0] : deleteButtonText[1]);
+    CurrentMode = mode;
 }
 
 void taskQT::OnTaskTitleChanged()
@@ -189,7 +215,6 @@ void taskQT::SetState(bool done)
 {
     task->isDone = done;
 
-    //TEMPORARY, no idea for another solution, looks like opaciy from parent container doesnt work on QTextEdit objects
     ui->taskStatusBtn->setText(done ? taskStatusText[0] : taskStatusText[1]);
 
     ui->taskName->setStyleSheet(done ? doneTextEditSheet : undoneTextEditSheet);

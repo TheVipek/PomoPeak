@@ -6,22 +6,42 @@
 #include <memory>
 #include "TaskInputFilter.h"
 #include <QGraphicsBlurEffect>
+#include "QObjectInitialization.h"
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class taskQT;
 }
+
 QT_END_NAMESPACE
 
-class taskQT: public QWidget
+class taskQT: public QWidget, public QObjectInitialization
 {
     Q_OBJECT
+
+
+
 
 public:
     explicit taskQT(QWidget *parent = nullptr);
     ~taskQT();
+    enum ModifyState
+    {
+        Enter,
+        Exit,
+        Cancel,
+        Proceed
+    };
+    enum Mode
+    {
+        View,
+        Edit,
+        None
+    };
+
+    void ChangeMode(Mode mode);
     void ElapsedIncrease();
-    void SwitchSelectState();
-    void ChangeViewModeState(bool enabled);
+    void SwitchTaskActivation();
+
 signals:
     void DeleteRequest(std::shared_ptr<Task> task, taskQT* taskU);
     void CreateRequest(std::shared_ptr<Task> task);
@@ -31,11 +51,14 @@ signals:
 protected:
     void mousePressEvent(QMouseEvent* event) override
     {
-        if(event->button() == Qt::LeftButton && !isViewMode && !task->isDone)
+        if(event->button() == Qt::LeftButton && CurrentMode != View && !task->isDone)
         {
-            ChangeViewModeState(true);
+            ChangeMode(View);
         }
     }
+    void InitializeDataContainer() override;
+    void InitializeObjects() override;
+    void SubscribeToEvents() override;
 
 private slots:
 
@@ -43,11 +66,7 @@ private slots:
     void OnProceedButton();
     void OnCancelButton();
 
-    void OnModifyEnter();
-    void OnModifyProceed();
-    void OnModifyCancel();
-    void OnModifyExit();
-
+    void OnModify(ModifyState state);
     void OnDelete();
     void OnCreate();
 
@@ -97,10 +116,10 @@ private:
     const QString editLabelValue = "Currently in Edit Mode";
     const QString deleteButtonText[2] = { "Cancel", "Delete" };
     const QString taskStatusText[2] = {  "Mark as incompleted", "Mark as completed" };
+
     bool isCreated = false;
-    bool isEditMode = false;
     bool isSelected = false;
-    bool isViewMode = false;
+    Mode CurrentMode = None;
 
     Ui::taskQT* ui;
     TaskInputFilter* filter;
@@ -108,8 +127,6 @@ private:
     std::shared_ptr<Task> task;
 
     void OnTaskTitleChanged();
-
-    void ChangeEditModeState(bool value);
 
     void ProceedTaskModifications();
     void CancelTaskModifications();

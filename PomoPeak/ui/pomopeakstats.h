@@ -8,14 +8,14 @@
 #include <QtCharts/QLegend>
 #include <QtCharts/QBarCategoryAxis>
 #include "userstats.h"
-
+#include "QObjectInitialization.h"
 
 #include <QTimer>
 namespace Ui {
 class PomopeakStats;
 }
 
-class PomopeakStats : public QWidget
+class PomopeakStats : public QWidget, public QObjectInitialization
 {
     Q_OBJECT
 
@@ -29,6 +29,11 @@ public:
     explicit PomopeakStats( UserStats& stats, QWidget *parent = nullptr);
     ~PomopeakStats();
     void ForceUpdateChart();
+
+protected:
+    void InitializeDataContainer() override;
+    void InitializeObjects() override;
+    void SubscribeToEvents() override;
 signals:
     void OnClose();
 private slots:
@@ -53,8 +58,6 @@ private:
     QBarCategoryAxis* daysAxis;
     QTimer* showTooltipTimer;
     QString tooltipText;
-    void InitializeObjects();
-    void SubscribeToEvents();
     void OnViewButtonsClick();
     void SwtichChartView(ChartVisibility visibility);
     void InitializeChart();

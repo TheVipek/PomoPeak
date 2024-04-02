@@ -21,13 +21,14 @@
 #include <QShortcut>
 #include "trayiconhandler.h"
 #include "pomopeakstats.h"
+#include "QObjectInitialization.h"
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class PomoPeak;
 }
 QT_END_NAMESPACE
 
-class PomoPeak : public QMainWindow
+class PomoPeak : public QMainWindow, public QObjectInitialization
 {
     Q_OBJECT
 
@@ -35,15 +36,18 @@ public:
     PomoPeak(QWidget *parent = nullptr);
     ~PomoPeak();
 protected:
-    void closeEvent(QCloseEvent* event)
+    void closeEvent(QCloseEvent* event) override
     {
-
         if(!isQuitting)
         {
             PlayNotification("Application has been minimized to tray","", 1000, true);
         }
         QMainWindow::closeEvent(event);
     }
+
+    void InitializeDataContainer() override;
+    void InitializeObjects() override;
+    void SubscribeToEvents() override;
 protected slots:
     void OnChangeState();
     void OnTimerTimeout();
@@ -82,9 +86,7 @@ private:
 
 
 
-    void InitializeDataContainer();
-    void InitializeObjects();
-    void SubscribeToEvents();
+
     void UpdateCounter();
     void Skip();
     void UpdateTimerLabel(QString value);

@@ -200,7 +200,7 @@ void PomoPeak::OnViewModeTaskChanged(taskQT* taskUI)
 {
     if(currentInViewModeTaskUI != nullptr && currentInViewModeTaskUI != taskUI)
     {
-        currentInViewModeTaskUI->ChangeViewModeState(false);
+        currentInViewModeTaskUI->ChangeMode(taskQT::None);
     }
     currentInViewModeTaskUI = taskUI;
 }
@@ -209,7 +209,7 @@ void PomoPeak::OnCurrentActiveTaskChanged(taskQT* taskUI)
 {
     if(currentActiveTaskUI != nullptr && currentActiveTaskUI != taskUI)
     {
-        currentActiveTaskUI->SwitchSelectState();
+        currentActiveTaskUI->SwitchTaskActivation();
     }
     currentActiveTaskUI = taskUI;
 }

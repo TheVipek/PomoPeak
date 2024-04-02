@@ -10,15 +10,22 @@ PomopeakStats::PomopeakStats(UserStats& stats,QWidget *parent)
 {
     ui->setupUi(this);
 
+    InitializeDataContainer();
     InitializeObjects();
     SubscribeToEvents();
-    InitializeChart();
+
+
     SwtichChartView(ChartVisibility::Weekly);
 }
 
 PomopeakStats::~PomopeakStats()
 {
     delete ui;
+}
+
+void PomopeakStats::InitializeDataContainer()
+{
+    InitializeChart();
 }
 
 void PomopeakStats::InitializeObjects()
