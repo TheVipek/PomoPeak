@@ -21,6 +21,7 @@ pomopeaksettings::pomopeaksettings(Settings& _settings, SqliteHandler& _handler,
     InitializeObjects();
     SubscribeToEvents();
 }
+
 pomopeaksettings::~pomopeaksettings()
 {
     delete ui;
@@ -34,6 +35,7 @@ void pomopeaksettings::InitializeDataContainer()
     }
     ui->SkinSelectionComboBox->setCurrentIndex(static_cast<int>(settings.Skin));
 }
+
 void pomopeaksettings::InitializeObjects()
 {
     ui->sessionDoubleSpinBox->setValue((double)settings.SessionDuration / 60);

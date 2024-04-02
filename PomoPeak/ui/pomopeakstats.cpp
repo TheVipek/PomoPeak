@@ -53,12 +53,10 @@ void PomopeakStats::OnViewButtonsClick()
 
     if(obj == ui->weeklyBtn)
     {
-        qDebug() << "Clicked at; " << obj->objectName();
         SwtichChartView(ChartVisibility::Weekly);
     }
     else if(obj == ui->monthlyBtn)
     {
-        qDebug() << "Clicked at; " << obj->objectName();
         SwtichChartView(ChartVisibility::Monthly);
     }
 }
@@ -87,6 +85,7 @@ void PomopeakStats::InitializeChart()
     QChartView* view = new QChartView(chart);
     ui->chartLayout->addWidget(view);
 }
+
 void PomopeakStats::UpdateChart(int days)
 {
     if(allSets != nullptr)
@@ -151,6 +150,7 @@ void PomopeakStats::OnHoverBar(bool status, int index)
         QToolTip::hideText();
     }
 }
+
 void PomopeakStats::ShowBarText()
 {
     QToolTip::showText(QCursor::pos(), tooltipText);
