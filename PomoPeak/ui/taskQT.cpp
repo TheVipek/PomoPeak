@@ -104,8 +104,6 @@ void taskQT::OnModify(ModifyState state)
 
     if(state == Proceed || state == Cancel || state == Exit)
     {
-        qDebug() << "State Mod";
-
         ChangeMode(View);
         ui->modifyBtn->setEnabled(true);
         UpdateModeLabel(viewLabelValue);
@@ -226,7 +224,7 @@ void taskQT::SetState(bool done)
 }
 
 //Called from pomopeak.cpp when session is finished
-void taskQT::ElapsedIncrease()
+void taskQT::IncreasePomodorosDone()
 {
     ui->currentSpinBox->setValue(ui->currentSpinBox->text().toInt() + 1);
     task->pomodorosDone++;

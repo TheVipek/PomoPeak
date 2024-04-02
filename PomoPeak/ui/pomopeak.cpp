@@ -153,7 +153,7 @@ void PomoPeak::OnTimerTimeout()
         {
             if(currentActiveTaskUI != nullptr)
             {
-                currentActiveTaskUI->ElapsedIncrease();
+                currentActiveTaskUI->IncreasePomodorosDone();
             }
             userStats->AddTimeSpend(((float)settings->SessionDuration/60));
             globalCounter++;
@@ -205,8 +205,6 @@ void PomoPeak::RemoveTask(std::shared_ptr<Task> task, taskQT* taskUI)
 
 void PomoPeak::OnViewModeTaskChanged(taskQT* taskUI)
 {
-
-
     if(currentInViewModeTaskUI != nullptr && currentInViewModeTaskUI != taskUI)
     {
         currentInViewModeTaskUI->ChangeMode(taskQT::None);
@@ -216,8 +214,6 @@ void PomoPeak::OnViewModeTaskChanged(taskQT* taskUI)
 
 void PomoPeak::OnCurrentActiveTaskChanged(taskQT* taskUI)
 {
-    qDebug() << "active task";
-    qDebug() << (currentActiveTaskUI == nullptr);
     if(currentActiveTaskUI != nullptr && currentActiveTaskUI != taskUI)
     {
         currentActiveTaskUI->SwitchTaskActivation();

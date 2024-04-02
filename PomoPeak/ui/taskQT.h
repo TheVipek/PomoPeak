@@ -24,6 +24,11 @@ class taskQT: public QWidget, public QObjectInitialization
 public:
     explicit taskQT(QWidget *parent = nullptr);
     ~taskQT();
+
+    // Enter -> Enter edit mode
+    // Exit -> Exit edit mode
+    // Cancel -> Cancel all changes made in edit mode and exit
+    // Proceed -> Proceed all changes made in edit mode and exit
     enum ModifyState
     {
         Enter,
@@ -31,6 +36,8 @@ public:
         Cancel,
         Proceed
     };
+
+    // Represents currently active mode
     enum Mode
     {
         View,
@@ -39,7 +46,7 @@ public:
     };
 
     void ChangeMode(Mode mode);
-    void ElapsedIncrease();
+    void IncreasePomodorosDone();
     void SwitchTaskActivation();
 
 signals:
