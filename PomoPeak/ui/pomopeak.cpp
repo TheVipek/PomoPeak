@@ -186,18 +186,27 @@ void PomoPeak::OnTryAddTask()
 
 void PomoPeak::AddTask(std::shared_ptr<Task> task)
 {
-
     taskManager.AddTask(task);
 }
 
 void PomoPeak::RemoveTask(std::shared_ptr<Task> task, taskQT* taskUI)
 {
+    if(currentInViewModeTaskUI == taskUI)
+    {
+        currentInViewModeTaskUI = nullptr;
+    }
+    if(currentActiveTaskUI == taskUI)
+    {
+        currentActiveTaskUI = nullptr;
+    }
     taskManager.RemoveTask(task);
     taskUI->deleteLater();
 }
 
 void PomoPeak::OnViewModeTaskChanged(taskQT* taskUI)
 {
+
+
     if(currentInViewModeTaskUI != nullptr && currentInViewModeTaskUI != taskUI)
     {
         currentInViewModeTaskUI->ChangeMode(taskQT::None);
@@ -207,6 +216,8 @@ void PomoPeak::OnViewModeTaskChanged(taskQT* taskUI)
 
 void PomoPeak::OnCurrentActiveTaskChanged(taskQT* taskUI)
 {
+    qDebug() << "active task";
+    qDebug() << (currentActiveTaskUI == nullptr);
     if(currentActiveTaskUI != nullptr && currentActiveTaskUI != taskUI)
     {
         currentActiveTaskUI->SwitchTaskActivation();
