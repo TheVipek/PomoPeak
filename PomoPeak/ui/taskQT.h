@@ -29,7 +29,7 @@ public:
     // Exit -> Exit edit mode
     // Cancel -> Cancel all changes made in edit mode and exit
     // Proceed -> Proceed all changes made in edit mode and exit
-    enum ModifyState
+    enum class ModifyState
     {
         Enter,
         Exit,
@@ -38,7 +38,7 @@ public:
     };
 
     // Represents currently active mode
-    enum Mode
+    enum class Mode
     {
         View,
         Edit,
@@ -58,9 +58,9 @@ signals:
 protected:
     void mousePressEvent(QMouseEvent* event) override
     {
-        if(event->button() == Qt::LeftButton && CurrentMode != View && !task->isDone)
+        if(event->button() == Qt::LeftButton && CurrentMode != Mode::View && !task->isDone)
         {
-            ChangeMode(View);
+            ChangeMode(Mode::View);
         }
     }
     void InitializeDataContainer() override;
@@ -126,7 +126,7 @@ private:
 
     bool isCreated = false;
     bool isSelected = false;
-    Mode CurrentMode = None;
+    Mode CurrentMode = Mode::None;
 
     Ui::taskQT* ui;
     TaskInputFilter* filter;
