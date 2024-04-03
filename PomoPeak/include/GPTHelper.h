@@ -8,10 +8,10 @@ class GPTHelper
 
 public:
     void SetAPIKey(std::string key);
-
+    void Ask(std::string question);
 private:
+    bool IsKeySet();
     liboai::OpenAI oai;
-    bool isKeySet;
     const std::string defaultModel = "gpt-3.5-turbo";
 };
 

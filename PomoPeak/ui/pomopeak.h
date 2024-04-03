@@ -22,6 +22,7 @@
 #include "trayiconhandler.h"
 #include "pomopeakstats.h"
 #include "QObjectInitialization.h"
+#include "GPTHelper.h"
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class PomoPeak;
@@ -71,6 +72,8 @@ private:
     QSoundEffect* startButtonClickEffect;
     QSoundEffect* endBreakEffect;
     QShortcut* quickActionShortcut;
+
+    GPTHelper* gptHelper;
 
     QTimer timer;
     TaskManager taskManager;
