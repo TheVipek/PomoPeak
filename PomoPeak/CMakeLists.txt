@@ -82,6 +82,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         include/userstatsdto.h
         src/userstatsdto.cpp
         include/QObjectInitialization.h
+        include/GPTHelper.h
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET PomoPeak APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -107,6 +108,16 @@ target_link_libraries(PomoPeak PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(PomoPeak PRIVATE Qt${QT_VERSION_MAJOR}::Multimedia)
 target_link_libraries(PomoPeak PRIVATE Qt${QT_VERSION_MAJOR}::Sql)
 target_link_libraries(PomoPeak PRIVATE Qt${QT_VERSION_MAJOR}::Charts)
+
+target_include_directories(PomoPeak PRIVATE ${CMAKE_SOURCE_DIR}/libs/nlohmann/include)
+#target_link_libraries(PomoPeak PRIVATE json)
+
+target_include_directories(PomoPeak PRIVATE ${CMAKE_SOURCE_DIR}/libs/curl/include)
+#target_link_libraries(PomoPeak PRIVATE curl)
+
+target_include_directories(PomoPeak PRIVATE ${CMAKE_SOURCE_DIR}/libs/liboai)
+#target_link_libraries(PomoPeak PRIVATE liboai)
+
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
