@@ -1,18 +1,22 @@
 #ifndef GPTHELPER_H
 #define GPTHELPER_H
-#include "liboai/include/liboai.h"
-class GPTHelper
-{
-    GPTHelper();
-    ~GPTHelper();
 
+#include <QNetworkAccessManager>
+class GPTHelper : public QObject
+{
+    Q_OBJECT
 public:
-    void SetAPIKey(std::string key);
-    void Ask(std::string question);
+    GPTHelper();
+    void SetAPIKey(const QString key);
+    QString Ask(const QString question, const QString systemInfo);
 private:
+    QNetworkAccessManager* manager;
     bool IsKeySet();
-    liboai::OpenAI oai;
-    const std::string defaultModel = "gpt-3.5-turbo";
+    QString endpoint = "https://api.openai.com/v1/chat";
+    QString apiKey = "";
+    const QString defaultModel = "gpt-3.5-turbo-0125";
+private slots:
+    QString HandleCompletionistReply(QNetworkReply* reply);
 };
 
 #endif // GPTHELPER_H

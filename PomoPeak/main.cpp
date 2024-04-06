@@ -1,7 +1,6 @@
 #include "pomopeak.h"
 #include <QApplication>
-#include <QSystemTrayIcon>
-#include <QMessageBox>
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -11,3 +10,5 @@ int main(int argc, char *argv[])
     QApplication::setQuitOnLastWindowClosed(false);
     return a.exec();
 }
+
+

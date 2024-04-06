@@ -1,12 +1,6 @@
 [submodule "e/Programming/CPlusPlus/PomoPeak/PomoPeak/PomoPeak/libs"]
 	path = e/Programming/CPlusPlus/PomoPeak/PomoPeak/PomoPeak/libs
 	url = https://github.com/D7EAD/liboai.git
-[submodule "PomoPeak/libs/liboai"]
-	path = PomoPeak/libs/liboai
-	url = https://github.com/D7EAD/liboai.git
 [submodule "PomoPeak/libs/curl"]
 	path = PomoPeak/libs/curl
 	url = https://github.com/curl/curl.git
-[submodule "PomoPeak/libs/nlohmann"]
-	path = PomoPeak/libs/nlohmann
-	url = https://github.com/nlohmann/json.git

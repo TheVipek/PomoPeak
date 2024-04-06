@@ -9,11 +9,14 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+
+
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Multimedia)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Sql)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Charts)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Network)
 set(PROJECT_SOURCES
         main.cpp
 
@@ -40,6 +43,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
 
         data/Resources.qrc
+
+        include/QObjectInitialization.h
 
         include/FlowHandler.h
         src/flowhandler.cpp
@@ -81,7 +86,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         include/userstatsdto.h
         src/userstatsdto.cpp
-        include/QObjectInitialization.h
+
         include/GPTHelper.h
         src/GPTHelper.cpp
     )
@@ -103,21 +108,16 @@ else()
     endif()
 endif()
 
-target_include_directories(PomoPeak PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_include_directories(PomoPeak PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ui)
+
 target_link_libraries(PomoPeak PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(PomoPeak PRIVATE Qt${QT_VERSION_MAJOR}::Multimedia)
 target_link_libraries(PomoPeak PRIVATE Qt${QT_VERSION_MAJOR}::Sql)
 target_link_libraries(PomoPeak PRIVATE Qt${QT_VERSION_MAJOR}::Charts)
+target_link_libraries(PomoPeak PRIVATE Qt${QT_VERSION_MAJOR}::Network)
 
-target_include_directories(PomoPeak PRIVATE ${CMAKE_SOURCE_DIR}/libs/nlohmann/include)
-#target_link_libraries(PomoPeak PRIVATE json)
+target_include_directories(PomoPeak PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(PomoPeak PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ui)
 
-target_include_directories(PomoPeak PRIVATE ${CMAKE_SOURCE_DIR}/libs/curl/include)
-#target_link_libraries(PomoPeak PRIVATE curl)
-
-target_include_directories(PomoPeak PRIVATE ${CMAKE_SOURCE_DIR}/libs/liboai)
-#target_link_libraries(PomoPeak PRIVATE liboai)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

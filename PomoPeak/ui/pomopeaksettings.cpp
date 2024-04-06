@@ -9,11 +9,13 @@
 #include <QMimeDatabase>
 #include <QMimeData>
 #include <QFileInfo>
-pomopeaksettings::pomopeaksettings(Settings& _settings, SqliteHandler& _handler, QWidget *parent)
+pomopeaksettings::pomopeaksettings(Settings& _settings, SqliteHandler& _handler, GPTHelper& _gptHelper, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::pomopeaksettings)
     , settings(_settings)
     , handler(_handler)
+    , gptHelper(_gptHelper)
+
 {
     ui->setupUi(this);
 
@@ -58,6 +60,14 @@ void pomopeaksettings::InitializeObjects()
     ui->notificationsCheckbox->setChecked(settings.Notifications);
     ui->alarmSoundCheckBox->setChecked(settings.AlarmSound);
 
+    QString api = qgetenv("CHATGPT");
+
+    if(api != "")
+    {
+        ui->chatGPTLineEdit->setText(api);
+        ui->chatGPTLineEdit->setEchoMode(QLineEdit::Password);
+    }
+    ui->chatGPTLineEdit->echoMode() == QLineEdit::Password ? ui->chatGPTVisibilityBtn->setText("Show") : ui->chatGPTVisibilityBtn->setText("Hide");
 
 }
 
@@ -84,6 +94,24 @@ void pomopeaksettings::SubscribeToEvents()
     connect(ui->alarmSoundCheckBox, &QCheckBox::clicked, this, &pomopeaksettings::OnCheckBoxValueChanged);
 
     connect(ui->SkinSelectionComboBox, &QComboBox::currentIndexChanged, this, &pomopeaksettings::OnIndexInComboBoxChanged);
+
+    connect(ui->chatGPTVisibilityBtn, &QPushButton::clicked, this, &pomopeaksettings::OnChangeChatGPTVisibility);
+    connect(ui->chatGPTLineEdit, &QLineEdit::textEdited, this, &pomopeaksettings::OnChatGPTApiChanged);
+}
+
+void pomopeaksettings::OnChatGPTApiChanged(const QString& str)
+{
+    qputenv("CHATGPT", str.toUtf8());
+}
+void pomopeaksettings::OnChangeChatGPTVisibility()
+{
+    QObject* obj = sender();
+
+    if(obj == ui->chatGPTVisibilityBtn)
+    {
+        ui->chatGPTLineEdit->echoMode() == QLineEdit::Password ? ui->chatGPTLineEdit->setEchoMode(QLineEdit::Normal) : ui->chatGPTLineEdit->setEchoMode(QLineEdit::Password);
+        ui->chatGPTLineEdit->echoMode() == QLineEdit::Password ? ui->chatGPTVisibilityBtn->setText("Show") : ui->chatGPTVisibilityBtn->setText("Hide");
+    }
 }
 
 void pomopeaksettings::OnQuickActionSequenceFinished()

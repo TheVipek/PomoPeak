@@ -5,8 +5,6 @@
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QSoundEffect>
-#include <vector>
-
 #include <QSqlDriver>
 #include "pomopeaksettings.h"
 #include "flowhandler.h"

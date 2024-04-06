@@ -34,10 +34,13 @@ protected:
     void InitializeDataContainer() override;
     void InitializeObjects() override;
     void SubscribeToEvents() override;
+
 signals:
     void OnClose();
+
 private slots:
     void OnExitClicked();
+
 private:
 
     const QMap<ChartVisibility, int> VisibilitySettings =

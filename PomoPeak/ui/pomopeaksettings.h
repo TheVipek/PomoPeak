@@ -6,6 +6,7 @@
 #include "sqliteHandler.h"
 #include <QMediaPlayer>
 #include "QObjectInitialization.h"
+#include "GPTHelper.h"
 namespace Ui {
 class pomopeaksettings;
 }
@@ -15,7 +16,7 @@ class pomopeaksettings : public QWidget, public QObjectInitialization
     Q_OBJECT
 
 public:
-    explicit pomopeaksettings(Settings& _settings, SqliteHandler& _handler, QWidget *parent = nullptr);
+    explicit pomopeaksettings(Settings& _settings, SqliteHandler& _handler, GPTHelper& _gptHelper, QWidget *parent = nullptr);
     ~pomopeaksettings();
     void setVisible(bool visible) override
     {
@@ -38,10 +39,13 @@ private slots:
     void OnCheckBoxValueChanged(bool value);
     void OnIndexInComboBoxChanged(int index);
     void OnQuickActionSequenceFinished();
+    void OnChangeChatGPTVisibility();
+    void OnChatGPTApiChanged(const QString& val);
 private:
     Ui::pomopeaksettings *ui;
     Settings& settings;
     SqliteHandler& handler;
+    GPTHelper& gptHelper;
     bool isDirty = false;
     bool startAlarmChanged = false;
     bool breakAlarmChanged = false;

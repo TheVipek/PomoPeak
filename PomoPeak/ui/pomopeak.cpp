@@ -8,7 +8,7 @@ PomoPeak::PomoPeak(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::PomoPeak)
     , sqliteHandler(new SqliteHandler(QCoreApplication::applicationDirPath() + "/data/database/applicationData.sqlite"))
-    , gptHelper()
+    , gptHelper(new GPTHelper())
     , timer(new QTimer)
     , taskManager()
     , trayIconHandler()
@@ -18,10 +18,12 @@ PomoPeak::PomoPeak(QWidget *parent)
     ui->tasksContentV2->setAlignment(Qt::AlignTop);
 
     trayIconHandler.Show();
-
     InitializeDataContainer();
     InitializeObjects();
     SubscribeToEvents();
+
+    gptHelper->SetAPIKey(qgetenv("CHATGPT"));
+    gptHelper->Ask("Give me 10 facts about pomodoro technique", "You're pomodoro professional, all questions are SHORT, by it I mean, you're jsut giving what user want, without any additionals, start every fact with, 'Did You Know That' ");
 }
 
 PomoPeak::~PomoPeak()
@@ -75,7 +77,7 @@ void PomoPeak::InitializeObjects()
 {
     flowHandler = new FlowHandler(*settings);
 
-    pomopeakSettings = new pomopeaksettings(*settings, *sqliteHandler , this);
+    pomopeakSettings = new pomopeaksettings(*settings, *sqliteHandler, *gptHelper , this);
     pomopeakSettings->hide();
     ui->widgetsLayout->addWidget(pomopeakSettings);
 
