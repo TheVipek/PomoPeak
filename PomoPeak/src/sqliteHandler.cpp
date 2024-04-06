@@ -3,8 +3,10 @@
 #include <QVariantList>
 SqliteHandler::SqliteHandler(const QString& connectionName)
 {
-    db = QSqlDatabase::addDatabase("QSQLITE");
+    db = QSqlDatabase::addDatabase("SQLITECIPHER");
     db.setDatabaseName(connectionName);
+    db.setPassword(qgetenv("SECRET"));
+    //db.setConnectOptions("QSQLITE_CREATE_KEY");
     CheckIfDatabaseIsInCorrectState();
 
 }

@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
 
-find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Multimedia)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Sql)
@@ -188,8 +188,8 @@ add_dependencies(PomoPeak TempFiles)
 add_dependencies(PomoPeak Images)
 
 #database-related
-set(DATABASE_FILE "${CMAKE_SOURCE_DIR}/data/database/applicationData.sqlite")
-set(BUILD_DATABASE_FILE "${CMAKE_BINARY_DIR}/data/database/applicationData.sqlite")
+set(DATABASE_FILE "${CMAKE_SOURCE_DIR}/data/database/applicationData.db")
+set(BUILD_DATABASE_FILE "${CMAKE_BINARY_DIR}/data/database/applicationData.db")
 set(RENEW_FILES FALSE CACHE BOOL "Flag to indicate if the build is for production")
 
 

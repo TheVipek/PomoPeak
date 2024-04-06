@@ -7,7 +7,7 @@
 PomoPeak::PomoPeak(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::PomoPeak)
-    , sqliteHandler(new SqliteHandler(QCoreApplication::applicationDirPath() + "/data/database/applicationData.sqlite"))
+    , sqliteHandler(new SqliteHandler(QCoreApplication::applicationDirPath() + "/data/database/applicationData.db"))
     , gptHelper(new GPTHelper())
     , timer(new QTimer)
     , taskManager()
