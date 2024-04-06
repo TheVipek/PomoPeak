@@ -21,6 +21,7 @@
 #include "pomopeakstats.h"
 #include "QObjectInitialization.h"
 #include "GPTHelper.h"
+#include "PomodoroFacts.h"
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class PomoPeak;
@@ -72,6 +73,7 @@ private:
     QShortcut* quickActionShortcut;
 
     GPTHelper* gptHelper;
+    PomodoroFacts* pomodoroFacts;
 
     QTimer timer;
     TaskManager taskManager;

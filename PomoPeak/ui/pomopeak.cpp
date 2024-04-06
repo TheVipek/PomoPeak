@@ -23,7 +23,7 @@ PomoPeak::PomoPeak(QWidget *parent)
     SubscribeToEvents();
 
     gptHelper->SetAPIKey(settings->ChatGPTApiKey);
-    //gptHelper->Ask("Give me 10 facts about pomodoro technique", "You're pomodoro professional, all questions are SHORT, by it I mean, you're jsut giving what user want, without any additionals, start every fact with, 'Did You Know That' ");
+    pomodoroFacts = new PomodoroFacts(gptHelper);
 }
 
 PomoPeak::~PomoPeak()
@@ -160,7 +160,7 @@ void PomoPeak::OnTimerTimeout()
             }
             userStats->AddTimeSpend(((float)settings->SessionDuration/60));
             globalCounter++;
-            PlayNotification("Break", "", 5000);
+            PlayNotification("Break", pomodoroFacts->GetNextFact(), 5000, true);
 
         }
         if(currentSequence == FlowSequence::LongBreak || currentSequence == FlowSequence::ShortBreak)

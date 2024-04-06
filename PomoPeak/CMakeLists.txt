@@ -17,6 +17,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Multimedia)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Sql)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Charts)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Network)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Concurrent)
 set(PROJECT_SOURCES
         main.cpp
 
@@ -89,6 +90,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         include/GPTHelper.h
         src/GPTHelper.cpp
+        include/PomodoroFacts.h
+        src/PomodoroFacts.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET PomoPeak APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -114,6 +117,7 @@ target_link_libraries(PomoPeak PRIVATE Qt${QT_VERSION_MAJOR}::Multimedia)
 target_link_libraries(PomoPeak PRIVATE Qt${QT_VERSION_MAJOR}::Sql)
 target_link_libraries(PomoPeak PRIVATE Qt${QT_VERSION_MAJOR}::Charts)
 target_link_libraries(PomoPeak PRIVATE Qt${QT_VERSION_MAJOR}::Network)
+target_link_libraries(PomoPeak PRIVATE Qt${QT_VERSION_MAJOR}::Concurrent)
 
 target_include_directories(PomoPeak PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_include_directories(PomoPeak PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ui)
