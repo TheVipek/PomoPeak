@@ -7,6 +7,7 @@
 #include <QMediaPlayer>
 #include "QObjectInitialization.h"
 #include "GPTHelper.h"
+#include <QLineEdit>
 namespace Ui {
 class pomopeaksettings;
 }
@@ -49,6 +50,8 @@ private:
     bool isDirty = false;
     bool startAlarmChanged = false;
     bool breakAlarmChanged = false;
+
+    void SetChatGPTLineEditEchoMode(const QLineEdit::EchoMode& mode);
 };
 
 #endif // POMOPEAKSETTINGS_H

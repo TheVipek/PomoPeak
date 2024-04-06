@@ -155,6 +155,10 @@ set(BUILD_BREAK_ALARM_SOUNDS_DIRECTORY "${CMAKE_BINARY_DIR}/data/sounds/breakAla
 set(TEMP_DIR "${CMAKE_SOURCE_DIR}/data/temp")
 set(BUILD_TEMP_DIR "${CMAKE_BINARY_DIR}/data/temp")
 
+set(IMAGES_DIR "${CMAKE_SOURCE_DIR}/data/images")
+set(BUILD_IMAGES_DIR "${CMAKE_BINARY_DIR}/data/images")
+
+
 # Create a custom target that always runs
 add_custom_target(CopyAlarmSounds ALL
     COMMAND ${CMAKE_COMMAND} -E make_directory "${BUILD_START_ALARM_SOUNDS_DIRECTORY}"
@@ -169,22 +173,31 @@ add_custom_target(TempFiles ALL
     COMMAND ${CMAKE_COMMAND} -E make_directory "${BUILD_TEMP_DIR}"
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${TEMP_DIR}" "${BUILD_TEMP_DIR}"
     COMMENT "Copying sound files to build directory")
+
+add_custom_target(Images ALL
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${BUILD_IMAGES_DIR}"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${IMAGES_DIR}" "${BUILD_IMAGES_DIR}"
+    COMMENT "Copying images files to build directory")
+
+
+
 # Ensure your main target depends on this custom target
 add_dependencies(PomoPeak CopyAlarmSounds)
 add_dependencies(PomoPeak CopyBreakSounds)
 add_dependencies(PomoPeak TempFiles)
+add_dependencies(PomoPeak Images)
+
+#database-related
+set(DATABASE_FILE "${CMAKE_SOURCE_DIR}/data/database/applicationData.sqlite")
+set(BUILD_DATABASE_FILE "${CMAKE_BINARY_DIR}/data/database/applicationData.sqlite")
 set(RENEW_FILES FALSE CACHE BOOL "Flag to indicate if the build is for production")
 
+
 if(RENEW_FILES)
-     message("RENEWING FILES")
-
-    set(DATABASE_FILE "${CMAKE_SOURCE_DIR}/data/database/applicationData.sqlite")
-    set(BUILD_DATABASE_FILE "${CMAKE_BINARY_DIR}/data/database/applicationData.sqlite")
-
+    message("RENEWING FILES")
     add_custom_target(CopyDatabase ALL
                        COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/data/database"
                        COMMAND ${CMAKE_COMMAND} -E copy ${DATABASE_FILE} ${BUILD_DATABASE_FILE}
                        COMMENT "Copying database to build directory")
-
     add_dependencies(CopyDatabase PomoPeak)
 endif()

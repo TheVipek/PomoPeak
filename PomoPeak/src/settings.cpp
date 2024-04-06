@@ -19,6 +19,8 @@ Settings::Settings()
     AlarmSound = true;
 
     Skin = Skin::SkinTypes::White;
+
+    ChatGPTApiKey = "";
 }
 
 Settings::Settings(const SettingsDTO& dto)
@@ -40,6 +42,7 @@ Settings::Settings(const SettingsDTO& dto)
     Skin = dto.Skin;
     //Load file from custom session alarm path
 
+    ChatGPTApiKey = dto.ChatGPTApiKey;
 
     qDebug() << "loading file";
     QFile fileFromDB = QFile(QCoreApplication::applicationDirPath() + TempFilesPath + dto.SessionAlarmName + dto.SessionAlarmExt);
@@ -173,7 +176,8 @@ QList<QPair<QString,QVariant>> Settings::ToData()
         {"BreakAlarmExt", "." + breakAlarmInfo.suffix()},
         {"Notifications", Notifications != 0},
         {"AlarmSound", AlarmSound != 0},
-        {"Skin", skinVariant}
+        {"Skin", skinVariant},
+        {"ChatGPTApiKey", ChatGPTApiKey}
     };
 }
 
@@ -212,7 +216,8 @@ QList<QPair<QString,QVariant>> Settings::ToData(const int userID)
         {"BreakAlarmExt", "." + breakAlarmInfo.suffix()},
         {"Notifications", Notifications != 0},
         {"AlarmSound", AlarmSound != 0},
-        {"Skin", skinVariant}
+        {"Skin", skinVariant},
+        {"ChatGPTApiKey", ChatGPTApiKey}
     };
 };
 

@@ -19,6 +19,7 @@ SettingsDTO SettingsDTO::FromSqlRecord(const QSqlRecord& record)
     bool notifications = record.value("Notifications").isNull() ? true : record.value("Notifications").toInt() != 0;
     bool alarmSound = record.value("AlarmSound").isNull() ? true : record.value("AlarmSound").toInt() != 0;
     Skin::SkinTypes skin = record.value("Skin").isNull() ? Skin::SkinTypes::White : static_cast<Skin::SkinTypes>(record.value("Skin").toInt());;
+    QString chatGPTApiKey = record.value("ChatGPTApiKey").isNull() ? "" : record.value("ChatGPTApiKey").toString();
 
     return SettingsDTO(
         userID,
@@ -38,7 +39,8 @@ SettingsDTO SettingsDTO::FromSqlRecord(const QSqlRecord& record)
         breakAlarmExt,
         notifications,
         alarmSound,
-        skin
+        skin,
+        chatGPTApiKey
     );
 };
 

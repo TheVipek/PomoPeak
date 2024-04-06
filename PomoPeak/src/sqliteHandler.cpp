@@ -31,7 +31,8 @@ void SqliteHandler::CheckIfDatabaseIsInCorrectState()
                                            "BreakAlarmExt TEXT,"
                                            "Notifications INT,"
                                            "AlarmSound INT,"
-                                           "Skin INT);").arg(DatabaseTables::SETTINGS);
+                                           "Skin INT,"
+                                           "ChatGPTApiKey TEXT);").arg(DatabaseTables::SETTINGS);
     query.prepare(createSettingsTableQ);
 
     if(!query.exec())

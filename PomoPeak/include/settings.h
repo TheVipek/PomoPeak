@@ -43,6 +43,8 @@ public:
     bool AlarmSound;
     Skin::SkinTypes Skin;
 
+    QString ChatGPTApiKey;
+
     QList<QPair<QString,QVariant>> ToData();
     QList<QPair<QString,QVariant>> ToData(const int userID);
     float GetSessionVolumeForAudio();

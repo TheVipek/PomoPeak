@@ -60,15 +60,8 @@ void pomopeaksettings::InitializeObjects()
     ui->notificationsCheckbox->setChecked(settings.Notifications);
     ui->alarmSoundCheckBox->setChecked(settings.AlarmSound);
 
-    QString api = qgetenv("CHATGPT");
-
-    if(api != "")
-    {
-        ui->chatGPTLineEdit->setText(api);
-        ui->chatGPTLineEdit->setEchoMode(QLineEdit::Password);
-    }
-    ui->chatGPTLineEdit->echoMode() == QLineEdit::Password ? ui->chatGPTVisibilityBtn->setText("Show") : ui->chatGPTVisibilityBtn->setText("Hide");
-
+    ui->chatGPTLineEdit->setText(settings.ChatGPTApiKey);
+    SetChatGPTLineEditEchoMode(QLineEdit::Password);
 }
 
 void pomopeaksettings::SubscribeToEvents()
@@ -101,7 +94,8 @@ void pomopeaksettings::SubscribeToEvents()
 
 void pomopeaksettings::OnChatGPTApiChanged(const QString& str)
 {
-    qputenv("CHATGPT", str.toUtf8());
+    settings.ChatGPTApiKey = str;
+    isDirty = true;
 }
 void pomopeaksettings::OnChangeChatGPTVisibility()
 {
@@ -109,11 +103,14 @@ void pomopeaksettings::OnChangeChatGPTVisibility()
 
     if(obj == ui->chatGPTVisibilityBtn)
     {
-        ui->chatGPTLineEdit->echoMode() == QLineEdit::Password ? ui->chatGPTLineEdit->setEchoMode(QLineEdit::Normal) : ui->chatGPTLineEdit->setEchoMode(QLineEdit::Password);
-        ui->chatGPTLineEdit->echoMode() == QLineEdit::Password ? ui->chatGPTVisibilityBtn->setText("Show") : ui->chatGPTVisibilityBtn->setText("Hide");
+        ui->chatGPTLineEdit->echoMode() == QLineEdit::Password ? SetChatGPTLineEditEchoMode(QLineEdit::Normal) : SetChatGPTLineEditEchoMode(QLineEdit::Password);
     }
 }
-
+void pomopeaksettings::SetChatGPTLineEditEchoMode(const QLineEdit::EchoMode& mode)
+{
+    ui->chatGPTLineEdit->setEchoMode(mode);
+    mode == QLineEdit::Password ? ui->chatGPTVisibilityBtn->setText("Show") : ui->chatGPTVisibilityBtn->setText("Hide");
+}
 void pomopeaksettings::OnQuickActionSequenceFinished()
 {
     QObject* obj = sender();
@@ -281,4 +278,5 @@ void pomopeaksettings::OnExitClicked()
     emit OnClose(startAlarmChanged, breakAlarmChanged);
     startAlarmChanged = false;
     breakAlarmChanged = false;
+    SetChatGPTLineEditEchoMode(QLineEdit::Password);
 }

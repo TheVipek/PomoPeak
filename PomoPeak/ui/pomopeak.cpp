@@ -22,8 +22,8 @@ PomoPeak::PomoPeak(QWidget *parent)
     InitializeObjects();
     SubscribeToEvents();
 
-    gptHelper->SetAPIKey(qgetenv("CHATGPT"));
-    gptHelper->Ask("Give me 10 facts about pomodoro technique", "You're pomodoro professional, all questions are SHORT, by it I mean, you're jsut giving what user want, without any additionals, start every fact with, 'Did You Know That' ");
+    gptHelper->SetAPIKey(settings->ChatGPTApiKey);
+    //gptHelper->Ask("Give me 10 facts about pomodoro technique", "You're pomodoro professional, all questions are SHORT, by it I mean, you're jsut giving what user want, without any additionals, start every fact with, 'Did You Know That' ");
 }
 
 PomoPeak::~PomoPeak()
