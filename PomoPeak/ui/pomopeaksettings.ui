@@ -49,7 +49,10 @@ QPushButton
 #exitBtn::hover
 {
 	background-color:rgba(12,5,0,75);
-	border-radius:1px;
+}
+#alarmStartSelectBtn::hover, #alarmEndBreakSelectBtn::hover, #chatGPTVisibilityBtn::hover
+{
+	background-color: #4c5154;
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,15,0">
@@ -57,16 +60,16 @@ QPushButton
     <number>0</number>
    </property>
    <property name="leftMargin">
-    <number>5</number>
+    <number>15</number>
    </property>
    <property name="topMargin">
-    <number>5</number>
+    <number>15</number>
    </property>
    <property name="rightMargin">
-    <number>5</number>
+    <number>15</number>
    </property>
    <property name="bottomMargin">
-    <number>5</number>
+    <number>15</number>
    </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="8,1">
@@ -158,7 +161,7 @@ QPushButton
     </spacer>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,3,1">
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1,1">
      <property name="spacing">
       <number>0</number>
      </property>
@@ -205,7 +208,7 @@ QPushButton
         <number>0</number>
        </property>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,1,1,1,1,1,1,1,1,1,1,1,0">
+        <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,1,1,1,1,0,1,1,1,1,1,1,0">
          <property name="spacing">
           <number>15</number>
          </property>
@@ -225,9 +228,9 @@ QPushButton
           <number>15</number>
          </property>
          <item>
-          <layout class="QHBoxLayout" name="sessionLayout" stretch="1,1">
+          <layout class="QHBoxLayout" name="sessionLayout" stretch="1,2">
            <property name="spacing">
-            <number>5</number>
+            <number>15</number>
            </property>
            <property name="sizeConstraint">
             <enum>QLayout::SetDefaultConstraint</enum>
@@ -309,9 +312,9 @@ QPushButton
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="shortBreakLayout" stretch="1,1">
+          <layout class="QHBoxLayout" name="shortBreakLayout" stretch="1,2">
            <property name="spacing">
-            <number>5</number>
+            <number>15</number>
            </property>
            <property name="leftMargin">
             <number>0</number>
@@ -372,9 +375,9 @@ QPushButton
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="longBreakLayout" stretch="1,1">
+          <layout class="QHBoxLayout" name="longBreakLayout" stretch="1,2">
            <property name="spacing">
-            <number>5</number>
+            <number>15</number>
            </property>
            <property name="leftMargin">
             <number>0</number>
@@ -444,9 +447,9 @@ QPushButton
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="alarmStartLayout" stretch="1,1,2">
+          <layout class="QHBoxLayout" name="alarmStartLayout" stretch="1,1,1">
            <property name="spacing">
-            <number>5</number>
+            <number>15</number>
            </property>
            <property name="leftMargin">
             <number>0</number>
@@ -538,9 +541,91 @@ QPushButton
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="alarmStartVolumeLayout" stretch="1,3,1">
+          <layout class="QHBoxLayout" name="alarmEndLayout" stretch="1,1,1">
            <property name="spacing">
-            <number>25</number>
+            <number>15</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="alarmEndBreakLabel">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>50</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Alarm End Break</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="alarmEndBreakCurrentLabel">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>50</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>currentAlarmName</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="alarmEndBreakSelectBtn">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>50</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Select File...</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="alarmStartVolumeLayout" stretch="1,1,1">
+           <property name="spacing">
+            <number>15</number>
            </property>
            <property name="leftMargin">
             <number>0</number>
@@ -618,90 +703,17 @@ QPushButton
              <property name="text">
               <string>TextLabel</string>
              </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="alarmEndLayout">
-           <property name="spacing">
-            <number>25</number>
-           </property>
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QLabel" name="alarmEndBreakLabel">
-             <property name="maximumSize">
-              <size>
-               <width>200</width>
-               <height>50</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <family>Bahnschrift</family>
-               <pointsize>10</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>Alarm End Break</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="alarmEndBreakCurrentLabel">
-             <property name="maximumSize">
-              <size>
-               <width>150</width>
-               <height>50</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <family>Bahnschrift</family>
-               <pointsize>10</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>currentAlarmName</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="alarmEndBreakSelectBtn">
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>50</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <family>Bahnschrift</family>
-               <pointsize>10</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>Select File...</string>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="alarmEndVolumeLayout">
+          <layout class="QHBoxLayout" name="alarmEndVolumeLayout" stretch="1,1,1">
            <property name="spacing">
-            <number>25</number>
+            <number>15</number>
            </property>
            <property name="leftMargin">
             <number>0</number>
@@ -719,7 +731,7 @@ QPushButton
             <widget class="QLabel" name="alarmEndBreakVolumeLabel">
              <property name="maximumSize">
               <size>
-               <width>200</width>
+               <width>16777215</width>
                <height>50</height>
               </size>
              </property>
@@ -736,6 +748,12 @@ QPushButton
            </item>
            <item>
             <widget class="QSlider" name="alarmEndBreakVolumeSlider">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
@@ -760,7 +778,7 @@ QPushButton
             <widget class="QLabel" name="alarmEndSliderValue">
              <property name="maximumSize">
               <size>
-               <width>200</width>
+               <width>16777215</width>
                <height>50</height>
               </size>
              </property>
@@ -773,6 +791,9 @@ QPushButton
              <property name="text">
               <string>TextLabel</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
             </widget>
            </item>
           </layout>
@@ -780,7 +801,7 @@ QPushButton
          <item>
           <layout class="QHBoxLayout" name="alarmEndBreakRepLayout" stretch="1,2">
            <property name="spacing">
-            <number>25</number>
+            <number>15</number>
            </property>
            <property name="leftMargin">
             <number>0</number>
@@ -797,7 +818,7 @@ QPushButton
            <item>
             <widget class="QLabel" name="alarmEndBreakRepLabel">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -822,7 +843,7 @@ QPushButton
            <item>
             <widget class="QSpinBox" name="alarmEndBreakRepSpinBox">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -844,9 +865,9 @@ QPushButton
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="quickActionBindLayout">
+          <layout class="QHBoxLayout" name="quickActionBindLayout" stretch="1,2">
            <property name="spacing">
-            <number>25</number>
+            <number>15</number>
            </property>
            <property name="leftMargin">
             <number>0</number>
@@ -864,7 +885,7 @@ QPushButton
             <widget class="QLabel" name="quickActionBindLabel">
              <property name="maximumSize">
               <size>
-               <width>200</width>
+               <width>16777215</width>
                <height>50</height>
               </size>
              </property>
@@ -881,6 +902,12 @@ QPushButton
            </item>
            <item>
             <widget class="QKeySequenceEdit" name="quickActionSequenceEdit">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
@@ -898,9 +925,9 @@ QPushButton
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="notificationsLayout">
+          <layout class="QHBoxLayout" name="notificationsLayout" stretch="1,2">
            <property name="spacing">
-            <number>25</number>
+            <number>15</number>
            </property>
            <property name="leftMargin">
             <number>0</number>
@@ -918,7 +945,7 @@ QPushButton
             <widget class="QLabel" name="notificationsLabel">
              <property name="maximumSize">
               <size>
-               <width>200</width>
+               <width>16777215</width>
                <height>50</height>
               </size>
              </property>
@@ -942,7 +969,7 @@ QPushButton
            <item>
             <widget class="QCheckBox" name="notificationsCheckbox">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -960,7 +987,7 @@ QPushButton
               </font>
              </property>
              <property name="layoutDirection">
-              <enum>Qt::RightToLeft</enum>
+              <enum>Qt::LeftToRight</enum>
              </property>
              <property name="styleSheet">
               <string notr="true"/>
@@ -973,9 +1000,9 @@ QPushButton
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="alarmSoundLayout">
+          <layout class="QHBoxLayout" name="alarmSoundLayout" stretch="1,2">
            <property name="spacing">
-            <number>25</number>
+            <number>15</number>
            </property>
            <property name="leftMargin">
             <number>0</number>
@@ -993,7 +1020,7 @@ QPushButton
             <widget class="QLabel" name="alarmSoundLabel">
              <property name="maximumSize">
               <size>
-               <width>200</width>
+               <width>16777215</width>
                <height>50</height>
               </size>
              </property>
@@ -1029,7 +1056,7 @@ QPushButton
               </font>
              </property>
              <property name="layoutDirection">
-              <enum>Qt::RightToLeft</enum>
+              <enum>Qt::LeftToRight</enum>
              </property>
              <property name="styleSheet">
               <string notr="true"/>
@@ -1042,9 +1069,9 @@ QPushButton
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="SkinSelectionLayout" stretch="1,3">
+          <layout class="QHBoxLayout" name="SkinSelectionLayout" stretch="1,2">
            <property name="spacing">
-            <number>25</number>
+            <number>15</number>
            </property>
            <property name="leftMargin">
             <number>0</number>
@@ -1086,7 +1113,7 @@ QPushButton
            <item>
             <widget class="QComboBox" name="SkinSelectionComboBox">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -1108,9 +1135,9 @@ QPushButton
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="chatGPTLayout" stretch="1,3,1">
+          <layout class="QHBoxLayout" name="chatGPTLayout" stretch="1,1,1">
            <property name="spacing">
-            <number>25</number>
+            <number>15</number>
            </property>
            <property name="leftMargin">
             <number>0</number>
