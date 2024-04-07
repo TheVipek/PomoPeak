@@ -59,6 +59,11 @@ QPushButton
 	padding: 5px;
 }
 
+#SkipBtn::hover, #AddTaskBtn::hover, #ChangeFlowBtn::hover
+{
+	background-color: #4c5154;
+}
+
 
 #settingsBtn, #statsBtn
 {

@@ -75,11 +75,14 @@ void PomopeakStats::SwtichChartView(ChartVisibility visibility)
         ui->weeklyBtn->setEnabled(true);
     }
     UpdateChart(VisibilitySettings[visibility]);
+
 }
 
 void PomopeakStats::InitializeChart()
 {
     chart = new QChart();
+
+    chart->setBackgroundBrush(QBrush(this->palette().color(QPalette::Window)));
     chart->setTitle("Title");
 
     QChartView* view = new QChartView(chart);

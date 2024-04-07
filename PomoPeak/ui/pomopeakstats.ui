@@ -50,7 +50,7 @@ QPushButton
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0">
    <property name="spacing">
-    <number>5</number>
+    <number>0</number>
    </property>
    <property name="leftMargin">
     <number>15</number>
@@ -66,20 +66,26 @@ QPushButton
    </property>
    <item>
     <layout class="QHBoxLayout" name="statsLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
      <property name="leftMargin">
-      <number>15</number>
+      <number>0</number>
      </property>
      <property name="topMargin">
-      <number>15</number>
+      <number>0</number>
      </property>
      <property name="rightMargin">
-      <number>15</number>
+      <number>0</number>
      </property>
      <property name="bottomMargin">
-      <number>15</number>
+      <number>0</number>
      </property>
      <item>
       <layout class="QVBoxLayout" name="statsContainer" stretch="1,1,1,2,2,2">
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -94,6 +100,9 @@ QPushButton
        </property>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="spacing">
+          <number>25</number>
+         </property>
          <item>
           <spacer name="horizontalSpacer_3">
            <property name="orientation">
@@ -143,7 +152,7 @@ QPushButton
          <property name="font">
           <font>
            <family>Bahnschrift</family>
-           <pointsize>18</pointsize>
+           <pointsize>24</pointsize>
           </font>
          </property>
          <property name="text">
@@ -157,29 +166,57 @@ QPushButton
        <item>
         <layout class="QHBoxLayout" name="globalStatsLayout">
          <property name="spacing">
-          <number>5</number>
+          <number>25</number>
          </property>
          <property name="leftMargin">
-          <number>15</number>
+          <number>0</number>
          </property>
          <property name="topMargin">
-          <number>15</number>
+          <number>0</number>
          </property>
          <property name="rightMargin">
-          <number>15</number>
+          <number>0</number>
          </property>
          <property name="bottomMargin">
-          <number>15</number>
+          <number>0</number>
          </property>
+         <item>
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
          <item>
           <widget class="QWidget" name="totalTaskWidget" native="true">
            <layout class="QVBoxLayout" name="verticalLayout">
+            <property name="spacing">
+             <number>25</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item>
              <widget class="QLabel" name="tasksTasksLabel">
               <property name="font">
                <font>
                 <family>Bahnschrift</family>
-                <pointsize>10</pointsize>
+                <pointsize>18</pointsize>
                </font>
               </property>
               <property name="text">
@@ -195,7 +232,7 @@ QPushButton
               <property name="font">
                <font>
                 <family>Bahnschrift</family>
-                <pointsize>10</pointsize>
+                <pointsize>14</pointsize>
                </font>
               </property>
               <property name="text">
@@ -210,14 +247,42 @@ QPushButton
           </widget>
          </item>
          <item>
+          <spacer name="horizontalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <widget class="QWidget" name="totalMinutesWidget" native="true">
            <layout class="QVBoxLayout" name="verticalLayout_3">
+            <property name="spacing">
+             <number>25</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item>
              <widget class="QLabel" name="totalMinutesLabel">
               <property name="font">
                <font>
                 <family>Bahnschrift</family>
-                <pointsize>10</pointsize>
+                <pointsize>18</pointsize>
                </font>
               </property>
               <property name="text">
@@ -233,7 +298,7 @@ QPushButton
               <property name="font">
                <font>
                 <family>Bahnschrift</family>
-                <pointsize>10</pointsize>
+                <pointsize>14</pointsize>
                </font>
               </property>
               <property name="text">
@@ -246,6 +311,19 @@ QPushButton
             </item>
            </layout>
           </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </item>
@@ -268,7 +346,7 @@ QPushButton
        <item>
         <layout class="QHBoxLayout" name="timedStatsLayout">
          <property name="spacing">
-          <number>15</number>
+          <number>25</number>
          </property>
          <property name="leftMargin">
           <number>0</number>
@@ -360,19 +438,19 @@ QPushButton
        <item>
         <layout class="QVBoxLayout" name="chartLayout">
          <property name="spacing">
-          <number>5</number>
+          <number>0</number>
          </property>
          <property name="leftMargin">
-          <number>15</number>
+          <number>0</number>
          </property>
          <property name="topMargin">
-          <number>15</number>
+          <number>0</number>
          </property>
          <property name="rightMargin">
-          <number>15</number>
+          <number>0</number>
          </property>
          <property name="bottomMargin">
-          <number>15</number>
+          <number>0</number>
          </property>
         </layout>
        </item>
