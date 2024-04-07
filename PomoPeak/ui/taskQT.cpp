@@ -9,6 +9,7 @@ taskQT::taskQT(QWidget *parent)
 {
     setAttribute(Qt::WA_StyledBackground, true);
     ui->setupUi(this);
+    baseStyleSheet = this->styleSheet();
 
     InitializeDataContainer();
     InitializeObjects();
@@ -29,11 +30,11 @@ void taskQT::InitializeDataContainer()
 
 void taskQT::InitializeObjects()
 {
-    setStyleSheet(selectedTaskWidgetSheet);
+    setStyleSheet(baseStyleSheet + selectedTaskWidgetSheet);
     opacityEffect->setBlurRadius(UNDONE_BLUR);
 
     ui->taskLayout->setGraphicsEffect(opacityEffect);
-    ui->activeBtn->setStyleSheet(unselectedTaskBar);
+    ui->activeBtn->setChecked(false);
     ui->activeBtn->setVisible(false);
 
     OnTaskTitleChanged();
@@ -144,16 +145,23 @@ void taskQT::CancelTaskModifications()
 
 void taskQT::SwitchTaskActivation()
 {
+
     isSelected = !isSelected;
-    if(isSelected)
-    {
-        ui->activeBtn->setStyleSheet(selectedTaskBar);
-        emit OnSelectRequest(this);
-    }
-    else
-    {
-        ui->activeBtn->setStyleSheet(unselectedTaskBar);
-    }
+    ui->activeBtn->setChecked(isSelected);
+
+    qDebug() << "isCheckable?" << ui->activeBtn->isCheckable();
+    qDebug() << "isChecked?" << ui->activeBtn->isChecked();
+    // if(isSelected)
+    // {
+    //     //ui->activeBtn->setChecked(true);
+    //     //ui->activeBtn->setStyleSheet(selectedTaskBar);
+    //     emit OnSelectRequest(this);
+    // }
+    // else
+    // {
+    //     //ui->activeBtn->setChecked(false);
+    //     //ui->activeBtn->setStyleSheet(unselectedTaskBar);
+    // }
 }
 
 void taskQT::ChangeMode(Mode mode)
@@ -163,7 +171,7 @@ void taskQT::ChangeMode(Mode mode)
         return;
     }
     //General
-    setStyleSheet(mode != Mode::None ? selectedTaskWidgetSheet : unselectedTaskWidgetSheet);
+    setStyleSheet(mode != Mode::None ? baseStyleSheet + selectedTaskWidgetSheet : baseStyleSheet + unselectedTaskWidgetSheet);
 
     //View
     ui->modifyBtn->setVisible(mode != Mode::None);
@@ -212,9 +220,7 @@ void taskQT::OnChangeStatus()
 void taskQT::SetState(bool done)
 {
     task->isDone = done;
-
     ui->taskStatusBtn->setText(done ? taskStatusText[0] : taskStatusText[1]);
-
     ui->taskName->setStyleSheet(done ? doneTextEditSheet : undoneTextEditSheet);
     ui->currentSpinBox->setStyleSheet(done ? doneTextEditSheet : undoneTextEditSheet);
     ui->taskDescription->setStyleSheet(done ? doneTextEditSheet : undoneTextEditSheet);

@@ -82,6 +82,7 @@ private:
     const int MIN_TITLE_SIZE = 3;
     const float UNDONE_BLUR = 0;
     const float DONE_BLUR = 20.0f;
+    QString baseStyleSheet;
     const QString selectedTaskWidgetSheet =
         R"(#taskQT
         {
@@ -107,16 +108,6 @@ private:
     const QString undoneTextEditSheet = R"(QWidget
         {
             background: rgba(255,255,255,255); color: rgba(0, 0, 0, 255);
-
-        })";
-    const QString selectedTaskBar = R"(#activeBtn
-        {
-            background-color:rgba(0, 255, 0, 96)
-
-        })";
-    const QString unselectedTaskBar = R"(#activeBtn
-        {
-            background-color:rgba(255, 0, 0, 96)
 
         })";
     const QString viewLabelValue = "Currently in View Mode";
