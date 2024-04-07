@@ -14,8 +14,8 @@ PomoPeak::PomoPeak(QWidget *parent)
     , trayIconHandler()
 {
     ui->setupUi(this);
-    ui->widgetsLayout->setAlignment(Qt::AlignCenter);
-    ui->tasksContentV2->setAlignment(Qt::AlignTop);
+    // ui->widgetsLayout->setAlignment(Qt::AlignCenter);
+    // ui->tasksContentV2->setAlignment(Qt::AlignTop);
 
     trayIconHandler.Show();
     InitializeDataContainer();

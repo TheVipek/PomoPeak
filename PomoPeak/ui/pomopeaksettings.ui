@@ -13,6 +13,12 @@
     <height>600</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -20,24 +26,131 @@
    <double>1.000000000000000</double>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">QWidget
+{
+	background-color: #f6f7eb;
+}
+
+QLabel, QPushButton
+{
+	color: #393e41;
+}
+QPushButton
+{
+	background-color: #393e41;
+	border-radius: 1px;
+	color: #f6f7eb;
+}
+#exitBtn
+{	
+	background-color: none;
+}</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,15,0">
    <property name="spacing">
     <number>0</number>
    </property>
    <property name="leftMargin">
-    <number>0</number>
+    <number>5</number>
    </property>
    <property name="topMargin">
-    <number>0</number>
+    <number>5</number>
    </property>
    <property name="rightMargin">
-    <number>0</number>
+    <number>5</number>
    </property>
    <property name="bottomMargin">
-    <number>0</number>
+    <number>5</number>
    </property>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="8,1">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <spacer name="horizontalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="exitBtn">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>64</width>
+         <height>64</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Bahnschrift</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::RightToLeft</enum>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../data/Resources.qrc">
+         <normaloff>:/icon/images/cancel.png</normaloff>:/icon/images/cancel.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,3,1">
      <property name="spacing">
@@ -86,66 +199,6 @@
         <number>0</number>
        </property>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="3,1">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <spacer name="horizontalSpacer_4">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="exitBtn">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>200</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="layoutDirection">
-            <enum>Qt::RightToLeft</enum>
-           </property>
-           <property name="text">
-            <string>Exit Icon</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
         <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,1,1,1,1,1,1,1,1,1,1,1,0">
          <property name="spacing">
           <number>15</number>
@@ -166,9 +219,12 @@
           <number>15</number>
          </property>
          <item>
-          <layout class="QHBoxLayout" name="sessionLayout">
+          <layout class="QHBoxLayout" name="sessionLayout" stretch="1,1">
            <property name="spacing">
-            <number>25</number>
+            <number>5</number>
+           </property>
+           <property name="sizeConstraint">
+            <enum>QLayout::SetDefaultConstraint</enum>
            </property>
            <property name="leftMargin">
             <number>0</number>
@@ -184,11 +240,35 @@
            </property>
            <item>
             <widget class="QLabel" name="sessionLabel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="maximumSize">
               <size>
-               <width>200</width>
-               <height>30</height>
+               <width>16777215</width>
+               <height>50</height>
               </size>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="text">
               <string>Session Duration</string>
@@ -197,11 +277,23 @@
            </item>
            <item>
             <widget class="QDoubleSpinBox" name="sessionDoubleSpinBox">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>30</height>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="maximum">
               <double>1000.000000000000000</double>
@@ -211,9 +303,9 @@
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="shortBreakLayout">
+          <layout class="QHBoxLayout" name="shortBreakLayout" stretch="1,1">
            <property name="spacing">
-            <number>25</number>
+            <number>5</number>
            </property>
            <property name="leftMargin">
             <number>0</number>
@@ -231,9 +323,15 @@
             <widget class="QLabel" name="shortBreakLabel">
              <property name="maximumSize">
               <size>
-               <width>200</width>
-               <height>30</height>
+               <width>16777215</width>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="text">
               <string>Short Break Duration</string>
@@ -242,11 +340,23 @@
            </item>
            <item>
             <widget class="QDoubleSpinBox" name="shortBreakDoubleSpinBox">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>30</height>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="maximum">
               <double>1000.000000000000000</double>
@@ -256,9 +366,9 @@
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="longBreakLayout">
+          <layout class="QHBoxLayout" name="longBreakLayout" stretch="1,1">
            <property name="spacing">
-            <number>25</number>
+            <number>5</number>
            </property>
            <property name="leftMargin">
             <number>0</number>
@@ -274,11 +384,23 @@
            </property>
            <item>
             <widget class="QLabel" name="longBreakLabel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="maximumSize">
               <size>
-               <width>200</width>
-               <height>30</height>
+               <width>16777215</width>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="text">
               <string>Long Break Duration</string>
@@ -287,11 +409,23 @@
            </item>
            <item>
             <widget class="QDoubleSpinBox" name="longBreakDoubleSpinBox">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>30</height>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="maximum">
               <double>1000.000000000000000</double>
@@ -304,9 +438,9 @@
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="alarmStartLayout">
+          <layout class="QHBoxLayout" name="alarmStartLayout" stretch="1,1,2">
            <property name="spacing">
-            <number>25</number>
+            <number>5</number>
            </property>
            <property name="leftMargin">
             <number>0</number>
@@ -322,11 +456,23 @@
            </property>
            <item>
             <widget class="QLabel" name="alarmStartLabel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="maximumSize">
               <size>
-               <width>200</width>
-               <height>30</height>
+               <width>16777215</width>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="text">
               <string>Alarm Start Task</string>
@@ -335,11 +481,23 @@
            </item>
            <item>
             <widget class="QLabel" name="alarmStartCurrentLabel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="maximumSize">
               <size>
-               <width>150</width>
-               <height>30</height>
+               <width>16777215</width>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="text">
               <string>currentAlarmName</string>
@@ -348,11 +506,23 @@
            </item>
            <item>
             <widget class="QPushButton" name="alarmStartSelectBtn">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>30</height>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="text">
               <string>Select File...</string>
@@ -362,7 +532,7 @@
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="alarmStartVolumeLayout">
+          <layout class="QHBoxLayout" name="alarmStartVolumeLayout" stretch="1,3,1">
            <property name="spacing">
             <number>25</number>
            </property>
@@ -383,8 +553,14 @@
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>30</height>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="text">
               <string>Alarm Start Task Volume</string>
@@ -393,11 +569,23 @@
            </item>
            <item>
             <widget class="QSlider" name="alarmStartSlider">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>30</height>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="maximum">
               <number>100</number>
@@ -411,9 +599,15 @@
             <widget class="QLabel" name="alarmStartSliderValueLabel">
              <property name="maximumSize">
               <size>
-               <width>200</width>
-               <height>30</height>
+               <width>16777215</width>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="text">
               <string>TextLabel</string>
@@ -444,8 +638,14 @@
              <property name="maximumSize">
               <size>
                <width>200</width>
-               <height>30</height>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="text">
               <string>Alarm End Break</string>
@@ -457,8 +657,14 @@
              <property name="maximumSize">
               <size>
                <width>150</width>
-               <height>30</height>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="text">
               <string>currentAlarmName</string>
@@ -470,8 +676,14 @@
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>30</height>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="text">
               <string>Select File...</string>
@@ -502,8 +714,14 @@
              <property name="maximumSize">
               <size>
                <width>200</width>
-               <height>30</height>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="text">
               <string>Alarm End Break Volume</string>
@@ -515,8 +733,14 @@
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>30</height>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="maximum">
               <number>100</number>
@@ -531,8 +755,14 @@
              <property name="maximumSize">
               <size>
                <width>200</width>
-               <height>30</height>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="text">
               <string>TextLabel</string>
@@ -542,7 +772,7 @@
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="alarmEndBreakRepLayout" stretch="0,0">
+          <layout class="QHBoxLayout" name="alarmEndBreakRepLayout" stretch="1,2">
            <property name="spacing">
             <number>25</number>
            </property>
@@ -560,11 +790,23 @@
            </property>
            <item>
             <widget class="QLabel" name="alarmEndBreakRepLabel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="maximumSize">
               <size>
-               <width>200</width>
-               <height>30</height>
+               <width>16777215</width>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="text">
               <string>End Break Alarm Repetitions</string>
@@ -573,11 +815,23 @@
            </item>
            <item>
             <widget class="QSpinBox" name="alarmEndBreakRepSpinBox">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>30</height>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
             </widget>
            </item>
@@ -605,8 +859,14 @@
              <property name="maximumSize">
               <size>
                <width>200</width>
-               <height>30</height>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="text">
               <string>Quick Action Shortcut</string>
@@ -618,8 +878,14 @@
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>30</height>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
             </widget>
            </item>
@@ -647,7 +913,7 @@
              <property name="maximumSize">
               <size>
                <width>200</width>
-               <height>30</height>
+               <height>50</height>
               </size>
              </property>
              <property name="sizeIncrement">
@@ -655,6 +921,12 @@
                <width>0</width>
                <height>0</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="text">
               <string>Notifications</string>
@@ -672,8 +944,14 @@
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>30</height>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="layoutDirection">
               <enum>Qt::RightToLeft</enum>
@@ -710,8 +988,14 @@
              <property name="maximumSize">
               <size>
                <width>200</width>
-               <height>30</height>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="text">
               <string>Alarm Sound</string>
@@ -729,8 +1013,14 @@
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>30</height>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="layoutDirection">
               <enum>Qt::RightToLeft</enum>
@@ -746,7 +1036,7 @@
           </layout>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="SkinSelectionLayout">
+          <layout class="QHBoxLayout" name="SkinSelectionLayout" stretch="1,3">
            <property name="spacing">
             <number>25</number>
            </property>
@@ -764,6 +1054,24 @@
            </property>
            <item>
             <widget class="QLabel" name="SkinSelectionLabel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>50</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
+             </property>
              <property name="text">
               <string>Skin Selection</string>
              </property>
@@ -772,7 +1080,7 @@
            <item>
             <widget class="QComboBox" name="SkinSelectionComboBox">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -780,8 +1088,14 @@
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>30</height>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
             </widget>
            </item>
@@ -806,6 +1120,18 @@
            </property>
            <item>
             <widget class="QLabel" name="chatGPTLabel">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>50</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
+             </property>
              <property name="text">
               <string>Chat GPT API Key</string>
              </property>
@@ -818,6 +1144,18 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>50</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="text">
               <string/>
@@ -841,8 +1179,14 @@
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>30</height>
+               <height>50</height>
               </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>10</pointsize>
+              </font>
              </property>
              <property name="text">
               <string>Show</string>
@@ -870,8 +1214,23 @@
      </item>
     </layout>
    </item>
+   <item>
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../data/Resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

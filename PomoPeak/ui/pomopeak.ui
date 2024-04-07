@@ -19,6 +19,9 @@
   <property name="windowTitle">
    <string>PomoPeak</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="mainWidget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -37,6 +40,36 @@
      <width>16777215</width>
      <height>16777215</height>
     </size>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget
+{
+	background-color: #f6f7eb;
+}
+
+QLabel, QPushButton
+{
+	color: #393e41;
+}
+QPushButton
+{
+	background-color: #393e41;
+	border-radius: 1px;
+	color: #f6f7eb;
+}
+
+
+
+#settingsBtn, #statsBtn
+{
+ background-color: none;
+}
+
+#TimeLabel
+{
+	background-color : #e94f37;
+	color: #f6f7eb;
+}</string>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <property name="leftMargin">
@@ -67,7 +100,7 @@
       </property>
       <item>
        <widget class="QWidget" name="widget" native="true">
-        <layout class="QVBoxLayout" name="allElementsLayout" stretch="0,10,0,0,1,1">
+        <layout class="QVBoxLayout" name="allElementsLayout" stretch="1,10,0,0,1,1">
          <property name="spacing">
           <number>15</number>
          </property>
@@ -84,18 +117,18 @@
           <number>15</number>
          </property>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout">
+          <layout class="QHBoxLayout" name="topLayout">
            <property name="leftMargin">
-            <number>5</number>
+            <number>0</number>
            </property>
            <property name="topMargin">
-            <number>5</number>
+            <number>0</number>
            </property>
            <property name="rightMargin">
-            <number>5</number>
+            <number>0</number>
            </property>
            <property name="bottomMargin">
-            <number>5</number>
+            <number>0</number>
            </property>
            <item>
             <spacer name="horizontalSpacer">
@@ -112,8 +145,30 @@
            </item>
            <item>
             <widget class="QPushButton" name="statsBtn">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
              <property name="text">
-              <string>Stats</string>
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../data/Resources.qrc">
+               <normaloff>:/icon/images/bar-chart (1).png</normaloff>:/icon/images/bar-chart (1).png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
              </property>
             </widget>
            </item>
@@ -121,12 +176,43 @@
             <widget class="QPushButton" name="settingsBtn">
              <property name="minimumSize">
               <size>
-               <width>100</width>
-               <height>25</height>
+               <width>0</width>
+               <height>30</height>
               </size>
              </property>
+             <property name="font">
+              <font>
+               <family>Bahnschrift</family>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
              <property name="text">
-              <string>Settings</string>
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../data/Resources.qrc">
+               <normaloff>:/icon/images/settings (1).png</normaloff>:/icon/images/settings (1).png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+             <property name="autoDefault">
+              <bool>false</bool>
+             </property>
+             <property name="default">
+              <bool>false</bool>
+             </property>
+             <property name="flat">
+              <bool>false</bool>
              </property>
             </widget>
            </item>
@@ -164,7 +250,7 @@
                  <x>0</x>
                  <y>0</y>
                  <width>1051</width>
-                 <height>439</height>
+                 <height>426</height>
                 </rect>
                </property>
                <property name="sizePolicy">
@@ -186,8 +272,9 @@
                     </property>
                     <property name="font">
                      <font>
-                      <family>BIZ UDPMincho</family>
+                      <family>Bahnschrift</family>
                       <pointsize>48</pointsize>
+                      <bold>true</bold>
                      </font>
                     </property>
                     <property name="text">
@@ -231,53 +318,100 @@
          </item>
          <item>
           <widget class="QPushButton" name="AddTaskBtn">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Bahnschrift</family>
+             <pointsize>12</pointsize>
+             <kerning>true</kerning>
+            </font>
+           </property>
            <property name="text">
             <string>Add Task</string>
+           </property>
+           <property name="checkable">
+            <bool>false</bool>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+           <property name="autoDefault">
+            <bool>false</bool>
+           </property>
+           <property name="default">
+            <bool>false</bool>
+           </property>
+           <property name="flat">
+            <bool>false</bool>
            </property>
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="ManagingStateLayout" stretch="0,0">
+          <layout class="QHBoxLayout" name="ManagingStateLayout" stretch="5,1">
            <property name="sizeConstraint">
             <enum>QLayout::SetDefaultConstraint</enum>
            </property>
            <property name="leftMargin">
-            <number>15</number>
+            <number>0</number>
            </property>
            <property name="rightMargin">
-            <number>15</number>
+            <number>0</number>
            </property>
            <item>
             <widget class="QPushButton" name="ChangeFlowBtn">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
              <property name="font">
               <font>
-               <family>BIZ UDPMincho</family>
-               <pointsize>16</pointsize>
+               <family>Bahnschrift</family>
+               <pointsize>12</pointsize>
               </font>
              </property>
              <property name="text">
               <string>Start</string>
+             </property>
+             <property name="autoDefault">
+              <bool>false</bool>
+             </property>
+             <property name="default">
+              <bool>false</bool>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QPushButton" name="SkipBtn">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
              <property name="font">
               <font>
-               <family>BIZ UDPMincho</family>
+               <family>Bahnschrift</family>
                <pointsize>12</pointsize>
+               <bold>false</bold>
               </font>
              </property>
              <property name="text">
@@ -308,6 +442,8 @@
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../data/Resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
