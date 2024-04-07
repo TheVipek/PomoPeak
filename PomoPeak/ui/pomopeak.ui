@@ -54,15 +54,21 @@ QLabel, QPushButton
 QPushButton
 {
 	background-color: #393e41;
-	border-radius: 1px;
+	border-radius: 5px;
 	color: #f6f7eb;
+	padding: 5px;
 }
-
 
 
 #settingsBtn, #statsBtn
 {
  background-color: none;
+}
+
+#settingsBtn::hover, #statsBtn::hover
+{
+	background-color:rgba(12,5,0,75);
+	border-radius:1px;
 }
 
 #TimeLabel
@@ -147,8 +153,14 @@ QPushButton
             <widget class="QPushButton" name="statsBtn">
              <property name="minimumSize">
               <size>
-               <width>0</width>
-               <height>30</height>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>64</width>
+               <height>64</height>
               </size>
              </property>
              <property name="font">
@@ -176,8 +188,14 @@ QPushButton
             <widget class="QPushButton" name="settingsBtn">
              <property name="minimumSize">
               <size>
-               <width>0</width>
-               <height>30</height>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>64</width>
+               <height>64</height>
               </size>
              </property>
              <property name="font">

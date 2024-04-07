@@ -38,12 +38,18 @@ QLabel, QPushButton
 QPushButton
 {
 	background-color: #393e41;
-	border-radius: 1px;
+	border-radius: 5px;
 	color: #f6f7eb;
+	padding: 5px;
 }
 #exitBtn
 {	
 	background-color: none;
+}
+#exitBtn::hover
+{
+	background-color:rgba(12,5,0,75);
+	border-radius:1px;
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,15,0">
