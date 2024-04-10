@@ -178,13 +178,12 @@ void PomoPeak::OnTimerTimeout()
 void PomoPeak::OnTryAddTask()
 {
     taskQT* newTaskUI = new taskQT(this);
-    //newTaskUI -> setMaximumHeight(175);
     connect(newTaskUI, &taskQT::CreateRequest, this, &PomoPeak::AddTask);
     connect(newTaskUI, &taskQT::DeleteRequest, this, &PomoPeak::RemoveTask);
     connect(newTaskUI, &taskQT::OnEnableViewModeRequest, this, &PomoPeak::OnViewModeTaskChanged);
     connect(newTaskUI, &taskQT::OnSelectRequest, this, &PomoPeak::OnCurrentActiveTaskChanged);
     connect(newTaskUI, &taskQT::OnStatusChanged, this, &PomoPeak::TaskStatusChanged);
-    ui->tasksContentV2->addWidget(newTaskUI);
+    ui->tasksLayoutList->addWidget(newTaskUI);
 }
 
 void PomoPeak::AddTask(std::shared_ptr<Task> task)
