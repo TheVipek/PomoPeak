@@ -58,13 +58,6 @@ signals:
     void OnSelectRequest(taskQT* ui);
     void OnStatusChanged(bool done);
 protected:
-    void mousePressEvent(QMouseEvent* event) override
-    {
-        if(event->button() == Qt::LeftButton && CurrentMode != Mode::View && !task->isDone)
-        {
-            ChangeMode(Mode::View);
-        }
-    }
     void InitializeDataContainer() override;
     void InitializeObjects() override;
     void SubscribeToEvents() override;
@@ -80,6 +73,8 @@ private slots:
     void OnCreate();
 
     void OnChangeStatus();
+
+    void OpenSettings();
 private:
     const int MIN_TITLE_SIZE = 3;
     const float UNDONE_BLUR = 0;

@@ -52,13 +52,20 @@ void taskQT::SubscribeToEvents()
     connect(ui->taskName, &QTextEdit::textChanged, this, &taskQT::OnTaskTitleChanged);
     connect(ui->activeBtn, &QPushButton::clicked, this, &taskQT::SwitchTaskActivation);
     connect(ui->taskStatusBtn, &QPushButton::clicked, this, &taskQT::OnChangeStatus);
+    connect(ui->openSettingsBtn, &QPushButton::clicked, this, &taskQT::OpenSettings);
 }
 
 bool taskQT::GetIsSelected()
 {
     return isSelected;
 }
-
+void taskQT::OpenSettings()
+{
+    if(CurrentMode != Mode::View && !task->isDone)
+    {
+        ChangeMode(Mode::View);
+    }
+}
 void taskQT::OnModifyButton()
 {
     if(CurrentMode != Mode::Edit)
@@ -153,9 +160,6 @@ void taskQT::SwitchTaskActivation()
 
     isSelected = !isSelected;
     ui->activeBtn->setChecked(isSelected);
-
-    qDebug() << "isCheckable?" << ui->activeBtn->isCheckable();
-    qDebug() << "isChecked?" << ui->activeBtn->isChecked();
     // if(isSelected)
     // {
     //     //ui->activeBtn->setChecked(true);
@@ -187,7 +191,7 @@ void taskQT::ChangeMode(Mode mode)
     ui->taskStatusBtn->setEnabled(mode == Mode::None);
     ui->activeBtn->setVisible(mode == Mode::None);
 
-
+    ui->openSettingsBtn->setVisible(mode == Mode::None);
     //Edit
 
     if(mode != Mode::None)
@@ -230,7 +234,6 @@ void taskQT::OnChangeStatus()
 void taskQT::SetState(bool done)
 {
     task->isDone = done;
-    ui->taskStatusBtn->setText(done ? taskStatusText[0] : taskStatusText[1]);
     ui->taskName->setStyleSheet(done ? doneTextEditSheet : undoneTextEditSheet);
     ui->currentSpinBox->setStyleSheet(done ? doneTextEditSheet : undoneTextEditSheet);
     ui->taskDescription->setStyleSheet(done ? doneTextEditSheet : undoneTextEditSheet);

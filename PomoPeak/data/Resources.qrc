@@ -6,5 +6,7 @@
         <file>images/bar-chart (1).png</file>
         <file>images/settings (1).png</file>
         <file>images/cancel.png</file>
+        <file>images/dots.png</file>
+        <file>images/check (1).png</file>
     </qresource>
 </RCC>

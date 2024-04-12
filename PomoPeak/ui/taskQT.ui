@@ -67,13 +67,15 @@ QPushButton
 	background-color:rgba(12,5,0,75);
 }
 
-#monthlyBtn::hover, #weeklyBtn::hover
+#taskStatusBtn, #openSettingsBtn
 {
-	background-color: #4c5154;
+	background-color: transparent;
 }
-#monthlyBtn::disabled, #weeklyBtn::disabled
+#taskStatusBtn::hover, #openSettingsBtn::hover
 {
-	background-color: #888b8d;
+	background-color:rgba(12,5,0,75);	
+	border-radius:1px;
+	color: transparent;
 }
 #activeBtn
 {
@@ -87,21 +89,21 @@ QPushButton
 }
 </string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
+  <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="7,1">
    <property name="spacing">
     <number>0</number>
    </property>
    <property name="leftMargin">
-    <number>7</number>
+    <number>2</number>
    </property>
    <property name="topMargin">
-    <number>7</number>
+    <number>2</number>
    </property>
    <property name="rightMargin">
-    <number>7</number>
+    <number>2</number>
    </property>
    <property name="bottomMargin">
-    <number>7</number>
+    <number>2</number>
    </property>
    <item>
     <widget class="QWidget" name="taskLayout" native="true">
@@ -114,24 +116,36 @@ QPushButton
      <property name="autoFillBackground">
       <bool>false</bool>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
+     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,0,0,0,0">
       <property name="spacing">
-       <number>3</number>
+       <number>2</number>
       </property>
       <property name="leftMargin">
-       <number>15</number>
+       <number>2</number>
       </property>
       <property name="topMargin">
-       <number>15</number>
+       <number>2</number>
       </property>
       <property name="rightMargin">
-       <number>15</number>
+       <number>2</number>
       </property>
       <property name="bottomMargin">
-       <number>15</number>
+       <number>2</number>
       </property>
       <item>
-       <layout class="QHBoxLayout" name="doneLayout" stretch="0,0">
+       <widget class="QLabel" name="modeLabel">
+        <property name="font">
+         <font>
+          <pointsize>-1</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Mode</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="doneLayout" stretch="1,15">
         <property name="spacing">
          <number>0</number>
         </property>
@@ -148,6 +162,44 @@ QPushButton
          <number>0</number>
         </property>
         <item>
+         <widget class="QPushButton" name="openSettingsBtn">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>32</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../data/Resources.qrc">
+            <normaloff>:/icon/images/dots.png</normaloff>:/icon/images/dots.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>32</width>
+            <height>32</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
          <spacer name="horizontalSpacer_3">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -160,38 +212,7 @@ QPushButton
           </property>
          </spacer>
         </item>
-        <item>
-         <widget class="QPushButton" name="taskStatusBtn">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Mark As Done</string>
-          </property>
-         </widget>
-        </item>
        </layout>
-      </item>
-      <item>
-       <widget class="QLabel" name="modeLabel">
-        <property name="font">
-         <font>
-          <pointsize>-1</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Mode</string>
-        </property>
-       </widget>
       </item>
       <item>
        <widget class="QTextEdit" name="taskName">
@@ -604,8 +625,72 @@ QPushButton
      </layout>
     </widget>
    </item>
+   <item>
+    <widget class="QWidget" name="widget" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="taskStatusBtn">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>40</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../data/Resources.qrc">
+          <normaloff>:/icon/images/check (1).png</normaloff>:/icon/images/check (1).png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>64</width>
+          <height>64</height>
+         </size>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../data/Resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
