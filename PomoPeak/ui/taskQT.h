@@ -41,14 +41,12 @@ public:
     enum class Mode
     {
         View,
-        Edit,
         None
     };
 
     void ChangeMode(Mode mode);
     void IncreasePomodorosDone();
     void SwitchTaskActivation();
-    bool GetIsSelected();
 
 signals:
     void DeleteRequest(std::shared_ptr<Task> task, taskQT* taskU);
@@ -63,11 +61,9 @@ protected:
     void SubscribeToEvents() override;
 
 private slots:
-
-    void OnModifyButton();
     void OnProceedButton();
     void OnCancelButton();
-
+    void OnDeleteButton();
     void OnModify(ModifyState state);
     void OnDelete();
     void OnCreate();
@@ -107,10 +103,6 @@ private:
             background: rgba(255,255,255,255); color: rgba(0, 0, 0, 255);
 
         })";
-    const QString viewLabelValue = "Currently in View Mode";
-    const QString editLabelValue = "Currently in Edit Mode";
-    const QString deleteButtonText[2] = { "Cancel", "Delete" };
-    const QString taskStatusText[2] = {  "Mark as incompleted", "Mark as completed" };
 
     bool isCreated = false;
     bool isSelected = false;
@@ -125,8 +117,6 @@ private:
 
     void ProceedTaskModifications();
     void CancelTaskModifications();
-
-    void UpdateModeLabel(QString val);
     void SetState(bool done);
 };
 #endif // TASKQT_H

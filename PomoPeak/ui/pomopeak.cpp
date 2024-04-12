@@ -204,6 +204,8 @@ void PomoPeak::RemoveTask(std::shared_ptr<Task> task, taskQT* taskUI)
     }
     taskManager.RemoveTask(task);
     taskUI->deleteLater();
+
+    ui->AddTaskBtn->setEnabled(true);
 }
 
 void PomoPeak::OnViewModeTaskChanged(taskQT* taskUI)
@@ -213,7 +215,7 @@ void PomoPeak::OnViewModeTaskChanged(taskQT* taskUI)
         currentInViewModeTaskUI->ChangeMode(taskQT::Mode::None);
     }
     currentInViewModeTaskUI = taskUI;
-    //ui->AddTaskBtn->setEnabled(!(ui->AddTaskBtn->isEnabled()));
+
     ui->AddTaskBtn->setEnabled(false);
 
 }

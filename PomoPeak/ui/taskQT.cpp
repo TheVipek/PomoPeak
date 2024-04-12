@@ -36,10 +36,7 @@ void taskQT::InitializeObjects()
     ui->taskLayout->setGraphicsEffect(opacityEffect);
     ui->activeBtn->setChecked(false);
     ui->activeBtn->setVisible(false);
-
     OnTaskTitleChanged();
-
-    ChangeMode(Mode::View);
 
     OnModify(ModifyState::Enter);
 }
@@ -47,36 +44,20 @@ void taskQT::InitializeObjects()
 void taskQT::SubscribeToEvents()
 {
     connect(ui->okBtn, &QPushButton::clicked, this, &taskQT::OnProceedButton);
-    connect(ui->delBtn, &QPushButton::clicked, this, &taskQT::OnCancelButton);
-    connect(ui->modifyBtn, &QPushButton::clicked, this, &taskQT::OnModifyButton);
+    connect(ui->delBtn, &QPushButton::clicked, this, &taskQT::OnDeleteButton);
+    connect(ui->cancelBtn, &QPushButton::clicked, this, &taskQT::OnCancelButton);
     connect(ui->taskName, &QTextEdit::textChanged, this, &taskQT::OnTaskTitleChanged);
     connect(ui->activeBtn, &QPushButton::clicked, this, &taskQT::SwitchTaskActivation);
     connect(ui->taskStatusBtn, &QPushButton::clicked, this, &taskQT::OnChangeStatus);
     connect(ui->openSettingsBtn, &QPushButton::clicked, this, &taskQT::OpenSettings);
 }
-
-bool taskQT::GetIsSelected()
-{
-    return isSelected;
-}
+\
 void taskQT::OpenSettings()
 {
     if(CurrentMode != Mode::View && !task->isDone)
     {
         ChangeMode(Mode::View);
     }
-}
-void taskQT::OnModifyButton()
-{
-    if(CurrentMode != Mode::Edit)
-    {
-        OnModify(ModifyState::Enter);
-    }
-}
-
-void taskQT::OnProceedButton()
-{
-    CurrentMode == Mode::Edit ? OnModify(ModifyState::Proceed) : ChangeMode(Mode::None);
 }
 
 void taskQT::OnCancelButton()
@@ -86,17 +67,27 @@ void taskQT::OnCancelButton()
         OnDelete();
         return;
     }
-    CurrentMode == Mode::Edit ? OnModify(ModifyState::Cancel) :  OnDelete();
+    if(CurrentMode == Mode::View)
+    {
+        OnModify(ModifyState::Cancel);
+    }
+}
+
+void taskQT::OnProceedButton()
+{
+    OnModify(ModifyState::Proceed);
+}
+
+void taskQT::OnDeleteButton()
+{
+    OnDelete();
 }
 
 void taskQT::OnModify(ModifyState state)
 {
     switch (state) {
     case ModifyState::Enter:
-        ChangeMode(Mode::Edit);
-
-        ui->modifyBtn->setEnabled(false);
-        UpdateModeLabel(editLabelValue);
+        ChangeMode(Mode::View);
         break;
     case ModifyState::Proceed:
         ProceedTaskModifications();
@@ -104,22 +95,17 @@ void taskQT::OnModify(ModifyState state)
         {
             OnCreate();
         }
+        ChangeMode(Mode::None);
         break;
     case ModifyState::Cancel:
         CancelTaskModifications();
+        ChangeMode(Mode::None);
         break;
     case ModifyState::Exit:
         //nothingggg
         break;
     default:
         break;
-    }
-
-    if(state == ModifyState::Proceed || state == ModifyState::Cancel || state == ModifyState::Exit)
-    {
-        ChangeMode(Mode::View);
-        ui->modifyBtn->setEnabled(true);
-        UpdateModeLabel(viewLabelValue);
     }
 }
 
@@ -131,10 +117,7 @@ void taskQT::OnCreate()
 
 void taskQT::OnDelete()
 {
-    if(isCreated)
-    {
-        emit DeleteRequest(task, this);
-    }
+    emit DeleteRequest(task, this);
 }
 
 void taskQT::ProceedTaskModifications()
@@ -160,17 +143,6 @@ void taskQT::SwitchTaskActivation()
 
     isSelected = !isSelected;
     ui->activeBtn->setChecked(isSelected);
-    // if(isSelected)
-    // {
-    //     //ui->activeBtn->setChecked(true);
-    //     //ui->activeBtn->setStyleSheet(selectedTaskBar);
-    //     emit OnSelectRequest(this);
-    // }
-    // else
-    // {
-    //     //ui->activeBtn->setChecked(false);
-    //     //ui->activeBtn->setStyleSheet(unselectedTaskBar);
-    // }
 }
 
 void taskQT::ChangeMode(Mode mode)
@@ -183,25 +155,20 @@ void taskQT::ChangeMode(Mode mode)
     setStyleSheet(mode != Mode::None ? baseStyleSheet + selectedTaskWidgetSheet : baseStyleSheet + unselectedTaskWidgetSheet);
 
     //View
-    ui->modifyBtn->setVisible(mode != Mode::None);
-    ui->okBtn->setVisible(mode != Mode::None);
-    ui->delBtn->setVisible(mode != Mode::None);
-    ui->modeLabel->setVisible(mode != Mode::None);
+    ui->cancelBtn->setVisible(mode == Mode::View);
+    ui->okBtn->setVisible(mode == Mode::View);
+    ui->delBtn->setVisible(mode == Mode::View);
 
     ui->taskStatusBtn->setEnabled(mode == Mode::None);
     ui->activeBtn->setVisible(mode == Mode::None);
-
     ui->openSettingsBtn->setVisible(mode == Mode::None);
-    //Edit
 
-    if(mode != Mode::None)
-    {
-        ui->taskName->setTextInteractionFlags(mode == Mode::Edit ? Qt::TextEditable : Qt::NoTextInteraction);
-        ui->taskDescription->setTextInteractionFlags(mode == Mode::Edit ? Qt::TextEditable : Qt::NoTextInteraction);
-        ui->currentSpinBox->setEnabled(mode == Mode::Edit);
-        ui->estimationSpinBox->setEnabled(mode == Mode::Edit);
-        ui->delBtn->setText(mode == Mode::Edit ? deleteButtonText[0] : deleteButtonText[1]);        
-    }
+
+    ui->taskName->setTextInteractionFlags(mode == Mode::View ? Qt::TextEditable : Qt::NoTextInteraction);
+    ui->taskDescription->setTextInteractionFlags(mode == Mode::View ? Qt::TextEditable : Qt::NoTextInteraction);
+    ui->currentSpinBox->setEnabled(mode == Mode::View);
+    ui->estimationSpinBox->setEnabled(mode == Mode::View);
+
 
     //Post
     if(mode == Mode::View)
@@ -213,6 +180,7 @@ void taskQT::ChangeMode(Mode mode)
     {
         emit OnNoneModeRequest(this);
     }
+
     CurrentMode = mode;
 }
 
@@ -249,7 +217,3 @@ void taskQT::IncreasePomodorosDone()
     task->pomodorosDone++;
 }
 
-void taskQT::UpdateModeLabel(QString val)
-{
-    ui->modeLabel->setText(val);
-}
