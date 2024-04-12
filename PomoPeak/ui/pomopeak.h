@@ -54,6 +54,7 @@ protected slots:
     void OnTryAddTask();
     void OnCurrentActiveTaskChanged(taskQT* taskUI);
     void OnViewModeTaskChanged(taskQT* taskUI);
+    void OnNoneTaskMode(taskQT* taskUI);
     void OnOpenSettings();
     void OnHideSettings(const bool alarmStartChanged,const bool alarmBreakChanged);
     void OnOpenStats();

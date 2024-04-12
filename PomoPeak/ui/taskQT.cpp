@@ -54,6 +54,11 @@ void taskQT::SubscribeToEvents()
     connect(ui->taskStatusBtn, &QPushButton::clicked, this, &taskQT::OnChangeStatus);
 }
 
+bool taskQT::GetIsSelected()
+{
+    return isSelected;
+}
+
 void taskQT::OnModifyButton()
 {
     if(CurrentMode != Mode::Edit)
@@ -191,13 +196,18 @@ void taskQT::ChangeMode(Mode mode)
         ui->taskDescription->setTextInteractionFlags(mode == Mode::Edit ? Qt::TextEditable : Qt::NoTextInteraction);
         ui->currentSpinBox->setEnabled(mode == Mode::Edit);
         ui->estimationSpinBox->setEnabled(mode == Mode::Edit);
-        ui->delBtn->setText(mode == Mode::Edit ? deleteButtonText[0] : deleteButtonText[1]);
+        ui->delBtn->setText(mode == Mode::Edit ? deleteButtonText[0] : deleteButtonText[1]);        
     }
 
     //Post
     if(mode == Mode::View)
     {
         emit OnEnableViewModeRequest(this);
+    }
+
+    if(mode == Mode::None)
+    {
+        emit OnNoneModeRequest(this);
     }
     CurrentMode = mode;
 }

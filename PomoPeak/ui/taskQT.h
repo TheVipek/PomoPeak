@@ -48,11 +48,13 @@ public:
     void ChangeMode(Mode mode);
     void IncreasePomodorosDone();
     void SwitchTaskActivation();
+    bool GetIsSelected();
 
 signals:
     void DeleteRequest(std::shared_ptr<Task> task, taskQT* taskU);
     void CreateRequest(std::shared_ptr<Task> task);
     void OnEnableViewModeRequest(taskQT* ui);
+    void OnNoneModeRequest(taskQT* ui);
     void OnSelectRequest(taskQT* ui);
     void OnStatusChanged(bool done);
 protected:

@@ -14,8 +14,6 @@ PomoPeak::PomoPeak(QWidget *parent)
     , trayIconHandler()
 {
     ui->setupUi(this);
-    // ui->widgetsLayout->setAlignment(Qt::AlignCenter);
-    // ui->tasksContentV2->setAlignment(Qt::AlignTop);
 
     trayIconHandler.Show();
     InitializeDataContainer();
@@ -183,8 +181,10 @@ void PomoPeak::OnTryAddTask()
     connect(newTaskUI, &taskQT::OnEnableViewModeRequest, this, &PomoPeak::OnViewModeTaskChanged);
     connect(newTaskUI, &taskQT::OnSelectRequest, this, &PomoPeak::OnCurrentActiveTaskChanged);
     connect(newTaskUI, &taskQT::OnStatusChanged, this, &PomoPeak::TaskStatusChanged);
-
+    connect(newTaskUI, &taskQT::OnNoneModeRequest, this, &PomoPeak::OnNoneTaskMode);
     ui->taskLayoutListScrollAreaContent->layout()->addWidget(newTaskUI);
+
+    ui->AddTaskBtn->setEnabled(false);
 }
 
 void PomoPeak::AddTask(std::shared_ptr<Task> task)
@@ -213,6 +213,13 @@ void PomoPeak::OnViewModeTaskChanged(taskQT* taskUI)
         currentInViewModeTaskUI->ChangeMode(taskQT::Mode::None);
     }
     currentInViewModeTaskUI = taskUI;
+    //ui->AddTaskBtn->setEnabled(!(ui->AddTaskBtn->isEnabled()));
+    ui->AddTaskBtn->setEnabled(false);
+
+}
+void PomoPeak::OnNoneTaskMode(taskQT* taskUI)
+{
+    ui->AddTaskBtn->setEnabled(true);
 }
 
 void PomoPeak::OnCurrentActiveTaskChanged(taskQT* taskUI)
