@@ -183,7 +183,8 @@ void PomoPeak::OnTryAddTask()
     connect(newTaskUI, &taskQT::OnEnableViewModeRequest, this, &PomoPeak::OnViewModeTaskChanged);
     connect(newTaskUI, &taskQT::OnSelectRequest, this, &PomoPeak::OnCurrentActiveTaskChanged);
     connect(newTaskUI, &taskQT::OnStatusChanged, this, &PomoPeak::TaskStatusChanged);
-    ui->tasksLayoutList->addWidget(newTaskUI);
+
+    ui->taskLayoutListScrollAreaContent->layout()->addWidget(newTaskUI);
 }
 
 void PomoPeak::AddTask(std::shared_ptr<Task> task)
