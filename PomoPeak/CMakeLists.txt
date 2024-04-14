@@ -157,6 +157,9 @@ set(BREAK_ALARM_SOUNDS_DIRECTORY "${CMAKE_SOURCE_DIR}/data/sounds/breakAlarms")
 set(BUILD_BREAK_ALARM_SOUNDS_DIRECTORY "${CMAKE_BINARY_DIR}/data/sounds/breakAlarms")
 
 set(TEMP_DIR "${CMAKE_SOURCE_DIR}/data/temp")
+file(MAKE_DIRECTORY ${TEMP_DIR})
+
+
 set(BUILD_TEMP_DIR "${CMAKE_BINARY_DIR}/data/temp")
 
 set(IMAGES_DIR "${CMAKE_SOURCE_DIR}/data/images")
