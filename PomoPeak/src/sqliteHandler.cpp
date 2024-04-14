@@ -6,7 +6,6 @@ SqliteHandler::SqliteHandler(const QString& connectionName)
     db = QSqlDatabase::addDatabase("SQLITECIPHER");
     db.setDatabaseName(connectionName);
     db.setPassword(qgetenv("SECRET"));
-    //db.setConnectOptions("QSQLITE_CREATE_KEY");
     CheckIfDatabaseIsInCorrectState();
 
 }
@@ -33,6 +32,7 @@ void SqliteHandler::CheckIfDatabaseIsInCorrectState()
                                            "BreakAlarmExt TEXT,"
                                            "Notifications INT,"
                                            "AlarmSound INT,"
+                                           "MinimizeToTray INT,"
                                            "Skin INT,"
                                            "ChatGPTApiKey TEXT);").arg(DatabaseTables::SETTINGS);
     query.prepare(createSettingsTableQ);

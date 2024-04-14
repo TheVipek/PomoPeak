@@ -17,7 +17,7 @@ Settings::Settings()
 
     Notifications = true;
     AlarmSound = true;
-
+    MinimizeToTray = true;
     Skin = Skin::SkinTypes::White;
 
     ChatGPTApiKey = "";
@@ -38,6 +38,7 @@ Settings::Settings(const SettingsDTO& dto)
 
     Notifications = dto.Notifications;
     AlarmSound = dto.AlarmSound;
+    MinimizeToTray = dto.MinimizeToTray;
 
     Skin = dto.Skin;
     //Load file from custom session alarm path
@@ -176,6 +177,7 @@ QList<QPair<QString,QVariant>> Settings::ToData()
         {"BreakAlarmExt", "." + breakAlarmInfo.suffix()},
         {"Notifications", Notifications != 0},
         {"AlarmSound", AlarmSound != 0},
+        {"MinimizeToTray", MinimizeToTray != 0},
         {"Skin", skinVariant},
         {"ChatGPTApiKey", ChatGPTApiKey}
     };
@@ -216,6 +218,7 @@ QList<QPair<QString,QVariant>> Settings::ToData(const int userID)
         {"BreakAlarmExt", "." + breakAlarmInfo.suffix()},
         {"Notifications", Notifications != 0},
         {"AlarmSound", AlarmSound != 0},
+        {"MinimizeToTray", MinimizeToTray != 0},
         {"Skin", skinVariant},
         {"ChatGPTApiKey", ChatGPTApiKey}
     };

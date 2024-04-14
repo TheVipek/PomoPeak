@@ -41,6 +41,7 @@ public:
 
     bool Notifications;
     bool AlarmSound;
+    bool MinimizeToTray;
     Skin::SkinTypes Skin;
 
     QString ChatGPTApiKey;

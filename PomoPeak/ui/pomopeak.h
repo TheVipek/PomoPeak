@@ -38,7 +38,11 @@ public:
 protected:
     void closeEvent(QCloseEvent* event) override
     {
-        if(!isQuitting)
+        if(settings != nullptr && settings->MinimizeToTray == false)
+        {
+            OnAppQuit();
+        }
+        else if(!isQuitting)
         {
             PlayNotification("Application has been minimized to tray","", 1000, true);
         }

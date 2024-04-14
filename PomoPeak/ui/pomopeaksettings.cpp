@@ -59,7 +59,7 @@ void pomopeaksettings::InitializeObjects()
 
     ui->notificationsCheckbox->setChecked(settings.Notifications);
     ui->alarmSoundCheckBox->setChecked(settings.AlarmSound);
-
+    ui->minimizeToTrayCheckbox->setChecked(settings.MinimizeToTray);
     ui->chatGPTLineEdit->setText(settings.ChatGPTApiKey);
     SetChatGPTLineEditEchoMode(QLineEdit::Password);
 }
@@ -85,6 +85,7 @@ void pomopeaksettings::SubscribeToEvents()
 
     connect(ui->notificationsCheckbox, &QCheckBox::clicked, this, &pomopeaksettings::OnCheckBoxValueChanged);
     connect(ui->alarmSoundCheckBox, &QCheckBox::clicked, this, &pomopeaksettings::OnCheckBoxValueChanged);
+    connect(ui->minimizeToTrayCheckbox, &QCheckBox::clicked, this, &pomopeaksettings::OnCheckBoxValueChanged);
 
     connect(ui->SkinSelectionComboBox, &QComboBox::currentIndexChanged, this, &pomopeaksettings::OnIndexInComboBoxChanged);
 
@@ -262,6 +263,11 @@ void pomopeaksettings::OnCheckBoxValueChanged(bool value)
     else if(obj == ui->alarmSoundCheckBox)
     {
         settings.AlarmSound = value;
+        isDirty = true;
+    }
+    else if(obj == ui->minimizeToTrayCheckbox)
+    {
+        settings.MinimizeToTray = value;
         isDirty = true;
     }
 }

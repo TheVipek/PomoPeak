@@ -18,6 +18,7 @@ SettingsDTO SettingsDTO::FromSqlRecord(const QSqlRecord& record)
     QString breakAlarmExt = record.value("BreakAlarmExt").isNull() ? QString(".") : record.value("BreakAlarmExt").toString();
     bool notifications = record.value("Notifications").isNull() ? true : record.value("Notifications").toInt() != 0;
     bool alarmSound = record.value("AlarmSound").isNull() ? true : record.value("AlarmSound").toInt() != 0;
+    bool minimizeToTray = record.value("MinimizeToTray").isNull() ? true : record.value("MinimizeToTray").toInt() != 0;
     Skin::SkinTypes skin = record.value("Skin").isNull() ? Skin::SkinTypes::White : static_cast<Skin::SkinTypes>(record.value("Skin").toInt());;
     QString chatGPTApiKey = record.value("ChatGPTApiKey").isNull() ? "" : record.value("ChatGPTApiKey").toString();
 
@@ -39,6 +40,7 @@ SettingsDTO SettingsDTO::FromSqlRecord(const QSqlRecord& record)
         breakAlarmExt,
         notifications,
         alarmSound,
+        minimizeToTray,
         skin,
         chatGPTApiKey
     );
