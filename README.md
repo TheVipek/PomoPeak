@@ -28,3 +28,19 @@ Clone the repository:
 git clone https://github.com/TheVipek/PomoPeak.git
 cd PomoPeak
 ```
+
+Configure the project with CMake:
+```
+mkdir build
+cd build
+cmake ..
+```
+
+Build the application:
+```
+cmake --build . --config Release
+```
+
+# License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
