@@ -31,7 +31,7 @@ pomopeaksettings::~pomopeaksettings()
 
 void pomopeaksettings::InitializeDataContainer()
 {
-    for(auto item : Skin::SkinTypesEnumerable)
+    for(const std::pair<QString,Skin::SkinTypes>& item : Skin::SkinTypesEnumerable)
     {
         ui->SkinSelectionComboBox->addItem(item.first,QVariant::fromValue(item.second));
     }

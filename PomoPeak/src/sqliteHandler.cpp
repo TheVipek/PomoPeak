@@ -83,7 +83,7 @@ bool SqliteHandler::Exist(QString tableName, QList<QPair<QString,QVariant>> cond
         whereClauses << QString("%1 = :%1").arg(conditions[i].first);
     }
 
-    QString _q = QString("SELECT 1 FROM %1 WHERE %2 LIMIT 1").arg(tableName).arg(whereClauses.join(" AND "));
+    QString _q = QString("SELECT 1 FROM %1 WHERE %2 LIMIT 1").arg(tableName,whereClauses.join(" AND "));
 
     query.prepare(_q);
 
@@ -130,7 +130,7 @@ bool SqliteHandler::Update(QString tableName, QList<QPair<QString,QVariant>> upd
     }
 
 
-    QString _q = QString("UPDATE %1 SET %2 WHERE %3").arg(tableName).arg(setClauses.join(", ")).arg(whereClauses.join(" AND "));
+    QString _q = QString("UPDATE %1 SET %2 WHERE %3").arg(tableName,setClauses.join(", "), whereClauses.join(" AND "));
     query.prepare(_q);
 
     for(int i = 0; i < updates.length(); i++)
