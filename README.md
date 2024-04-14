@@ -21,25 +21,22 @@ PomoPeak allows users to set timers for work sessions, short breaks, and long br
 * CMake 3.5 or higher
 * A C++17 compatible compiler
 
-# Building from Source
-
 Clone the repository:
 ```
 git clone https://github.com/TheVipek/PomoPeak.git
 cd PomoPeak
 ```
 
-Configure the project with CMake:
-```
-mkdir build
-cd build
-cmake ..
-```
+# Steps (via QT Creator)
 
-Build the application:
-```
-cmake --build . --config Release
-```
+1. Open QT Creator.
+2. Navige to project CMakeLists.txt.
+3. Configure project.
+4. Build project.
+5. Run the application.
+
+
+
 
 # License
 
