@@ -16,6 +16,7 @@ PomopeakStats::PomopeakStats(UserStats& stats,QWidget *parent)
 
 
     SwtichChartView(ChartVisibility::Weekly);
+    UpdateGlobalStats();
 }
 
 PomopeakStats::~PomopeakStats()
@@ -159,7 +160,23 @@ void PomopeakStats::ShowBarText()
     QToolTip::showText(QCursor::pos(), tooltipText);
 }
 
-void PomopeakStats::ForceUpdateChart()
+void PomopeakStats::ForceUpdate()
 {
     UpdateChart(currentVisibility);
+    UpdateGlobalStats();
+}
+void PomopeakStats::UpdateGlobalStats()
+{
+    QMap<QDate,DayTaskStats> userStats = stats.GetUserStats();
+    int completedCount = 0;
+    float timeSpend = 0;
+    for(auto it = userStats.constBegin(); it != userStats.constEnd(); ++it)
+    {
+        const auto& val = it.value();
+        completedCount += val.TaskCompletedCount;
+        timeSpend += val.TimeSpendInHours;
+    }
+
+    ui->totalTasksValueLabel->setText(QString::number(completedCount));
+    ui->totalMinutesValueLabel->setText(QString::number(timeSpend * 60));
 }

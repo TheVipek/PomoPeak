@@ -28,7 +28,7 @@ class PomopeakStats : public QWidget, public QObjectInitialization
 public:
     explicit PomopeakStats( UserStats& stats, QWidget *parent = nullptr);
     ~PomopeakStats();
-    void ForceUpdateChart();
+    void ForceUpdate();
 
 protected:
     void InitializeDataContainer() override;
@@ -67,6 +67,7 @@ private:
     void OnHoverBar(bool status, int index);
     void ShowBarText();
     void UpdateChart(int days);
+    void UpdateGlobalStats();
 };
 
 #endif // POMOPEAKSTATS_H

@@ -184,7 +184,7 @@ void PomoPeak::OnTryAddTask()
     connect(newTaskUI, &taskQT::OnNoneModeRequest, this, &PomoPeak::OnNoneTaskMode);
     ui->taskLayoutListScrollAreaContent->layout()->addWidget(newTaskUI);
 
-    ui->AddTaskBtn->setEnabled(false);
+    ChangeAddTaskBtnInteractability(false);
 }
 
 void PomoPeak::AddTask(std::shared_ptr<Task> task)
@@ -205,7 +205,7 @@ void PomoPeak::RemoveTask(std::shared_ptr<Task> task, taskQT* taskUI)
     taskManager.RemoveTask(task);
     taskUI->deleteLater();
 
-    ui->AddTaskBtn->setEnabled(true);
+    ChangeAddTaskBtnInteractability(true);
 }
 
 void PomoPeak::OnViewModeTaskChanged(taskQT* taskUI)
@@ -216,12 +216,18 @@ void PomoPeak::OnViewModeTaskChanged(taskQT* taskUI)
     }
     currentInViewModeTaskUI = taskUI;
 
-    ui->AddTaskBtn->setEnabled(false);
+    ChangeAddTaskBtnInteractability(false);
 
 }
+
 void PomoPeak::OnNoneTaskMode(taskQT* taskUI)
 {
-    ui->AddTaskBtn->setEnabled(true);
+    ChangeAddTaskBtnInteractability(true);
+}
+
+void PomoPeak::ChangeAddTaskBtnInteractability(bool v)
+{
+    ui->AddTaskBtn->setEnabled(v);
 }
 
 void PomoPeak::OnCurrentActiveTaskChanged(taskQT* taskUI)
@@ -370,7 +376,7 @@ void PomoPeak::OnOpenStats()
 {
     ui->widget->hide();
 
-    pomopeakStats->ForceUpdateChart();
+    pomopeakStats->ForceUpdate();
     pomopeakStats->show();
 }
 

@@ -194,7 +194,7 @@ add_dependencies(PomoPeak Images)
 #database-related
 set(DATABASE_FILE "${CMAKE_SOURCE_DIR}/data/database/applicationData.db")
 set(BUILD_DATABASE_FILE "${CMAKE_BINARY_DIR}/data/database/applicationData.db")
-set(RENEW_FILES FALSE CACHE BOOL "Flag to indicate if the build is for production")
+set(RENEW_FILES TRUE CACHE BOOL "Flag to indicate if the build is for production")
 
 
 if(RENEW_FILES)

@@ -90,7 +90,7 @@ private:
 
 
 
-
+    void ChangeAddTaskBtnInteractability(bool v);
     void UpdateCounter();
     void Skip();
     void UpdateTimerLabel(QString value);
