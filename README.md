@@ -13,3 +13,18 @@ PomoPeak allows users to set timers for work sessions, short breaks, and long br
 * Notifications: Audio and visual alerts to notify the end of a session or break.
 * Customization: Settings for adjusting time durations, alarm sounds.
 
+# Installation
+
+# Prerequisites
+
+* Qt 6 or higher (Note: The application was developed and tested with Qt 6.6.1. It may work on Qt 5.x versions, but compatibility is not guaranteed.)
+* CMake 3.5 or higher
+* A C++17 compatible compiler
+
+# Building from Source
+
+Clone the repository:
+```
+git clone https://github.com/TheVipek/PomoPeak.git
+cd PomoPeak
+```
