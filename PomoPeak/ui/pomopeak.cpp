@@ -419,7 +419,7 @@ void PomoPeak::PlayNotification(const QString title, const QString message, cons
 void PomoPeak::OnAppQuit()
 {
     isQuitting = true;
-    QList<QPair<QString,QVariant>> conditions = { {"UserID", 0} };
+    QList<QPair<QString,QVariant>> conditions = { QPair<QString, QVariant>("UserID", QVariant(0)) };
     sqliteHandler->Update(DatabaseTables::STATS, userStats->ToData(),conditions);
     QApplication::quit();
 }
