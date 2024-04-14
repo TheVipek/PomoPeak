@@ -158,7 +158,7 @@ void PomoPeak::OnTimerTimeout()
             }
             userStats->AddTimeSpend(((float)settings->SessionDuration/60));
             globalCounter++;
-            PlayNotification("Break", pomodoroFacts->GetNextFact(), 5000, true);
+            PlayNotification("Break", pomodoroFacts->GetNextFact(), 5000);
 
         }
         if(currentSequence == FlowSequence::LongBreak || currentSequence == FlowSequence::ShortBreak)
