@@ -13,6 +13,7 @@ class SqliteHandler
 {
 public:
     SqliteHandler(const QString& connectionName);
+    ~SqliteHandler();
     template<typename T>
     std::vector<T> GetData(const QString queryStr)
     {

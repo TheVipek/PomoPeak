@@ -9,7 +9,14 @@ SqliteHandler::SqliteHandler(const QString& connectionName)
     CheckIfDatabaseIsInCorrectState();
 
 }
-
+SqliteHandler::~SqliteHandler()
+{
+    if(db.isOpen())
+    {
+        db.close();
+    }
+    QSqlDatabase::removeDatabase(db.databaseName());
+}
 void SqliteHandler::CheckIfDatabaseIsInCorrectState()
 {
     db.open();
@@ -98,12 +105,11 @@ bool SqliteHandler::Exist(QString tableName, QList<QPair<QString,QVariant>> cond
         db.close();
         return false;
     }
-    bool next = query.next();
-    db.close();
-    return next;
-
-
-
+    else
+    {
+        db.close();
+        return query.next();
+    }
 }
 
 bool SqliteHandler::Update(QString tableName, QList<QPair<QString,QVariant>> updates, QList<QPair<QString,QVariant>> conditions)
@@ -148,8 +154,11 @@ bool SqliteHandler::Update(QString tableName, QList<QPair<QString,QVariant>> upd
         db.close();
         return false;
     }
-    db.close();
-    return query.next();
+    else
+    {
+        db.close();
+        return query.next();
+    }
 }
 
 bool SqliteHandler::SetData(QString tableName, QList<QPair<QString,QVariant>> map)
@@ -194,15 +203,14 @@ bool SqliteHandler::SetData(QString tableName, QList<QPair<QString,QVariant>> ma
 
     if(!query.exec())
     {
-        qDebug() << "Failed to insert data into table:" << tableName << "Error:" << query.lastError().text();
-
         db.close();
+        qDebug() << "Failed to insert data into table:" << tableName << "Error:" << query.lastError().text();
         return false;
     }
     else
     {
-        qDebug() << "Successfuly inserted data into table:" << tableName;
         db.close();
+        qDebug() << "Successfuly inserted data into table:" << tableName;
         return true;
     }
 }

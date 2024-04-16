@@ -26,22 +26,6 @@ PomoPeak::~PomoPeak()
     UnsubscribeFromEvents();
 
     delete ui;
-    // delete pomopeakStats;
-    // delete pomopeakSettings;
-    //delete startButtonClickEffect;
-    //delete endBreakEffect;
-    //delete quickActionShortcut;
-
-    // if(currentActiveTaskUI != nullptr)
-    // {
-    //     delete currentActiveTaskUI;
-    // }
-    // if(currentInViewModeTaskUI != nullptr)
-    // {
-    //     delete currentInViewModeTaskUI;
-    // }
-
-
 }
 
 void PomoPeak::InitializeDataContainer()
