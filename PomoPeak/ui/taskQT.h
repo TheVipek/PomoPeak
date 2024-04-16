@@ -59,6 +59,7 @@ protected:
     void InitializeDataContainer() override;
     void InitializeObjects() override;
     void SubscribeToEvents() override;
+    void UnsubscribeFromEvents() override;
 
 private slots:
     void OnProceedButton();
@@ -109,7 +110,6 @@ private:
     Mode CurrentMode = Mode::None;
 
     Ui::taskQT* ui;
-    TaskInputFilter* filter;
     QGraphicsBlurEffect* opacityEffect;
     std::shared_ptr<Task> task;
 

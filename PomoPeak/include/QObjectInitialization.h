@@ -6,6 +6,7 @@ protected:
     virtual void InitializeDataContainer() {};
     virtual void InitializeObjects() {};
     virtual void SubscribeToEvents() {};
+    virtual void UnsubscribeFromEvents() {};
     virtual ~QObjectInitialization() = 0;
 };
 

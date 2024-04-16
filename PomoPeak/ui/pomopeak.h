@@ -52,6 +52,7 @@ protected:
     void InitializeDataContainer() override;
     void InitializeObjects() override;
     void SubscribeToEvents() override;
+    void UnsubscribeFromEvents() override;
 protected slots:
     void OnChangeState();
     void OnTimerTimeout();

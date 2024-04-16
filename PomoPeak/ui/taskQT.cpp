@@ -3,7 +3,6 @@
 taskQT::taskQT(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::taskQT)
-    , filter(new TaskInputFilter)
     , opacityEffect(new QGraphicsBlurEffect(this))
     , task(std::make_shared<Task>())
 {
@@ -18,9 +17,8 @@ taskQT::taskQT(QWidget *parent)
 
 taskQT::~taskQT()
 {
+    UnsubscribeFromEvents();
     delete ui;
-    delete filter;
-    delete opacityEffect;
 }
 
 void taskQT::InitializeDataContainer()
@@ -51,7 +49,18 @@ void taskQT::SubscribeToEvents()
     connect(ui->taskStatusBtn, &QPushButton::clicked, this, &taskQT::OnChangeStatus);
     connect(ui->openSettingsBtn, &QPushButton::clicked, this, &taskQT::OpenSettings);
 }
-\
+
+void taskQT::UnsubscribeFromEvents()
+{
+    disconnect(ui->okBtn, &QPushButton::clicked, this, &taskQT::OnProceedButton);
+    disconnect(ui->delBtn, &QPushButton::clicked, this, &taskQT::OnDeleteButton);
+    disconnect(ui->cancelBtn, &QPushButton::clicked, this, &taskQT::OnCancelButton);
+    disconnect(ui->taskName, &QTextEdit::textChanged, this, &taskQT::OnTaskTitleChanged);
+    disconnect(ui->activeBtn, &QPushButton::clicked, this, &taskQT::SwitchTaskActivation);
+    disconnect(ui->taskStatusBtn, &QPushButton::clicked, this, &taskQT::OnChangeStatus);
+    disconnect(ui->openSettingsBtn, &QPushButton::clicked, this, &taskQT::OpenSettings);
+}
+
 void taskQT::OpenSettings()
 {
     if(CurrentMode != Mode::View && !task->isDone)

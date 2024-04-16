@@ -23,21 +23,23 @@ PomoPeak::PomoPeak(QWidget *parent)
 
 PomoPeak::~PomoPeak()
 {
-    delete ui;
-    delete pomopeakStats;
-    delete pomopeakSettings;
-    delete startButtonClickEffect;
-    delete endBreakEffect;
-    delete quickActionShortcut;
+    UnsubscribeFromEvents();
 
-    if(currentActiveTaskUI != nullptr)
-    {
-        delete currentActiveTaskUI;
-    }
-    if(currentInViewModeTaskUI != nullptr)
-    {
-        delete currentInViewModeTaskUI;
-    }
+    delete ui;
+    // delete pomopeakStats;
+    // delete pomopeakSettings;
+    //delete startButtonClickEffect;
+    //delete endBreakEffect;
+    //delete quickActionShortcut;
+
+    // if(currentActiveTaskUI != nullptr)
+    // {
+    //     delete currentActiveTaskUI;
+    // }
+    // if(currentInViewModeTaskUI != nullptr)
+    // {
+    //     delete currentInViewModeTaskUI;
+    // }
 
 
 }
@@ -124,7 +126,20 @@ void PomoPeak::SubscribeToEvents()
     connect(&trayIconHandler, &TrayIconHandler::Open, this, &PomoPeak::show);
     connect(&trayIconHandler, &TrayIconHandler::Exit, this, &PomoPeak::OnAppQuit);
 }
-
+void PomoPeak::UnsubscribeFromEvents()
+{
+    disconnect(pomopeakSettings, &pomopeaksettings::OnClose, this, &PomoPeak::OnHideSettings);
+    disconnect(pomopeakStats, &PomopeakStats::OnClose, this, &PomoPeak::OnHideStats);
+    disconnect(quickActionShortcut, &QShortcut::activated, this, &PomoPeak::TriggerQuickAction);
+    disconnect(ui->settingsBtn, &QPushButton::clicked, this, &PomoPeak::OnOpenSettings);
+    disconnect(ui->statsBtn, &QPushButton::clicked, this, &PomoPeak::OnOpenStats);
+    disconnect(&timer, &QTimer::timeout, this, &PomoPeak::OnTimerTimeout);
+    disconnect(ui->ChangeFlowBtn, &QPushButton::clicked, this, &PomoPeak::OnChangeState);
+    disconnect(ui->SkipBtn, &QPushButton::clicked, this, &PomoPeak::Skip);
+    disconnect(ui->AddTaskBtn, &QPushButton::clicked, this, &PomoPeak::OnTryAddTask);
+    disconnect(&trayIconHandler, &TrayIconHandler::Open, this, &PomoPeak::show);
+    disconnect(&trayIconHandler, &TrayIconHandler::Exit, this, &PomoPeak::OnAppQuit);
+}
 void PomoPeak::OnChangeState()
 {
     isRunning = !isRunning;

@@ -26,6 +26,8 @@ pomopeaksettings::pomopeaksettings(std::shared_ptr<Settings> _settings, std::sha
 
 pomopeaksettings::~pomopeaksettings()
 {
+    UnsubscribeFromEvents();
+
     delete ui;
 }
 
@@ -92,7 +94,34 @@ void pomopeaksettings::SubscribeToEvents()
     connect(ui->chatGPTVisibilityBtn, &QPushButton::clicked, this, &pomopeaksettings::OnChangeChatGPTVisibility);
     connect(ui->chatGPTLineEdit, &QLineEdit::textEdited, this, &pomopeaksettings::OnChatGPTApiChanged);
 }
+void pomopeaksettings::UnsubscribeFromEvents()
+{
+    disconnect(ui->sessionDoubleSpinBox, &QDoubleSpinBox::valueChanged, this, &pomopeaksettings::OnDoubleSpinBoxValueChanged);
+    disconnect(ui->longBreakDoubleSpinBox, &QDoubleSpinBox::valueChanged, this, &pomopeaksettings::OnDoubleSpinBoxValueChanged);
+    disconnect(ui->shortBreakDoubleSpinBox, &QDoubleSpinBox::valueChanged, this, &pomopeaksettings::OnDoubleSpinBoxValueChanged);
 
+    disconnect(ui->alarmEndBreakRepSpinBox, &QSpinBox::valueChanged, this, &pomopeaksettings::OnSpinBoxValueChanged);
+
+
+    disconnect(ui->alarmStartSlider,&QSlider::valueChanged, this, &pomopeaksettings::OnSliderValueChanged);
+    disconnect(ui->alarmEndBreakVolumeSlider,&QSlider::valueChanged, this, &pomopeaksettings::OnSliderValueChanged);
+
+    disconnect(ui->exitBtn, &QPushButton::clicked, this, &pomopeaksettings::OnExitClicked);
+
+    disconnect(ui->alarmStartSelectBtn, &QPushButton::clicked, this, &pomopeaksettings::OnSelectAudioClicked);
+    disconnect(ui->alarmEndBreakSelectBtn, &QPushButton::clicked, this, &pomopeaksettings::OnSelectAudioClicked);
+
+    disconnect(ui->quickActionSequenceEdit, &QKeySequenceEdit::editingFinished, this, &pomopeaksettings::OnQuickActionSequenceFinished);
+
+    disconnect(ui->notificationsCheckbox, &QCheckBox::clicked, this, &pomopeaksettings::OnCheckBoxValueChanged);
+    disconnect(ui->alarmSoundCheckBox, &QCheckBox::clicked, this, &pomopeaksettings::OnCheckBoxValueChanged);
+    disconnect(ui->minimizeToTrayCheckbox, &QCheckBox::clicked, this, &pomopeaksettings::OnCheckBoxValueChanged);
+
+    disconnect(ui->SkinSelectionComboBox, &QComboBox::currentIndexChanged, this, &pomopeaksettings::OnIndexInComboBoxChanged);
+
+    disconnect(ui->chatGPTVisibilityBtn, &QPushButton::clicked, this, &pomopeaksettings::OnChangeChatGPTVisibility);
+    disconnect(ui->chatGPTLineEdit, &QLineEdit::textEdited, this, &pomopeaksettings::OnChatGPTApiChanged);
+}
 void pomopeaksettings::OnChatGPTApiChanged(const QString& str)
 {
     settings->ChatGPTApiKey = str;

@@ -21,31 +21,8 @@ PomopeakStats::PomopeakStats(std::shared_ptr<UserStats> stats,QWidget *parent)
 
 PomopeakStats::~PomopeakStats()
 {
+    UnsubscribeFromEvents();
     delete ui;
-    if(chart != nullptr)
-    {
-        delete chart;
-    }
-    if(allSets != nullptr)
-    {
-        delete allSets;
-    }
-    if(completedTasksSet != nullptr)
-    {
-        delete completedTasksSet;
-    }
-    if(taskTimeSet != nullptr)
-    {
-        delete taskTimeSet;
-    }
-    if(daysAxis != nullptr)
-    {
-        delete daysAxis;
-    }
-    if(showTooltipTimer != nullptr)
-    {
-        delete showTooltipTimer;
-    }
 }
 
 void PomopeakStats::InitializeDataContainer()
@@ -65,6 +42,14 @@ void PomopeakStats::SubscribeToEvents()
     connect(ui->monthlyBtn, &QPushButton::clicked, this, &PomopeakStats::OnViewButtonsClick);
     connect(ui->weeklyBtn, &QPushButton::clicked, this, &PomopeakStats::OnViewButtonsClick);
     connect(showTooltipTimer, &QTimer::timeout, this, &PomopeakStats::ShowBarText);
+}
+
+void PomopeakStats::UnsubscribeFromEvents()
+{
+    disconnect(ui->exitButton, &QPushButton::clicked, this, &PomopeakStats::OnExitClicked);
+    disconnect(ui->monthlyBtn, &QPushButton::clicked, this, &PomopeakStats::OnViewButtonsClick);
+    disconnect(ui->weeklyBtn, &QPushButton::clicked, this, &PomopeakStats::OnViewButtonsClick);
+    disconnect(showTooltipTimer, &QTimer::timeout, this, &PomopeakStats::ShowBarText);
 }
 
 void PomopeakStats::OnExitClicked()
@@ -105,12 +90,16 @@ void PomopeakStats::SwtichChartView(ChartVisibility visibility)
 
 void PomopeakStats::InitializeChart()
 {
+    QChartView* view = new QChartView(this);
+
     chart = new QChart();
+    chart->setParent(view);
+
+    view->setChart(chart);
 
     chart->setBackgroundBrush(QBrush(this->palette().color(QPalette::Window)));
     chart->setTitle("Title");
 
-    QChartView* view = new QChartView(chart);
     ui->chartLayout->addWidget(view);
 }
 
@@ -122,10 +111,10 @@ void PomopeakStats::UpdateChart(int days)
     if(daysAxis != nullptr)
         chart->removeAxis(daysAxis);
 
-    allSets = new QBarSeries();
+    allSets = new QBarSeries(this);
 
-    completedTasksSet = new QBarSet("Task Count");
-    taskTimeSet = new QBarSet("Time Spend (in hours)");
+    completedTasksSet = new QBarSet("Task Count", this);
+    taskTimeSet = new QBarSet("Time Spend (in hours)", this);
 
     connect(completedTasksSet, &QBarSet::hovered,this, &PomopeakStats::OnHoverBar);
     connect(taskTimeSet, &QBarSet::hovered,this, &PomopeakStats::OnHoverBar);
@@ -154,7 +143,7 @@ void PomopeakStats::UpdateChart(int days)
         startDate = startDate.addDays(1);
     }
 
-    daysAxis = new QBarCategoryAxis();
+    daysAxis = new QBarCategoryAxis(this);
     daysAxis->append(dates);
 
 
@@ -189,6 +178,7 @@ void PomopeakStats::ForceUpdate()
     UpdateChart(currentVisibility);
     UpdateGlobalStats();
 }
+
 void PomopeakStats::UpdateGlobalStats()
 {
     QMap<QDate,DayTaskStats> userStats = stats->GetUserStats();

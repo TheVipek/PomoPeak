@@ -34,6 +34,7 @@ protected:
     void InitializeDataContainer() override;
     void InitializeObjects() override;
     void SubscribeToEvents() override;
+    void UnsubscribeFromEvents() override;
 
 signals:
     void OnClose();
