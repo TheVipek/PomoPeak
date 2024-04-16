@@ -7,10 +7,11 @@
 class PomodoroFacts
 {
 public:
-    PomodoroFacts(GPTHelper* gptHelper);
+    PomodoroFacts(std::shared_ptr<GPTHelper> gptHelper);
     QString GetNextFact();
+    void TryRefillFacts();
 private:
-    GPTHelper* gptHelper;
+    std::shared_ptr<GPTHelper> gptHelper;
     void RefillFacts();
     QStringList avaliableFacts;
 };

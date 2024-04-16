@@ -10,6 +10,7 @@ class GPTHelper : public QObject
 public:
     GPTHelper();
     void SetAPIKey(const QString key);
+    QString GetAPIKey();
     QString Ask(const QString question, const QString systemInfo);
 private:
     QNetworkAccessManager* manager;

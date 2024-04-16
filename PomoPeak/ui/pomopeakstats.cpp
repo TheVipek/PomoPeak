@@ -3,7 +3,7 @@
 #include <QToolTip>
 #include "daytaskstats.h"
 #include <QDate>
-PomopeakStats::PomopeakStats(UserStats& stats,QWidget *parent)
+PomopeakStats::PomopeakStats(std::shared_ptr<UserStats> stats,QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::PomopeakStats)
     , stats(stats)
@@ -22,6 +22,30 @@ PomopeakStats::PomopeakStats(UserStats& stats,QWidget *parent)
 PomopeakStats::~PomopeakStats()
 {
     delete ui;
+    if(chart != nullptr)
+    {
+        delete chart;
+    }
+    if(allSets != nullptr)
+    {
+        delete allSets;
+    }
+    if(completedTasksSet != nullptr)
+    {
+        delete completedTasksSet;
+    }
+    if(taskTimeSet != nullptr)
+    {
+        delete taskTimeSet;
+    }
+    if(daysAxis != nullptr)
+    {
+        delete daysAxis;
+    }
+    if(showTooltipTimer != nullptr)
+    {
+        delete showTooltipTimer;
+    }
 }
 
 void PomopeakStats::InitializeDataContainer()
@@ -106,7 +130,7 @@ void PomopeakStats::UpdateChart(int days)
     connect(completedTasksSet, &QBarSet::hovered,this, &PomopeakStats::OnHoverBar);
     connect(taskTimeSet, &QBarSet::hovered,this, &PomopeakStats::OnHoverBar);
 
-    QMap<QDate,DayTaskStats> userStats = stats.GetUserStats();
+    QMap<QDate,DayTaskStats> userStats = stats->GetUserStats();
     QDate startDate = QDateTime::currentDateTime().date().addDays(-days);
     for(auto it = userStats.constBegin(); it != userStats.constEnd(); ++it)
     {
@@ -167,7 +191,7 @@ void PomopeakStats::ForceUpdate()
 }
 void PomopeakStats::UpdateGlobalStats()
 {
-    QMap<QDate,DayTaskStats> userStats = stats.GetUserStats();
+    QMap<QDate,DayTaskStats> userStats = stats->GetUserStats();
     int completedCount = 0;
     float timeSpend = 0;
     for(auto it = userStats.constBegin(); it != userStats.constEnd(); ++it)

@@ -1,6 +1,6 @@
 #include "PomodoroFacts.h"
 #include <QtConcurrent>
-PomodoroFacts::PomodoroFacts(GPTHelper* helper)
+PomodoroFacts::PomodoroFacts(std::shared_ptr<GPTHelper> helper)
 {
     gptHelper = helper;
     RefillFacts();
@@ -17,15 +17,20 @@ QString PomodoroFacts::GetNextFact()
     {
         fact = avaliableFacts.takeFirst();
     }
+
+    TryRefillFacts();
+
+    return fact;
+
+}
+void PomodoroFacts::TryRefillFacts()
+{
     if(avaliableFacts.count() < 5)
     {
         QtConcurrent::run([=](){
             RefillFacts();
         });
     }
-
-    return fact;
-
 }
 void PomodoroFacts::RefillFacts()
 {

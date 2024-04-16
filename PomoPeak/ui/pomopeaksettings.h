@@ -17,7 +17,8 @@ class pomopeaksettings : public QWidget, public QObjectInitialization
     Q_OBJECT
 
 public:
-    explicit pomopeaksettings(Settings& _settings, SqliteHandler& _handler, GPTHelper& _gptHelper, QWidget *parent = nullptr);
+    explicit pomopeaksettings(std::shared_ptr<Settings> _settings, std::shared_ptr<SqliteHandler> _handler
+                              ,std::shared_ptr<GPTHelper> _gptHelper, QWidget *parent = nullptr);
     ~pomopeaksettings();
     void setVisible(bool visible) override
     {
@@ -44,9 +45,9 @@ private slots:
     void OnChatGPTApiChanged(const QString& val);
 private:
     Ui::pomopeaksettings *ui;
-    Settings& settings;
-    SqliteHandler& handler;
-    GPTHelper& gptHelper;
+    std::shared_ptr<Settings> settings;
+    std::shared_ptr<SqliteHandler> handler;
+    std::shared_ptr<GPTHelper> gptHelper;
     bool isDirty = false;
     bool startAlarmChanged = false;
     bool breakAlarmChanged = false;

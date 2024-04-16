@@ -7,34 +7,39 @@
 PomoPeak::PomoPeak(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::PomoPeak)
-    , sqliteHandler(new SqliteHandler(QCoreApplication::applicationDirPath() + "/data/database/applicationData.db"))
-    , gptHelper(new GPTHelper())
-    , timer(new QTimer)
+    , timer(QTimer(this))
     , taskManager()
     , trayIconHandler()
 {
     ui->setupUi(this);
 
     trayIconHandler.Show();
+
+    sqliteHandler = std::make_shared<SqliteHandler>(QCoreApplication::applicationDirPath() + "/data/database/applicationData.db");
     InitializeDataContainer();
     InitializeObjects();
     SubscribeToEvents();
-
-    gptHelper->SetAPIKey(settings->ChatGPTApiKey);
-    pomodoroFacts = new PomodoroFacts(gptHelper);
 }
 
 PomoPeak::~PomoPeak()
 {
     delete ui;
-    delete flowHandler;
+    delete pomopeakStats;
+    delete pomopeakSettings;
     delete startButtonClickEffect;
     delete endBreakEffect;
-    delete settings;
-    delete sqliteHandler;
-    delete userStats;
-    delete pomopeakStats;
     delete quickActionShortcut;
+
+    if(currentActiveTaskUI != nullptr)
+    {
+        delete currentActiveTaskUI;
+    }
+    if(currentInViewModeTaskUI != nullptr)
+    {
+        delete currentInViewModeTaskUI;
+    }
+
+
 }
 
 void PomoPeak::InitializeDataContainer()
@@ -45,12 +50,12 @@ void PomoPeak::InitializeDataContainer()
     if(!settingsDTO.empty())
     {
         qDebug() << "Creating settings from DTO";
-        settings = new Settings(settingsDTO.front());
+        settings = std::make_shared<Settings>(settingsDTO.front());
     }
     else
     {
         qDebug() << "Creatin default settings";
-        settings = new Settings();
+        settings = std::make_shared<Settings>();
         sqliteHandler->SetData(DatabaseTables::SETTINGS, settings->ToData(0));
     }
 
@@ -59,12 +64,12 @@ void PomoPeak::InitializeDataContainer()
     if(!statsDTO.empty())
     {
         qDebug() << "Creating stats from DTO";
-        userStats = new UserStats(statsDTO.front());
+        userStats = std::make_shared<UserStats>(statsDTO.front());
     }
     else
     {
         qDebug() << "Creatin default stats";
-        userStats = new UserStats();
+        userStats = std::make_shared<UserStats>();
         sqliteHandler->SetData(DatabaseTables::STATS, userStats->ToData(0));
     }
 
@@ -73,13 +78,16 @@ void PomoPeak::InitializeDataContainer()
 
 void PomoPeak::InitializeObjects()
 {
-    flowHandler = new FlowHandler(*settings);
+    gptHelper = std::make_shared<GPTHelper>();
+    gptHelper->SetAPIKey(settings->ChatGPTApiKey);
 
-    pomopeakSettings = new pomopeaksettings(*settings, *sqliteHandler, *gptHelper , this);
+    pomodoroFacts = std::make_shared<PomodoroFacts>(gptHelper);
+
+    flowHandler = std::make_shared<FlowHandler>(settings);
+    pomopeakSettings = new pomopeaksettings(settings, sqliteHandler, gptHelper , this);
     pomopeakSettings->hide();
     ui->widgetsLayout->addWidget(pomopeakSettings);
-
-    pomopeakStats = new PomopeakStats(*userStats,this);
+    pomopeakStats = new PomopeakStats(userStats,this);
     pomopeakStats->hide();
     ui->widgetsLayout->addWidget(pomopeakStats);
 
@@ -368,6 +376,13 @@ void PomoPeak::OnHideSettings(const bool alarmStartChanged,const bool alarmBreak
     if(quickActionShortcut->key() != settings->QuickActionShortcut)
     {
         quickActionShortcut->setKey(settings->QuickActionShortcut);
+    }
+
+    if(gptHelper->GetAPIKey() != settings->ChatGPTApiKey)
+    {
+        gptHelper->SetAPIKey(settings->ChatGPTApiKey);
+
+        pomodoroFacts->TryRefillFacts();
     }
 
 }

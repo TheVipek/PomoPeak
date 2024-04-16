@@ -7,13 +7,13 @@ enum FlowSequence { Session = 1, ShortBreak = 2, LongBreak = 6 };
 class FlowHandler
 {
 public:
-    FlowHandler(const Settings& _settings);
+    FlowHandler(std::shared_ptr<Settings> _settings);
     FlowSequence GetCurrentFlowSequence();
     FlowSequence Next();
 
 
 private:
-    const Settings& settings;
+    std::shared_ptr<Settings> settings;
     FlowSequence _currentFlowSequence;
     bool isBreak;
     int sessionsCount;

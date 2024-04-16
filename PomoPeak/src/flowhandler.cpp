@@ -1,6 +1,6 @@
 #include "flowhandler.h"
 
-FlowHandler::FlowHandler(const Settings& _settings) : settings(_settings)
+FlowHandler::FlowHandler(std::shared_ptr<Settings> _settings) : settings(_settings)
 {
     sessionsCount = 0;
     _currentFlowSequence = FlowSequence::Session;
@@ -13,7 +13,7 @@ FlowSequence FlowHandler::Next()
     if(isBreak)
     {
         sessionsCount++;
-        if(sessionsCount % settings.LongBreakFrequency == 0)
+        if(sessionsCount % settings->LongBreakFrequency == 0)
         {
             _currentFlowSequence = FlowSequence::LongBreak;
         }

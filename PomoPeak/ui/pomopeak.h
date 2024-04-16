@@ -67,18 +67,18 @@ private:
     Ui::PomoPeak* ui;
     pomopeaksettings* pomopeakSettings;
     PomopeakStats* pomopeakStats;
-    Settings* settings;
-    UserStats* userStats;
-    SqliteHandler* sqliteHandler;
+    std::shared_ptr<Settings> settings;
+    std::shared_ptr<UserStats> userStats;
+    std::shared_ptr<SqliteHandler> sqliteHandler;
     taskQT* currentActiveTaskUI = nullptr;
     taskQT* currentInViewModeTaskUI = nullptr;
-    FlowHandler* flowHandler;
+    std::shared_ptr<FlowHandler> flowHandler;
     QSoundEffect* startButtonClickEffect;
     QSoundEffect* endBreakEffect;
     QShortcut* quickActionShortcut;
 
-    GPTHelper* gptHelper;
-    PomodoroFacts* pomodoroFacts;
+    std::shared_ptr<GPTHelper> gptHelper;
+    std::shared_ptr<PomodoroFacts> pomodoroFacts;
 
     QTimer timer;
     TaskManager taskManager;

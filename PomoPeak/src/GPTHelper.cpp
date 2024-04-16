@@ -8,9 +8,8 @@
 #include <QEventLoop>
 #include <iostream>
 #include <limits>
-GPTHelper::GPTHelper()
+GPTHelper::GPTHelper() : manager(new QNetworkAccessManager(this))
 {
-    manager = new QNetworkAccessManager(this);
     engine = std::mt19937(rd());
 }
 
@@ -70,18 +69,36 @@ void GPTHelper::SetAPIKey(const QString key)
 {
     apiKey = key;
 }
+QString GPTHelper::GetAPIKey()
+{
+    return apiKey;
+}
 bool GPTHelper::IsKeySet()
 {
     return apiKey != "";
 }
 QString GPTHelper::HandleCompletionistReply(QNetworkReply* reply)
 {
-    QByteArray responseData = reply->readAll();
-    QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
-    if (!jsonResponse.isNull() && jsonResponse.isObject() && reply->error() == QNetworkReply::NetworkError::NoError )
+    QString response;
+    try
     {
-        QJsonObject jsonObject = jsonResponse.object();
-        return jsonObject["choices"][0]["message"]["content"].toString();
+        QByteArray responseData = reply->readAll();
+        QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
+        if (!jsonResponse.isNull() && jsonResponse.isObject() && reply->error() == QNetworkReply::NetworkError::NoError )
+        {
+            reply->deleteLater();
+            QJsonObject jsonObject = jsonResponse.object();
+            response = jsonObject["choices"][0]["message"]["content"].toString();
+        }
+        else
+        {
+            response = reply->errorString();
+        }
     }
-    return reply->errorString();
+    catch(...)
+    {
+        response = reply->errorString();
+    }
+    reply->deleteLater();
+    return response;
 }

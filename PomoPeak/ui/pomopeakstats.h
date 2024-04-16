@@ -26,7 +26,7 @@ class PomopeakStats : public QWidget, public QObjectInitialization
     };
 
 public:
-    explicit PomopeakStats( UserStats& stats, QWidget *parent = nullptr);
+    explicit PomopeakStats(std::shared_ptr<UserStats> stats, QWidget *parent = nullptr);
     ~PomopeakStats();
     void ForceUpdate();
 
@@ -53,7 +53,7 @@ private:
 
 
     Ui::PomopeakStats *ui;
-    UserStats& stats;
+    std::shared_ptr<UserStats> stats;
     QChart* chart;
     QBarSeries* allSets;
     QBarSet* completedTasksSet;
