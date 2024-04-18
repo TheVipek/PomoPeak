@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>PomoPeak x64</DisplayName>
+    <Description>PomoPeak is a productivity application that utilizes the Pomodoro Technique to help users manage their time effectively. PomoPeak allows users to set timers for work sessions, short breaks, and long breaks, all while keeping track of tasks and productivity statistics.</Description>
+    <Licenses>
+        <License name="License Agreement" file="license.txt" />
+    </Licenses>
+    <Version>1.0.0</Version>
+    <ReleaseDate>2024-04-18</ReleaseDate>
+    <Name>pl.pomopeak.qtinstaller64</Name>
+    <Default>true</Default>
+    <Script>shortcuts.qs</Script>
+</Package>

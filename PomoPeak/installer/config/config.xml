@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<Installer>
+    <Name>PomoPeak</Name>
+    <Version>1.0.0</Version>
+    <Title>PomoPeak</Title>
+    <ProductUrl>https://github.com/TheVipek/PomoPeak</ProductUrl>
+    <Publisher>Sigma Company</Publisher>    
+    <InstallerWindowIcon>appIcon</InstallerWindowIcon>
+    <InstallerApplicationIcon>appIcon</InstallerApplicationIcon>
+    <Logo>logo.jpg</Logo>
+    <Watermark>watermark.jpg</Watermark>
+    
+    <RunProgram>@TargetDir@/win64/PomoPeak</RunProgram>
+    <RunProgramDescription>Run PomoPeak</RunProgramDescription>
+    <StartMenuDir>PomoPeak</StartMenuDir>
+    <MaintenanceToolName>PomoPeakMaintenceTool</MaintenanceToolName>
+    <AllowNonAsciiCharacters>true</AllowNonAsciiCharacters>
+    <WizardStyle>Modern</WizardStyle>
+    <StyleSheet>style.qss</StyleSheet>
+    <WizardShowPageList>true</WizardShowPageList>
+    <Background>bg.jpg</Background>
+    <TargetDir>@HomeDir@/testinstall</TargetDir>
+    <AdminTargetDir>@RootDir@/testinstall</AdminTargetDir>
+</Installer>
