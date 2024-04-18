@@ -15,11 +15,19 @@ PomoPeak allows users to set timers for work sessions, short breaks, and long br
 
 # Installation
 
+# For Users
+
+Download the latest version of PomoPeak from the Releases section on this GitHub page.
+
+# For Developers
+
 # Prerequisites
 
 * Qt 6 or higher (Note: The application was developed and tested with Qt 6.6.1. It may work on Qt 5.x versions, but compatibility is not guaranteed.)
 * CMake 3.5 or higher
 * A C++17 compatible compiler
+
+# Build and Run
 
 # Steps (via QT Creator)
 
@@ -30,8 +38,6 @@ PomoPeak allows users to set timers for work sessions, short breaks, and long br
 5. Run the application.
 
 # Steps (via cmake)
-
--
 
 
 # License
