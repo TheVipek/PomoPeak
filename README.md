@@ -43,3 +43,7 @@ Download the latest version of PomoPeak from the Releases section on this GitHub
 # License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+![image](https://github.com/user-attachments/assets/09d30519-ce0b-456f-8f37-bfb2e4804ee5)![image](https://github.com/user-attachments/assets/d97ab70e-9eb4-4e13-96b3-3e4dc6ab9c8d)
+
+
